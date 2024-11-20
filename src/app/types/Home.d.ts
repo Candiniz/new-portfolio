@@ -1,6 +1,7 @@
 export interface Images {
     url: string
     alt: string
+    date: string
 }
 
 export interface Project {

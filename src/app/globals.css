@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 html, body {
-  background: linear-gradient(to bottom, #303446, #000000); /* Gradiente de cima para baixo */
+  background: #303446; /* Gradiente de cima para baixo */
   color: #ffffff;
   scroll-behavior: smooth;
 }

@@ -1,7 +1,10 @@
-import Link from "next/link";
 import { Project } from "../types/Home";
 import Image from "next/image";
-import { ibmPlexMono, oswald } from "../fonts/Fonts";
+import { ibmPlexMono } from "../fonts/Fonts";
+
+import { FaHtml5 } from "react-icons/fa";
+import { FaCss3Alt } from "react-icons/fa";
+import { FaJs } from "react-icons/fa";
 
 interface ProjectsProps {
     projects: Project[];
@@ -9,35 +12,62 @@ interface ProjectsProps {
 
 export default function Projects({ projects }: ProjectsProps) {
     return (
-        <article className={`${ibmPlexMono.className} space-y-16 flex flex-col items-center xl:items-start text-center xl:text-left px-10`}>
-            <div className="bg-[#43454f] w-full">
-                <h2 className="sm:pl-9 text-4xl md:text-7xl font-black text-[#c1c6de]">Projetos Recentes</h2>  
-            </div>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center xl:justify-start w-full">
-                {projects.map((project, index) => (
-                    <Link href={`/projects/${project.slug}`} key={project.name + index}>
-                        <li className="relative text-md flex flex-col items-center">
-                            <div className="relative  mb-4">
-                                <Image
-                                    src={project.image.url}
-                                    alt={project.image.alt}
-                                    width={300}
-                                    height={300}
-                                    className="shadow-2xl rounded-2xl"
-                                />
-                                {/* Índice fixado no canto inferior direito */}
-                                <h2 className="bg-[#787d96] rounded-xl w-[3.5rem] h-[3.5rem] text-center 
-                                    flex justify-center items-center text-3xl absolute bottom-4 right-4">
-                                    {index + 1}
-                                </h2>
+        <article
+            className={`${ibmPlexMono.className} space-y-16 flex flex-col items-center xl:items-start text-center xl:text-left px-10`}
+        >
+            <div className="w-full">
+                <div className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full">
+                <h2 className="xl:pl-9 text-4xl z-[1] md:text-5xl lg:text-7xl py-4 font-black text-[#fff] relative">
+    <span className="absolute left-0 top-0 z-[-1] text-[#14151a] w-full">
+        Projetos Recentes
+    </span>
+    Projetos Recentes
+</h2>
 
+                </div>
+                <div className="bg-[#aadd49] h-[4px] w-full"></div>
+            </div>
+
+            
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center xl:justify-start w-full">
+                {projects.map((project, index) => (
+                    <li
+                        key={project.name + index}
+                        className="relative group flex flex-col items-center transition-transform duration-500 hover:scale-105"
+                    >
+                        {/* Imagem e overlay */}
+                        <div className="w-full aspect-[2/1] overflow-hidden bg-gray-200 relative">
+                            <Image
+                                src={project.image.url}
+                                alt={project.image.alt}
+                                width={600}
+                                height={300}
+                                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                            />
+                            {/* Overlay inicial escuro */}
+                            <div className="absolute inset-0 bg-black bg-opacity-70 transition-opacity duration-500 group-hover:opacity-0"></div>
+
+                            {/* Título e Ícones */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 transition-opacity duration-500 group-hover:opacity-0">
+                                <p className="text-white text-lg font-semibold">{project.name}</p>
+                                <div className="flex items-center justify-center gap-2 text-2xl text-[#aadd49]">
+                                    <FaHtml5 />
+                                    <FaJs />
+                                    <FaCss3Alt />
+                                </div>
                             </div>
-                            <h2 className={`${oswald.className} font-bold text-lg text-[#c1c6de]`}>{project.name}</h2>
-                            <p className="
-                            xl:text-base md:text-[1.5vw] lg:text-[1.1vw]
-                            mt-4 w-full min-h-0 sm:min-h-[8rem] text-center bg-[#43454f] text-[#c1c6de] py-3 rounded-lg flex items-center px-4">{project.image.alt}</p>
-                        </li>
-                    </Link>
+
+                            {/* Div deslizante com botão */}
+                            <div className="absolute inset-0  text-white flex flex-col items-center justify-center gap-4 translate-y-full transition-transform duration-500 group-hover:translate-y-0">
+                                <button className="px-4 py-2 bg-[#aadd49] text-black hover:bg-blue-700">
+                                    Ver mais
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Barra inferior */}
+                        <div className="w-full h-[4px] bg-[#aadd49]"></div>
+                    </li>
                 ))}
             </ul>
         </article>

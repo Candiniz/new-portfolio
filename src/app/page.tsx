@@ -11,40 +11,45 @@ export default function Home() {
       slug: 'sobrinha-artesanatos',
       name: 'Sobrinha | Loja Virtual' ,
       image: {
-        url: 'https://i.imgur.com/KIarXCX.jpeg',
-        alt: 'Projeto feito em Next.js para uma loja virtual da artesã Lourdes Maria Candida Sobrinha.'
+        url: 'https://i.imgur.com/41LaBQh.jpeg',
+        alt: 'Projeto feito em Next.js para uma loja virtual da artesã Lourdes Maria Candida Sobrinha.',
+       date: '10/10/1000'
       }
     },
     {
       slug: 'old-portfolio',
       name: 'Portfólio Antigo',
       image: {
-        url: 'https://i.imgur.com/LwMGezH.jpeg',
-        alt: 'Meu portfólio feito com intúito de aperfeiçoar técnicas de HTML, CSS e Javascript sem auxilio de frameworks.'
+        url: 'https://i.imgur.com/08IldNi.png',
+        alt: 'Meu portfólio feito com intúito de aperfeiçoar técnicas de HTML, CSS e Javascript sem auxilio de frameworks.',
+       date: '10/10/1000'
       }
     },
     {
       slug: 'finance-control',
       name: 'Finance Control',
       image: {
-        url: 'https://i.imgur.com/WYyLc59.jpeg',
-        alt: 'Sistema desenvolvido em React para praticar lógicas básicas de Javascript.'
+        url: 'https://i.imgur.com/0bGqdSx.png',
+        alt: 'Sistema desenvolvido em React para praticar lógicas básicas de Javascript.',
+       date: '10/10/1000'
       }
     },
     {
       slug: 'robofriends',
       name: 'Robofriends',
       image: {
-        url: 'https://i.imgur.com/N0ZuhMs.jpeg',
-        alt: 'Sistema desenvolvido em React para praticar lógicas básicas de Javascript, principalmente métodos FETCH e GET.'
+        url: 'https://i.imgur.com/TCSyRbd.png',
+        alt: 'Sistema desenvolvido em React para praticar lógicas básicas de Javascript, principalmente métodos FETCH e GET.',
+       date: '10/10/1000'
       }
     },
     {
       slug: 'mario-js',
       name: 'Mario JS',
       image: {
-        url: 'https://i.imgur.com/KyfXVas.jpeg',
-        alt: 'Uma aplicação simples desenvolvida em Javascript para estudar conceitos da linguagem.'
+        url: 'https://i.imgur.com/ZDoC8Du.png',
+        alt: 'Uma aplicação simples desenvolvida em Javascript para estudar conceitos da linguagem.',
+       date: '10/10/1000'
       }
     }
   ]

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import zLogo from "../../../photos/cd-logo.png"
+import zLogo from "../../../photos/cd-logo2.png"
 import HeaderMenu from "./Menu";
 import { useCallback, useState } from "react";
 import { RiMenuFoldFill } from "react-icons/ri";
@@ -22,7 +22,7 @@ export default function Header() {
     }, [])
     
     return (
-        <header className="bg-[#252835] text-sm flex py-3 justify-between items-center sticky top-0 z-20 px-6 lg:px-60">
+        <header className="bg-[#1c1e27] text-sm flex py-3 justify-between items-center sticky top-0 z-20 px-6 lg:px-60">
             <Link href="/">
                 <Image alt="Logotipo" src={zLogo} width={60} />
             </Link>

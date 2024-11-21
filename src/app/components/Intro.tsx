@@ -13,8 +13,8 @@ export default function AboutMe() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3">
-                    <Link href='/contatos' className="text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all hover:bg-opacity-60 px-10">Vamos conversar!</Link>
-                    <Link href='/contatos' className="text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all hover:bg-opacity-60 px-10">Baixe meu CV!</Link>
+                    <Link href='/contatos' className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all hover:bg-opacity-60 px-10">Vamos conversar!</Link>
+                    <Link href='/contatos' className="rounded-full text-center w-[270px] h-15 p-1 border border-[#aadd49] bg-[#303446] text-[#aadd49] text-lg transition-all hover:bg-opacity-60 px-10">Baixe meu CV!</Link>
                 </div>
 
                 <ul className="flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">

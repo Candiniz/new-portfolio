@@ -24,7 +24,7 @@ export default function Header() {
     return (
         <header className="bg-[#1c1e27] text-sm flex py-3 justify-between items-center sticky top-0 z-20 px-6 lg:px-60">
             <Link href="/">
-                <Image alt="Logotipo" src={zLogo} width={60} />
+                <Image alt="Logotipo" src={zLogo} height={60} />
             </Link>
 
             <button className="p-1 md:hidden" onClick={openMenu}>

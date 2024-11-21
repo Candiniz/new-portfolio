@@ -1,6 +1,6 @@
 import { Project } from "../types/Home";
 import Image from "next/image";
-import { ibmPlexMono } from "../fonts/Fonts";
+import { ibmPlexMono, roboto } from "../fonts/Fonts";
 
 import { FaHtml5 } from "react-icons/fa";
 import { FaCss3Alt } from "react-icons/fa";
@@ -15,7 +15,7 @@ export default function Projects({ projects }: ProjectsProps) {
         <>
             <div className="w-full mb-5">
                 <div className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full">
-                    <h2 className="lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]">
+                    <h2 className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}>
                         Projetos Recentes
                     </h2>
                 </div>

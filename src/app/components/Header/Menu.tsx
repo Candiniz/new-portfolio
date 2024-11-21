@@ -16,7 +16,7 @@ export default function HeaderMenu({ isVisible, onClose }: MenuProps) {
             fixed inset-0 w-full h-full bg-black bg-opacity-40 backdrop-blur-sm md:hidden
         `} onClick={onClose}>
             <div className="w-full bg-slate-500 h-96 shadow-md py-4 px-5" onClick={(e) => e.stopPropagation()}>
-                <div className="flex justify-between mb-5">
+                <div className="flex justify-around mb-5">
                     <Link href="/">
                         <Image alt="Logotipo" src={zLogo} width={60} />
                     </Link>

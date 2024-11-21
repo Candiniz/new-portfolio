@@ -5,9 +5,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 html, body {
-  background: #303446; /* Gradiente de cima para baixo */
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  background: #303446;
   color: #ffffff;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* Texto com efeito de máscara */
@@ -35,4 +41,9 @@ html, body {
   left: 0;
   width: 100%; /* O vídeo ocupará 100% da largura da div */
   height: 100%; /* A altura será ajustada automaticamente para manter a proporção */
+}
+
+.skill.visible {
+  opacity: 1 !important; /* Altera a opacidade para visível */
+  transform: translateY(0) !important; /* Faz o item aparecer com o efeito de subida */
 }

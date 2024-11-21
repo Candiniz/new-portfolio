@@ -19,6 +19,7 @@ export default function RootLayout({
       <body>
         <Hydrate>
           <Header />
+          
           {children}
         </Hydrate>
       </body>

@@ -2,6 +2,7 @@
 import AboutMe from "./components/Intro";
 import Projects from "./components/Projects";
 import Trails from "./components/AboutMe";
+import Skills from "./components/Skills";
 
 
 export default function Home() {
@@ -56,10 +57,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="py-12 px-6 md:px-60">
+      <div className="mt-[100px]">
         <AboutMe />
       </div>
       <div>
+        <Skills />
         <Projects projects={projects} />
         <Trails />
       </div>

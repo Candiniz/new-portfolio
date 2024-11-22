@@ -47,3 +47,10 @@ html, body {
   opacity: 1 !important; /* Altera a opacidade para visível */
   transform: translateY(0) !important; /* Faz o item aparecer com o efeito de subida */
 }
+
+@keyframes blink {
+  50% {
+      opacity: 0;
+  }
+}
+

@@ -36,15 +36,6 @@ export default function Home() {
       }
     },
     {
-      slug: 'robofriends',
-      name: 'Robofriends',
-      image: {
-        url: 'https://i.imgur.com/TCSyRbd.png',
-        alt: 'Sistema desenvolvido em React para praticar lógicas básicas de Javascript, principalmente métodos FETCH e GET.',
-       date: '10/10/1000'
-      }
-    },
-    {
       slug: 'mario-js',
       name: 'Mario JS',
       image: {

@@ -1,28 +1,94 @@
+'use client';
+
 import Image from "next/image";
-import fotoPerfil from "../../photos/portrait.png"
+import fotoPerfil from "../../photos/portrait.png";
 import Link from "next/link";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
+import { useEffect, useState } from "react";
 
+// Função de efeito de digitação
+const typingEffect = (text: string, callback: () => void) => {
+    let index = 0;
+    const element = document.getElementById("about-typing-title");
+
+    // Garante que o elemento comece invisível
+    if (element) element.classList.remove("visible");
+
+    const interval = setInterval(() => {
+        if (element) {
+            // Usa textContent para digitar os caracteres de forma normal
+            element.textContent = text.slice(0, index + 1);
+            index++;
+            if (index === text.length) {
+                clearInterval(interval);
+                if (element) {
+                    element.classList.add("visible"); // Torna visível após a digitação
+                }
+                callback();
+            }
+        }
+    }, 100);
+};
 
 export default function AboutMe() {
-    return (
-        <div className="w-screen h-fit z-[-1] m-auto"
-        style={{
-            background: 'radial-gradient(circle at center, #5a5f75 0%, #303446 35%)', // Gradiente radial
-        }}>
-            <main className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-center gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}>
+    const [isTypingDone, setIsTypingDone] = useState(false);
 
-                
+    useEffect(() => {
+        // Apenas o "Anderson" será digitado
+        typingEffect("Anderson", () => setIsTypingDone(true));
+    }, []);
+
+    return (
+        <div
+            className="w-screen h-fit z-[-1] m-auto"
+            style={{
+                background: 'radial-gradient(circle at center, #5a5f75 0%, #303446 35%)', // Gradiente radial
+            }}
+        >
+            <main
+                className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-center gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
+            >
                 <div className="text-white mx-8 xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
-                    <h1 className="text-5xl md:text-[6vw] xl:text-[4vw]">Prazer, sou  <span className="font-bold text-[#aadd49]">Anderson!</span></h1>
+                    {/* Texto estático */}
+                    <div id="about-title-container">
+                        <h1 className="text-5xl md:text-[6vw] xl:text-[4vw]">
+                            Prazer, sou{" "}
+                            <span
+                                id="about-typing-title"
+                                className="font-bold text-[#aadd49]"> {/* Apenas "Anderson" será digitado */}
+                            </span>
+                            <span
+                                className={`font-bold text-[#aadd49] ${
+                                    isTypingDone ? "visible" : "invisible"
+                                }`}
+                                style={{
+                                    marginLeft: "5px",
+                                    animation: "blink 1s steps(1, end) infinite",
+                                }}
+                            >
+                                _
+                            </span>
+                        </h1>
+                    </div>
+
                     <div className="mb-12">
                         <h2>Sou um desenvolvedor frontend apaixonado por criar interfaces </h2>
                     </div>
 
                     <div className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3">
-                        <Link href='/contatos' className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all hover:bg-opacity-60 px-10">Vamos conversar!</Link>
-                        <Link href='/contatos' className="rounded-full text-center w-[270px] h-15 p-1 border border-[#aadd49] bg-[#30344600] text-[#aadd49] text-lg transition-all hover:bg-opacity-60 px-10">Baixe meu CV!</Link>
+                        <Link
+                            href="/contatos"
+                            className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all px-10 hover:bg-[#30344600] hover:border border-[#aadd49] hover:text-[#aadd49]"
+                        >
+                            Vamos conversar!
+                        </Link>
+                        <Link
+                            href="/contatos"
+                            className="rounded-full text-center w-[270px] h-15 p-1 border border-[#aadd49] bg-[#30344600] text-[#aadd49] text-lg transition-all px-10 hover:bg-[#aadd49] hover:text-[#21232b] hover:border-none"
+                        >
+                            Baixe meu CV!
+                        </Link>
                     </div>
 
                     <ul className="flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">
@@ -35,14 +101,19 @@ export default function AboutMe() {
                 </div>
                 <div className="m-0 p-0 z-[10]">
                     <div className="relative m-auto w-4/5 md:w-[350px] xl:w-[500px]">
-                        <Image alt="Foto de Perfil" src={fotoPerfil} className="rounded-full" />
+                        <Image
+                            alt="Foto de Perfil"
+                            src={fotoPerfil}
+                            className="rounded-full"
+                        />
                         <p className="p-4 w-fit text-base leading-tight bg-[#787d96] rounded-xl text-white absolute -bottom-[0.75rem]">
                             <span className="text-4xl ">2+</span>
-                            <br /> anos de experiência</p>
+                            <br /> anos de experiência
+                        </p>
                     </div>
                 </div>
                 <StarsBackground />
             </main>
         </div>
-    )
+    );
 }

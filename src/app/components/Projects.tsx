@@ -1,32 +1,95 @@
+'use client';
+
 import { Project } from "../types/Home";
 import Image from "next/image";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
-
 import { FaHtml5 } from "react-icons/fa";
 import { FaCss3Alt } from "react-icons/fa";
 import { FaJs } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 interface ProjectsProps {
     projects: Project[];
 }
 
+// Função de efeito de digitação
+const typingEffect = (text: string, callback: () => void) => {
+    let index = 0;
+    const element = document.getElementById("projects-typing-title");
+    if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
+
+    const interval = setInterval(() => {
+        if (element) {
+            element.textContent = text.slice(0, index + 1);
+            index++;
+            if (index === text.length) {
+                clearInterval(interval);
+                if (element) element.classList.add("visible"); // Torna visível após digitar
+                callback();
+            }
+        }
+    }, 100);
+};
+
 export default function Projects({ projects }: ProjectsProps) {
+    const [isTypingDone, setIsTypingDone] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const element = document.getElementById("projects-typing-title");
+
+                    if (entry.isIntersecting) {
+                        if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
+                        setIsTypingDone(false); // Reinicia o estado
+                        typingEffect("Projetos Recentes", () => setIsTypingDone(true));
+                    } else {
+                        if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
+                        setIsTypingDone(false); // Desativa o estado
+                    }
+                });
+            },
+            { threshold: 0.5 } // Aciona quando 50% do título está visível
+        );
+
+        const target = document.getElementById("projects-title-container");
+        if (target) observer.observe(target);
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <>
-            <div className="w-full mb-5">
-                <div className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full">
-                    <h2 className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}>
-                        Projetos Recentes
+            <div className="w-full mb-5 scroll-mt-20" id="projects">
+                {/* Cabeçalho com efeito de digitação */}
+                <div
+                    id="projects-title-container"
+                    className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full"
+                >
+                    <h2
+                        className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
+                    >
+                        <span id="projects-typing-title"></span>
+                        <span
+                            className={`text-[#aadd49] ${
+                                isTypingDone ? "visible" : "invisible"
+                            }`}
+                            style={{
+                                marginLeft: "5px",
+                                animation: "blink 1s steps(1, end) infinite",
+                            }}
+                        >
+                            _
+                        </span>
                     </h2>
                 </div>
                 <div className="bg-[#aadd49] h-[4px] w-full"></div>
             </div>
+
             <article
                 className={`${ibmPlexMono.className} space-y-16 flex flex-col items-center xl:items-start text-center xl:text-left px-10`}
             >
-            
-
-                
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center xl:justify-start w-full">
                     {projects.map((project, index) => (
                         <li
@@ -47,7 +110,9 @@ export default function Projects({ projects }: ProjectsProps) {
 
                                 {/* Título e Ícones */}
                                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 transition-opacity duration-500 group-hover:opacity-0">
-                                    <p className="text-white text-lg font-semibold">{project.name}</p>
+                                    <p className="text-white text-lg font-semibold">
+                                        {project.name}
+                                    </p>
                                     <div className="flex items-center justify-center gap-2 text-2xl text-[#aadd49]">
                                         <FaHtml5 />
                                         <FaJs />

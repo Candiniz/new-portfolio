@@ -1,14 +1,14 @@
 
 import "../globals.css";
-import { oswald } from "../fonts/Fonts";
+import { oswald, roboto } from "../fonts/Fonts";
 import { useState, useEffect } from "react";
 
 
 
 export default function Musician() {
 
-    const [showAllVideos, setShowAllVideos] = useState(false);
-const [isMobile, setIsMobile] = useState(false); // Para determinar se é mobile (menor que 'sm')
+  const [showAllVideos, setShowAllVideos] = useState(false);
+  const [isMobile, setIsMobile] = useState(false); // Para determinar se é mobile (menor que 'sm')
 
   // Lista dos vídeos
   const videos = [
@@ -56,8 +56,14 @@ const [isMobile, setIsMobile] = useState(false); // Para determinar se é mobile
   const visibleVideos = isMobile ? (showAllVideos ? videos : videos.slice(0, 2)) : videos;
 
 
-    return(
-        <div className="w-full h-fit aspect-video my-36">
+  return (
+    <div className="w-full h-fit aspect-video my-36 scroll-mt-20" id="aboutMe">
+      <div>
+        <h2
+          className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+        >Sobre mim:</h2>
+        <div className="bg-[#aadd49] h-[4px] w-full"></div>
+      </div>
       <div className="inset-0 px-6 flex lg:flex-col items-center justify-center bg-black/80 py-10 h-fit">
         <h1
           className={`
@@ -105,16 +111,16 @@ const [isMobile, setIsMobile] = useState(false); // Para determinar se é mobile
             </button>
           ) : (
             <a href="#hide-button" className="block sm:hidden">
-            <button
-              onClick={() => setShowAllVideos(false)}
-              className="bg-red-500 text-white py-2 px-4 rounded"
-            >
-              Esconder
-            </button>
+              <button
+                onClick={() => setShowAllVideos(false)}
+                className="bg-red-500 text-white py-2 px-4 rounded"
+              >
+                Esconder
+              </button>
             </a>
           )}
         </div>
       )}
     </div>
-    )
-  }
+  )
+}

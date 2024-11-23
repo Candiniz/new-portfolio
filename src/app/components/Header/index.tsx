@@ -54,11 +54,10 @@ export default function Header() {
                         className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
                         href="#projects">Meus Projetos</Link>
                     <Link
-                        onClick={(e) => scrollToAnchor(e, "about")}
+                        onClick={(e) => scrollToAnchor(e, "aboutMe")}
                         className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
-                        href="/contatos">Sobre Mim</Link>
+                        href="#aboutMe">Sobre Mim</Link>
                     <Link
-                        onClick={(e) => scrollToAnchor(e, "about")}
                         className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
                         href="/contatos">Entre em contato</Link>
                 </nav>

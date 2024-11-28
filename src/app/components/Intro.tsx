@@ -5,7 +5,8 @@ import fotoPerfil from "../../photos/portrait.png";
 import Link from "next/link";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -39,11 +40,13 @@ export default function AboutMe() {
         typingEffect("Anderson", () => setIsTypingDone(true));
     }, []);
 
+    const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
+
     return (
         <div
             className="w-screen h-fit z-[-1] m-auto"
             style={{
-                background: 'radial-gradient(circle at center, #5a5f75 0%, #303446 35%)', // Gradiente radial
+                background: 'radial-gradient(circle at center, #27292e 0%, #000 35%)', // Gradiente radial
             }}
         >
             <main
@@ -91,11 +94,11 @@ export default function AboutMe() {
                         </Link>
                     </div>
 
-                    <ul className="flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">
+                    <ul className="select-none flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">
                         <li className="bg-[#2f74c0] text-[#ffffff] w-fit p-2 rounded-md">typescript</li>
                         <li className="bg-[#6bddfa] text-[#000000] w-fit p-2 rounded-md">react</li>
                         <li className="bg-[#efd81d] text-[#000000] w-fit p-2 rounded-md">javascript</li>
-                        <li className="bg-[#000000] text-[#ffffff] w-fit p-2 rounded-md">next.js</li>
+                        <li className="bg-[#353535] text-[#ffffff] w-fit p-2 rounded-md">next.js</li>
                         <li className="bg-[#c762de] text-[#ffffff] w-fit p-2 rounded-md">UX/UI</li>
                     </ul>
                 </div>
@@ -108,11 +111,11 @@ export default function AboutMe() {
                         />
                         <p className="p-4 w-fit text-base leading-tight bg-[#787d96] rounded-xl text-white absolute -bottom-[0.75rem]">
                             <span className="text-4xl ">1+</span>
-                            <br /> anos de experiência
+                            <br /> ano de experiência
                         </p>
                     </div>
                 </div>
-                <StarsBackground />
+                {StarsBackgroundMemoized}
             </main>
         </div>
     );

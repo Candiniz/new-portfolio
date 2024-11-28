@@ -35,7 +35,7 @@ export default function Header() {
 
     return (
         <div className="w-full h-fit fixed z-50">
-            <header className={`${roboto.className} bg-[#1c1e27] text-sm flex py-3 justify-between items-center sticky top-0 z-20 px-6 lg:px-10 `}>
+            <header className={`${roboto.className} bg-[#000] text-sm flex py-3 justify-between items-center sticky top-0 z-20 px-6 lg:px-10 `}>
                 <Link href="/">
                     <Image alt="Logotipo" src={zLogo} height={60} />
                 </Link>
@@ -47,18 +47,18 @@ export default function Header() {
                 <nav className="hidden md:flex items-center gap-1 text-md z-50">
                     <Link
                         onClick={(e) => scrollToAnchor(e, "skills")}
-                        className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
+                        className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-4"
                         href="#skills">Habilidades</Link>
                     <Link
                         onClick={(e) => scrollToAnchor(e, "projects")}
-                        className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
+                        className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-4"
                         href="#projects">Meus Projetos</Link>
                     <Link
                         onClick={(e) => scrollToAnchor(e, "aboutMe")}
-                        className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
+                        className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-4"
                         href="#aboutMe">Sobre Mim</Link>
                     <Link
-                        className="hover:bg-[#aadd49] hover:text-black transition-all duration-500 p-4"
+                        className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-4"
                         href="/contatos">Entre em contato</Link>
                 </nav>
                 <HeaderMenu isVisible={isMenuOpen} onClose={closeMenu} />

@@ -61,14 +61,14 @@ export default function Projects({ projects }: ProjectsProps) {
 
     return (
         <>
-            <div className="w-full mb-5 scroll-mt-20" id="projects">
+            <div className="w-full mb-5 scroll-mt-24" id="projects">
                 {/* Cabeçalho com efeito de digitação */}
                 <div
                     id="projects-title-container"
-                    className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full"
+                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
+                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
                     >
                         <span id="projects-typing-title"></span>
                         <span
@@ -84,7 +84,7 @@ export default function Projects({ projects }: ProjectsProps) {
                         </span>
                     </h2>
                 </div>
-                <div className="bg-[#aadd49] h-[4px] w-full"></div>
+                <div className="bg-[#676767] h-[2px] w-full"></div>
             </div>
 
             <article

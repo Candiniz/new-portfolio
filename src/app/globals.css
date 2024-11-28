@@ -10,15 +10,25 @@ html, body {
   padding: 0;
   width: 100%;
 
-  background: #303446;
+  background: #000000;
   color: #ffffff;
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
 /* Texto com efeito de máscara */
-.bg-clip-text {
+.bg-clip-text-musician {
   background-image: url('../photos/me-w-guitar.jpg'); /* ou use uma cor gradiente */
+  background-clip: text;
+  -webkit-background-clip: text; /* Suporte para WebKit */
+  color: transparent; /* Torna o texto transparente */
+  background-size: cover; /* Ajusta a imagem para cobrir o texto */
+  background-position: center; /* Centraliza a imagem */
+  background-attachment: fixed; /* Mantém a imagem fixa no scroll */
+}
+
+.bg-clip-text-traveller {
+  background-image: url('../photos/edinburgh.jpg'); /* ou use uma cor gradiente */
   background-clip: text;
   -webkit-background-clip: text; /* Suporte para WebKit */
   color: transparent; /* Torna o texto transparente */
@@ -52,5 +62,57 @@ html, body {
   50% {
       opacity: 0;
   }
+}
+
+/* bg-clip-text-bar-musician: ajuste proporcional */
+.bg-clip-text-bar-musician {
+  position: relative;
+  background-image: url('../photos/me-w-guitar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: calc(37vh - 28vw); /* Inicia com 30vh de altura e diminui mais com 15vw à medida que a largura aumenta */
+  min-height: 8px;
+}
+
+.bg-clip-text-bar-musician::before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../photos/me-w-guitar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* bg-clip-text-bar-traveller: ajuste proporcional */
+.bg-clip-text-bar-traveller {
+  position: relative;
+  background-image: url('../photos/edinburgh.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: calc(25vh - 20vw); /* Inicia com 30vh de altura e diminui mais com 15vw à medida que a largura aumenta */
+  min-height: 8px;
+}
+
+.bg-clip-text-bar-traveller::before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../photos/edinburgh.jpg');
+  background-size: cover;
+  background-position: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 

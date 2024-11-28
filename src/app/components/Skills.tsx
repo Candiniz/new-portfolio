@@ -98,7 +98,7 @@ export default function Skills() {
             <div className="w-full mb-5 scroll-mt-24" id="skills">
                 <div
                     id="title-container"
-                    className="bg-gradient-to-t from-[#21232b] to-[#303446] h-fit w-full"
+                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2  
                         className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
@@ -117,7 +117,7 @@ export default function Skills() {
                         </span>
                     </h2>
                 </div>
-                <div className="bg-[#aadd49] h-[4px] w-full"></div>
+                <div className="bg-[#676767] h-[2px] w-full"></div>
             </div>
 
             {/* Conteúdo com ícones e habilidades */}
@@ -128,7 +128,7 @@ export default function Skills() {
                     {skills.map((skill, index) => (
                         <div
                             key={index}
-                            className="bg-[#20232e] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-32 h-32"
+                            className="bg-gradient-to-t from-[#303446] to-[#30344650] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-32 h-32 "
                         >
                             <div className="relative group">
                                 <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
@@ -137,8 +137,8 @@ export default function Skills() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="absolute bottom-0 w-full h-[4px] bg-[#aadd49] z-30"></div>
-                            <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#21232b] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30"></div>
+                            <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none">
                                 {skill.name}
                             </div>
                         </div>

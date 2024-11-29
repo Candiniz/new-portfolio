@@ -38,7 +38,7 @@ export default function Trails() {
           if (entry.isIntersecting) {
             if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
             setIsTypingDone(false); // Reinicia o estado
-            typingEffect("Sobre Mim", () => setIsTypingDone(true));
+            typingEffect("Sobre Mim:", () => setIsTypingDone(true));
           } else {
             if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
             setIsTypingDone(false); // Desativa o estado
@@ -60,7 +60,7 @@ export default function Trails() {
         {/* Cabeçalho com efeito de digitação e gradiente no fundo */}
         <div
           id="trails-title-container"
-          className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
+          className="h-fit w-full"
         >
           <h2
             className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
@@ -80,8 +80,8 @@ export default function Trails() {
         <div className="bg-[#676767] h-[2px] w-full"></div>
       </div>
 
-      {/* Conteúdo dos componentes Musician e Traveller */}
-      <div className="mt-28">
+      {/* Conteúdo dos componentes Traveller e Traveller */}
+      <div className="">
         <Musician />
         <Traveller />
       </div>

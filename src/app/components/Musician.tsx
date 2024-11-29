@@ -1,6 +1,8 @@
 import "../globals.css";
-import { oswald } from "../fonts/Fonts";
+import { oswald, roboto } from "../fonts/Fonts";
 import { useState, useEffect } from "react";
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+
 
 // Função para rolar suavemente para o próximo vídeo
 const scrollToAnchor = (e) => {
@@ -42,20 +44,27 @@ export default function Musician() {
   const visibleVideos = isMobile ? (showAllVideos ? videos : videos.slice(0, 2)) : videos;
 
   return (
-    <div className="w-full h-fit aspect-video">
-      <div className="inset-0 px-6 flex lg:flex-col items-center justify-center bg-black/80 py-10">
-        <div className="w-full h-full">
-          <div className="bg-clip-text-bar-musician w-auto mr-4 mb-1 lg:hidden 2xl:block lg:mx-6 2xl:h-28"></div>
+    <div className="w-full h-fit aspect-video mt-20">
+      <div className="relative w-full h-72 mb-3 lg:mb-0">
+        <div className="absolute top-0 right-0 inset-0 bg-gradient-to-b from-black to-transparent z-[11] "></div>
+        <div className="bg-clip-text-bar-musician w-full h-full relative z-10">
+        </div>
+      </div>
+      <div className="inset-0 px-3 flex lg:flex-col  bg-black/80">
+        <div className="w-full">
+          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mb-1 lg:hidden  2xl:h-28"></div>
           <h1 className={`${oswald.className} text-transparent text-right lg:text-center 2xl:text-left font-bold pr-4 bg-clip-text-musician text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4`}>
             MUSICO & PRODUTOR MUSICAL
           </h1>
-          <div className="bg-clip-text-bar-musician w-auto mr-4 mt-2 lg:hidden 2xl:block lg:mx-6 2xl:h-10 2xl:mt-4"></div>
+          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mt-2 lg:block 2xl:block lg:mx-6 2xl:h-10 2xl:mt-4"></div>
         </div>
-        <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 lg:pt-10`}>
+        <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 lg:pt-10 lg:mb-10`}>
           Sou um músico e cantor autodidata, tendo iniciado meus estudos aos 11 anos, e esse primeiro contato com o mundo da música me ajudou imensamente a abrir os horizontes e expandir minhas habilidades criativas, o que contribuiu para eu chegar até aqui e me tornar o profissional que sou hoje. Com mais de 30 músicas compostas e vários vídeos no meu canal do YouTube, sou grato a todos que me apoiaram e continuam me apoiando a fazer o que amo.
           <br />
           Além disso, possuo amplos conhecimentos em produção audiovisual e produção musical, o que me permite criar conteúdos completos e de alta qualidade, desde a concepção de uma ideia até sua realização final. Essa versatilidade me possibilita transmitir emoções e histórias de maneira autêntica e profissional.
         </p>
+      </div>
+      <div className="bg-clip-text-bar-musician h-20 w-full 2xl:block mt-3 lg:mb-0">
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
@@ -75,30 +84,32 @@ export default function Musician() {
       </div>
 
       {isMobile && (
-        <div className="text-center mt-4">
-          {!showAllVideos ? (
-            <button
-              onClick={(e) => {
-                setShowAllVideos(true);
-                scrollToAnchor(e); // Chama a rolagem suave quando clica em "Ver Mais"
-              }}
-              className="bg-[#565656] hover:bg-[#909090] transition-all duration-300 text-white py-2 px-4 rounded"
-            >
-              Ver Mais
-            </button>
-          ) : (
-            <button
-              onClick={(e) => {
-                setShowAllVideos(false);
-                scrollToAnchor(e); // Chama a rolagem suave quando clica em "Esconder"
-              }}
-              className="bg-red-500 hover:bg-red-400 transition-all duration-300 text-white py-2 px-4 rounded"
-            >
-              Esconder
-            </button>
-          )}
-        </div>
-      )}
+  <div className={`${roboto.className} text-center w-full flex items-center justify-center mt-4`}>
+    {!showAllVideos ? (
+      <button
+        onClick={(e) => {
+          setShowAllVideos(true);
+          scrollToAnchor(e); // Chama a rolagem suave quando clica em "Ver Mais"
+        }}
+        className="transition-all duration-300 text-white py-2 px-4 rounded flex flex-col items-center hover:text-[#aadd49]"
+      >
+        <RiArrowDownSLine size={30} className="hover:scale-150 transition-all duration-300" />
+        <span className="text-xs mt-1">Mostrar mais</span>
+      </button>
+    ) : (
+      <button
+        onClick={(e) => {
+          setShowAllVideos(false);
+          scrollToAnchor(e); // Chama a rolagem suave quando clica em "Esconder"
+        }}
+        className="transition-all duration-300 text-white py-2 px-4 rounded flex flex-col items-center hover:text-red-500"
+      >
+        <RiArrowUpSLine size={30} className="hover:scale-150 transition-all " />
+        <span className="text-xs mt-1">Esconder</span>
+      </button>
+    )}
+  </div>
+)}
     </div>
   );
 }

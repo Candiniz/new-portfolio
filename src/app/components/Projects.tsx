@@ -61,11 +61,11 @@ export default function Projects({ projects }: ProjectsProps) {
 
     return (
         <>
-            <div className="w-full mb-5 scroll-mt-24" id="projects">
+            <div className="w-full mt-36 mb-5 scroll-mt-24" id="projects">
                 {/* Cabeçalho com efeito de digitação */}
                 <div
                     id="projects-title-container"
-                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
+                    className="h-fit w-full"
                 >
                     <h2
                         className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}

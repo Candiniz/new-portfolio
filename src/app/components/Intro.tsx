@@ -43,7 +43,7 @@ export default function AboutMe() {
     const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
 
     return (
-        <div
+        <div 
             className="w-screen h-fit z-[-1] m-auto"
             style={{
                 background: 'radial-gradient(circle at center, #27292e 0%, #000 35%)', // Gradiente radial

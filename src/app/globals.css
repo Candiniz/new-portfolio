@@ -71,8 +71,17 @@ html, body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  height: calc(37vh - 28vw); /* Inicia com 30vh de altura e diminui mais com 15vw à medida que a largura aumenta */
+}
+
+.bg-musician-h {
+  height: 270px; /* Altura padrão */
   min-height: 8px;
+}
+
+@media (min-width: 400px) { /* A partir da largura 'sm' (640px ou maior) */
+  .bg-musician-h {
+    height: calc(39vh - 28vw); /* Aplica o cálculo apenas para telas sm ou maiores */
+  }
 }
 
 .bg-clip-text-bar-musician::before {
@@ -97,8 +106,17 @@ html, body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  height: calc(25vh - 20vw); /* Inicia com 30vh de altura e diminui mais com 15vw à medida que a largura aumenta */
+}
+
+.bg-traveller-h {
+  height: 200px; /* Altura padrão */
   min-height: 8px;
+}
+
+@media (min-width: 400px) { /* A partir da largura 'sm' (640px ou maior) */
+  .bg-traveller-h {
+    height: calc(25vh - 20vw); /* Aplica o cálculo apenas para telas sm ou maiores */
+  }
 }
 
 .bg-clip-text-bar-traveller::before {
@@ -116,3 +134,17 @@ html, body {
   color: transparent;
 }
 
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+@layer utilities {
+  .text-glow {
+    @apply text-white;  /* Cor do texto */
+    transition: text-shadow 0.3s ease-in-out;
+  }
+
+  .text-glow:hover {
+    text-shadow: 0 0 5px #aad49e, 0 0 10px #aad49e, 0 0 15px #aad49e;
+  }
+}

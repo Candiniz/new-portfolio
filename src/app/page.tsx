@@ -3,6 +3,8 @@ import AboutMe from "./components/Intro";
 import Projects from "./components/Projects";
 import Trails from "./components/AboutMe";
 import Skills from "./components/Skills";
+import "./globals.css";
+
 
 
 export default function Home() {

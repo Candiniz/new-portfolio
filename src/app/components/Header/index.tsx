@@ -103,7 +103,7 @@ export default function Header() {
                     <nav className="hidden lg:flex items-center gap-1 text-md z-50">
                         <Link onClick={(e) => scrollToAnchor(e, "skills")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#skills">Habilidades</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "projects")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#projects">Projetos</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Projetos</Link>
+                        <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Formação</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "aboutMe")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#aboutMe">Sobre Mim</Link>
                         <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="/contatos">Contatos</Link>
                     </nav>

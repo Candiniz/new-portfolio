@@ -147,17 +147,17 @@ export default function Skills() {
                     className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
                 >
                     <div
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
+                        className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
                     >
                         {skills.map((skill, index) => (
                             <div
                                 key={index}
-                                className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-28 h-28"
+                                className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
                                 onClick={() => openModal(skill)}
                             >
                                 <div className="relative group">
                                     <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
-                                        <div className="text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
+                                        <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
                                             {skill.icon}
                                         </div>
                                     </div>

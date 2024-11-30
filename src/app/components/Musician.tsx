@@ -50,15 +50,15 @@ export default function Musician() {
         <div className="bg-clip-text-bar-musician w-full h-full relative z-10">
         </div>
       </div>
-      <div className="inset-0 px-3 flex lg:flex-col  bg-black/80">
+      <div className="inset-0 px-3 flex justify-center items-center bg-black/80">
         <div className="w-full">
           <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mb-1 lg:hidden  2xl:h-28"></div>
-          <h1 className={`${oswald.className} text-transparent text-right lg:text-center 2xl:text-left font-bold pr-4 bg-clip-text-musician text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4`}>
+          <h1 className={`${oswald.className} text-transparent text-right lg:text-left font-bold pr-4 bg-clip-text-musician text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4`}>
             MUSICO & PRODUTOR MUSICAL
           </h1>
-          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mt-2 lg:block 2xl:block lg:mx-6 2xl:h-10 2xl:mt-4"></div>
+          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mt-2 lg:block 2xl:block 2xl:h-10 2xl:mt-4"></div>
         </div>
-        <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 lg:pt-10 lg:mb-10`}>
+        <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5`}>
           Sou um músico e cantor autodidata, tendo iniciado meus estudos aos 11 anos, e esse primeiro contato com o mundo da música me ajudou imensamente a abrir os horizontes e expandir minhas habilidades criativas, o que contribuiu para eu chegar até aqui e me tornar o profissional que sou hoje. Com mais de 30 músicas compostas e vários vídeos no meu canal do YouTube, sou grato a todos que me apoiaram e continuam me apoiando a fazer o que amo.
           <br />
           Além disso, possuo amplos conhecimentos em produção audiovisual e produção musical, o que me permite criar conteúdos completos e de alta qualidade, desde a concepção de uma ideia até sua realização final. Essa versatilidade me possibilita transmitir emoções e histórias de maneira autêntica e profissional.

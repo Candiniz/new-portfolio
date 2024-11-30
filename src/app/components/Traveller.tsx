@@ -1,6 +1,7 @@
 
 import "../globals.css";
 import { oswald } from "../fonts/Fonts";
+import InstagramFeed from "./Instagram/InstagramFeed";
 
 
 
@@ -16,12 +17,12 @@ export default function Traveller() {
         </div>
       </div>
 
-      <div className="inset-0 px-3 flex lg:flex-col-reverse justify-center items-center  bg-black/80">
+      <div className="inset-0 px-3 flex lg:flex-row justify-center items-center  bg-black/80">
         <p className={`${oswald.className} bg-clip-text-traveller text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5`}>
           Traveling is one of my greatest passions. I had the opportunity to study English in Ireland for a year and a half at ELI Language School in Drogheda, and I reached an advanced C1 level in the language. During my travels through Europe and Africa, I met incredible minds and learned a lot about architecture and technology. If you&apos;re also interested in these topics, it would be a pleasure to have you on our Instagram, where I share a bit of these experiences and discoveries!
         </p>
         <div className="w-full">
-          <div className="bg-clip-text-bar-traveller bg-traveller-h w-auto ml-3 mb-1 2xl:h-28"></div>
+          <div className="bg-clip-text-bar-traveller bg-traveller-h w-auto ml-3 mt-3 2xl:h-28"></div>
           <h1
             className={`
             ${oswald.className} 
@@ -36,6 +37,12 @@ export default function Traveller() {
         </div>
       </div>
       <div className="bg-clip-text-bar-traveller h-20 w-full 2xl:block mt-3 lg:mb-0">
+      </div>
+      <script src="https://static.elfsight.com/platform/platform.js" async></script>
+      <div className="w-[90vw] h-fit bg-[#1b1b1b] m-auto flex p-5 items-center justify-center mt-20">
+        <InstagramFeed />
+
+
       </div>
     </div>
   )

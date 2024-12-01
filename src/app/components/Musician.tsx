@@ -64,7 +64,7 @@ export default function Musician() {
           Além disso, possuo amplos conhecimentos em produção audiovisual e produção musical, o que me permite criar conteúdos completos e de alta qualidade, desde a concepção de uma ideia até sua realização final. Essa versatilidade me possibilita transmitir emoções e histórias de maneira autêntica e profissional.
         </p>
       </div>
-      <div className="bg-clip-text-bar-musician h-20 w-full 2xl:block mt-3 lg:mb-0">
+      <div className="bg-clip-text-bar-musician h-20 w-full 2xl:block mt-3 mb-4 lg:mb-0">
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">

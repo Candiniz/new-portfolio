@@ -366,8 +366,9 @@ export default function Skills() {
                     }}
                 ></div>
                 <Carousel
-                    onSwipeStart={handleTouchStart}
-                    onSwipeMove={handleTouchMove}
+                    preventMovementUntilSwipeScrollTolerance={true}
+                    swipeScrollTolerance={10}
+
                     showThumbs={false}
                     showStatus={false}
                     showArrows={true}

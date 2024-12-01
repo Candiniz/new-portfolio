@@ -2,7 +2,7 @@
 
 
 export const fetchInstagramProfileData = async () => {
-    const accessToken = process.env.NEXT_PUBLIC_INSTAGRAM_ACCESS_TOKEN || ''; // Aqui você passa o token corretamente
+    const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN || ''; // Aqui você passa o token corretamente
     const url = `https://graph.instagram.com/me?fields=id,username,followers_count,follows_count,media_count&access_token=${accessToken}`;
     try {
       const res = await fetch(url);
@@ -20,7 +20,7 @@ export const fetchInstagramProfileData = async () => {
   
   // Função para pegar os detalhes de cada post (curtidas, comentários, etc)
   export const fetchPostDetails = async (postId: string) => {
-    const accessToken = process.env.NEXT_PUBLIC_INSTAGRAM_ACCESS_TOKEN;
+    const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
     
     if (!accessToken) {
       throw new Error("Token de acesso do Instagram não encontrado.");

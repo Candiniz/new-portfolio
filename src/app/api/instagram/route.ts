@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const accessToken = process.env.NEXT_PUBLIC_INSTAGRAM_ACCESS_TOKEN;
+    const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
     if (!accessToken) {
       throw new Error("Token de acesso não encontrado");
     }

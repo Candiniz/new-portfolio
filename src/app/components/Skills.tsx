@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { SiStyledcomponents } from "react-icons/si";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaDatabase, FaUniversalAccess } from "react-icons/fa";
+import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaDatabase, FaUniversalAccess, FaMobileAlt, FaShareAlt } from "react-icons/fa";
 import { RiNextjsFill, RiServerLine, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript } from "react-icons/si";
 import { DiPhotoshop, DiIllustrator } from "react-icons/di";
@@ -96,7 +96,7 @@ export const skills = [
     },
 ];
 
-export const extraSkills = [
+const extraSkills = (closeModal: () => void) => [
     {
         icon: <FaDatabase />,
         name: "SQL",
@@ -126,6 +126,37 @@ export const extraSkills = [
         name: "Construção de API's",
         description: "Desenvolvimento e manutenção de APIs para comunicação entre diferentes sistemas e plataformas.",
         descriptionTwo: "Tenho certa experiência no desenvolvimento e manutenção de APIs, tanto RESTful quanto GraphQL, garantindo performance, segurança e escalabilidade. Construo soluções robustas que permitem a integração de diferentes sistemas, serviços e plataformas, atendendo às necessidades específicas de cada projeto. Já trabalhei com tecnologias e frameworks como Node.js e Express para criar APIs que conectam frontends e bancos de dados de forma eficiente. "
+    },
+    {
+        icon: <FaMobileAlt />,
+        name: "Construção de Apps Meta",
+        description: "Desenvolvimento de aplicativos interativos e otimizados para a plataforma Meta.",
+        descriptionTwo: (
+            <>
+                Tenho experiência no desenvolvimento de aplicativos para o ecossistema Meta, incluindo integração com APIs do Facebook, Instagram e WhatsApp. Desenvolvo aplicações interativas, otimizadas e seguras, aproveitando ferramentas como o GraphQL e o Meta SDK.<br /><br />
+                Possuo um componente simples demonstrativo feito com base em dados coletados pelo meu app meta linkado com meu instagram pessoal{" "}
+                <a className="text-yellow-400 font-bold hover:text-yellow-200"
+                    href="#insta"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        const targetElement = document.getElementById('insta');
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        closeModal();
+                    }}
+                >
+                    aqui
+                </a>
+
+            </>
+        )
+    },
+    {
+        icon: <FaShareAlt />,
+        name: "Manutenção e Design de Redes Sociais",
+        description: "Gestão criativa e técnica de redes sociais para engajamento e presença digital.",
+        descriptionTwo: "Tenho experiência em manter e melhorar perfis de redes sociais como Instagram, LinkedIn e Twitter. Meu trabalho inclui design gráfico personalizado, otimização de conteúdo para engajamento e análise de desempenho com ferramentas como Google Analytics e Meta Business Suite.\n\nRealizo desde a criação de identidades visuais até a gestão de campanhas estratégicas, garantindo um impacto positivo e consistente na presença online de marcas e projetos."
     },
 ];
 
@@ -183,6 +214,26 @@ const Dot = styled.div<DotProps>`
   `}
 `;
 
+const CustomArrow = styled.div`
+  .carousel .control-arrow {
+    font-size: 10rem;  // Aumentando o tamanho
+    color: #aadd49;
+    z-index: 2;
+  }
+
+  .carousel .control-arrow:hover {
+    color: #aadd49;
+  }
+
+  .carousel .control-prev::before {
+    border-right: 10px solid #aadd49;
+  }
+
+  .carousel .control-next::before {
+    border-left: 10px solid #aadd49;
+  }
+`;
+
 const AnimatedTrapezoidalDiv = styled(motion.div)`
     width: 600px;
     height: 100vh;
@@ -231,7 +282,7 @@ export default function Skills() {
         icon: JSX.Element,
         name: string,
         description: string,
-        descriptionTwo: string
+        descriptionTwo: string | JSX.Element;
     } | null>(null);
 
 
@@ -276,7 +327,7 @@ export default function Skills() {
         icon: JSX.Element;
         name: string;
         description: string;
-        descriptionTwo: string;
+        descriptionTwo: string | JSX.Element;
     }) => {
         setModalData(skill);
         setIsModalOpen(true);
@@ -310,6 +361,8 @@ export default function Skills() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    const skillsArray = extraSkills(closeModal);
 
     return (
         <>
@@ -347,6 +400,7 @@ export default function Skills() {
                         backgroundPosition: "70% center",
                     }}
                 ></div>
+                <CustomArrow>
                 <Carousel
                     preventMovementUntilSwipeScrollTolerance={true}
                     swipeScrollTolerance={200}
@@ -356,6 +410,7 @@ export default function Skills() {
                     showArrows={true}
                     swipeable={true}
                     emulateTouch={true}
+                    
                     renderIndicator={(clickHandler, isSelected, index) => {
                         return (
                             <DotsWrapper key={index}>
@@ -406,7 +461,7 @@ export default function Skills() {
                         <div
                             className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
                         >
-                            {extraSkills.map((extraSkill, index) => (
+                            {skillsArray.map((extraSkill, index) => (
                                 <div
                                     key={index}
                                     className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
@@ -428,6 +483,7 @@ export default function Skills() {
                         </div>
                     </div>
                 </Carousel>
+                </CustomArrow>
             </div>
 
             {/* Modal */}
@@ -476,9 +532,16 @@ export default function Skills() {
                             >
                                 <div>
                                     <p className="text-[#aadd49] text-[10px] lg:text-sm border-t-2 border-b-2 border-[#aadd49] py-3">
-                                        {modalData.descriptionTwo.split("\n").map((line, index) => (
-                                            <span key={index}>{line}<br /></span> // Renderiza cada linha com <br />
-                                        ))}
+                                        {typeof modalData.descriptionTwo === "string" ? (
+                                            modalData.descriptionTwo.split("\n").map((line, index) => (
+                                                <span key={index}>
+                                                    {line}
+                                                    <br />
+                                                </span>
+                                            ))
+                                        ) : (
+                                            modalData.descriptionTwo // Renderiza diretamente se for JSX
+                                        )}
                                     </p>
                                 </div>
                             </AnimatedTrapezoidalDiv>

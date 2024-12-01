@@ -38,7 +38,7 @@ export default function Traveller() {
       <div className="bg-clip-text-bar-traveller h-20 w-full 2xl:block mt-3 lg:mb-0">
       </div>
       <script src="https://static.elfsight.com/platform/platform.js" async></script>
-      <div className="w-[90vw] h-fit bg-[#1b1b1b] m-auto flex p-5 items-center justify-center mt-20">
+      <div className="w-[90vw] h-fit bg-[#1b1b1b] m-auto flex p-5 items-center justify-center mt-20" id="insta">
         <InstagramFeed />
 
 

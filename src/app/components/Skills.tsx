@@ -9,7 +9,7 @@ import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaData
 import { RiNextjsFill, RiServerLine, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript } from "react-icons/si";
 import { DiPhotoshop, DiIllustrator } from "react-icons/di";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { MdSpeed } from "react-icons/md";
 import { AiOutlineTool } from "react-icons/ai";
@@ -202,12 +202,12 @@ const AnimatedTrapezoidalDiv2 = styled(motion.div)`
     background-color: #aadd49;
     position: fixed;
     bottom: 0;
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(25% 0%, 85% 0%, 100% 100%, 0% 100%);
     z-index: 39;
 
 
   @media (max-width: 1024px) {
-    clip-path: polygon(0% 20%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 25%, 100% 0%, 100% 100%, 0% 100%);
     width: 100%;
     height: 40vh;
     margin-bottom: 20px;
@@ -229,15 +229,15 @@ export default function Skills() {
 
 
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth > 1024);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth > 1024);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     // Efeito de digitação
     useEffect(() => {
@@ -304,6 +304,31 @@ export default function Skills() {
         };
     }, []);
 
+
+
+    const startY = useRef<number>(0);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (e.touches && e.touches.length > 0) {
+            startY.current = e.touches[0].clientY; // Captura a posição inicial no eixo Y
+        }
+    };
+
+    const handleTouchMove = (e: React.TouchEvent): boolean => {
+        if (e.touches && e.touches.length > 0 && startY.current !== null) {
+            const deltaY = Math.abs(e.touches[0].clientY - startY.current);
+
+            // Se o movimento é principalmente vertical, interrompe o swipe
+            if (deltaY > 10) {
+                return false; // Impede o swipe horizontal
+            }
+
+            return true; // Permite o swipe horizontal
+        }
+
+        return true; // Caso nenhum toque válido seja encontrado, permite o swipe
+    };
+
     return (
         <>
             {/* Cabeçalho com efeito de digitação */}
@@ -341,6 +366,8 @@ export default function Skills() {
                     }}
                 ></div>
                 <Carousel
+                    onSwipeStart={handleTouchStart}
+                    onSwipeMove={handleTouchMove}
                     showThumbs={false}
                     showStatus={false}
                     showArrows={true}
@@ -448,7 +475,7 @@ export default function Skills() {
                                     <span className="text-[#aadd49]">{modalData.icon}</span>
                                     {modalData.name}
                                 </h3>
-                                <p className="mt-2">{modalData.description}</p>
+                                <p className="mt-2 text-sm ">{modalData.description}</p>
                                 <button
                                     className="mt-4 bg-[#aadd49] text-black px-4 py-2 rounded cursor-pointer hover:bg-[#d9fa9a] transition-all duration-300"
                                     onClick={closeModal}
@@ -457,7 +484,7 @@ export default function Skills() {
                                 </button>
                             </motion.div>
                             <AnimatedTrapezoidalDiv
-                                className="flex items-center justify-center px-36"
+                                className="flex items-center justify-center px-16 sm:px-24 md:px-28 lg:px-36 text-justify"
                                 onClick={(e) => e.stopPropagation()}
                                 initial={{ opacity: 0, x: isLargeScreen ? -100 : 0, y: isLargeScreen ? 0 : 100 }}
                                 animate={{ opacity: 1, x: 0, y: 0 }}
@@ -465,7 +492,7 @@ export default function Skills() {
                                 transition={{ duration: 0.3 }}
                             >
                                 <div>
-                                    <p className="text-[#aadd49]">
+                                    <p className="text-[#aadd49] text-sm">
                                         {modalData.descriptionTwo}
                                     </p>
                                 </div>

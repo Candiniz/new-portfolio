@@ -74,7 +74,7 @@ export default function InstagramFeed() {
 
 
     fetchInstagramPosts();
-  }, [blacklist]);
+  }, []);
 
   // Exibir mensagem de carregamento
   if (loading) {

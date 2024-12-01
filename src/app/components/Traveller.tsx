@@ -11,14 +11,14 @@ export default function Traveller() {
   return (
     <div className="w-full h-fit aspect-video mt-20">
 
-      <div className="relative w-full h-72 mb-3 lg:mb-0">
+      <div className="relative w-full h-72 lg:mb-0">
         <div className="absolute top-0 right-0 inset-0 bg-gradient-to-b from-black to-transparent z-[11] "></div>
         <div className="bg-clip-text-bar-traveller w-full h-full relative z-10">
         </div>
       </div>
 
-      <div className="inset-0 px-3 flex lg:flex-row justify-center items-center  bg-black/80">
-        <p className={`${oswald.className} bg-clip-text-traveller text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5`}>
+      <div className="inset-0 flex lg:flex-row justify-center items-center  bg-black/80">
+        <p className={`${oswald.className} bg-clip-text-traveller text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 ml-3`}>
           Traveling is one of my greatest passions. I had the opportunity to study English in Ireland for a year and a half at ELI Language School in Drogheda, and I reached an advanced C1 level in the language. During my travels through Europe and Africa, I met incredible minds and learned a lot about architecture and technology. If you&apos;re also interested in these topics, it would be a pleasure to have you on our Instagram, where I share a bit of these experiences and discoveries!
         </p>
         <div className="w-full">
@@ -27,8 +27,7 @@ export default function Traveller() {
             className={`
             ${oswald.className} 
             text-transparent text-left lg:text-center 2xl:text-left font-bold pl-3 bg-clip-text-traveller
-              text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem]
-              2xl:px-4 
+              text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4 mr-3
           `}
           >
             BACKPACKER & TRAVELLER

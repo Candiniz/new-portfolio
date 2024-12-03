@@ -78,7 +78,13 @@ export default function InstagramFeed() {
 
   // Exibir mensagem de carregamento
   if (loading) {
-    return <div>Carregando...</div>;
+    return (
+    <div className="mx-auto mt-3 
+    w-[95%] md:w-[550px] xl:w-[600px]
+    ">
+      Carregando...
+    </div>
+    )
   }
 
   // Exibir mensagem de erro se ocorrer algum problema
@@ -100,12 +106,13 @@ export default function InstagramFeed() {
 
 
   return (
-    <div className="mx-auto md:ml-5 mt-5 w-[90vw] md:w-[450px]">
+    <div className="mx-auto mt-3 
+    w-[95%] md:w-[550px] xl:w-[600px] ">
       <InstagramHeader />
       {/* Grid de Posts */}
-      <div className="grid grid-cols-3 gap-[0.1rem]">
+      <div className="grid grid-cols-3 gap-[0.1rem] ">
         {posts.length === 0 ? (
-          <div className="col-span-full text-center text-xl">Nenhum post disponível.</div>
+          <div className="col-span-full text-center text-xl mx-auto mt-3 w-[90vw] md:w-[450px] xl:w-[550px]">Nenhum post disponível.</div>
         ) : (
           posts.map((post) => (
             <div

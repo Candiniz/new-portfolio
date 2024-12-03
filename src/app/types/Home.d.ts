@@ -5,7 +5,14 @@ export interface Images {
 }
 
 export interface Project {
-    slug: string
-    name: string
-    image: Images
+    slug: string,
+    name: string,
+
+    projectLink: string,
+    repositoryLink: string,
+    linkedIn: string,
+    
+    image: Images,
+    icons: JSX.Element
+    description?: string;
 }

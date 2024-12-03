@@ -373,7 +373,7 @@ export default function Skills() {
                     className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 text-4xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
                     >
                         <span id="typing-title"></span>
                         <span
@@ -399,90 +399,96 @@ export default function Skills() {
                         backgroundImage: "url('/me-in-park.jpg')",
                         backgroundPosition: "70% center",
                     }}
-                ></div>
-                <CustomArrow>
-                <Carousel
-                    preventMovementUntilSwipeScrollTolerance={true}
-                    swipeScrollTolerance={200}
-                    dynamicHeight={true}
-                    showThumbs={false}
-                    showStatus={false}
-                    showArrows={true}
-                    swipeable={true}
-                    emulateTouch={true}
-                    
-                    renderIndicator={(clickHandler, isSelected, index) => {
-                        return (
-                            <DotsWrapper key={index}>
-                                <Dot
-                                    selected={!isSelected}  // Passando a prop 'selected' para aplicar o estilo correto
-                                    onClick={clickHandler}
-                                />
-                                {/* Adicionando um segundo ponto ao lado */}
-                                <Dot
-                                    selected={isSelected}  // O segundo ponto vai refletir a seleção também
-                                    onClick={clickHandler}
-                                />
-                            </DotsWrapper>
-                        );
-                    }}
-                    infiniteLoop={true}
                 >
-                    <div
-                        className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
+
+                    <div className={`${roboto.className} hidden lg:block lg:absolute xl:right-[70px] lg:right-[40px] top-[50%] xl:w-[40%] lg:w-[30%]`}>
+                        <p>Um pouco do que sei e do que estou aprendendo \(^_^)/</p>
+                    </div>
+
+                </div>
+                <CustomArrow>
+                    <Carousel
+                        preventMovementUntilSwipeScrollTolerance={true}
+                        swipeScrollTolerance={20}
+                        dynamicHeight={true}
+                        showThumbs={false}
+                        showStatus={false}
+                        showArrows={true}
+                        swipeable={true}
+                        emulateTouch={true}
+
+                        renderIndicator={(clickHandler, isSelected, index) => {
+                            return (
+                                <DotsWrapper key={index}>
+                                    <Dot
+                                        selected={!isSelected}  // Passando a prop 'selected' para aplicar o estilo correto
+                                        onClick={clickHandler}
+                                    />
+                                    {/* Adicionando um segundo ponto ao lado */}
+                                    <Dot
+                                        selected={isSelected}  // O segundo ponto vai refletir a seleção também
+                                        onClick={clickHandler}
+                                    />
+                                </DotsWrapper>
+                            );
+                        }}
+                        infiniteLoop={true}
                     >
                         <div
-                            className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
+                            className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
                         >
-                            {skills.map((skill, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
-                                    onClick={() => openModal(skill)}
-                                >
-                                    <div className="relative group">
-                                        <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
-                                            <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
-                                                {skill.icon}
+                            <div
+                                className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
+                            >
+                                {skills.map((skill, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
+                                        onClick={() => openModal(skill)}
+                                    >
+                                        <div className="relative group">
+                                            <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
+                                                <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
+                                                    {skill.icon}
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
+                                        <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none text-sm md:text-base">
+                                            {skill.name}
+                                        </div>
                                     </div>
-                                    <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
-                                    <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none">
-                                        {skill.name}
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
-                    >
                         <div
-                            className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
+                            className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
                         >
-                            {skillsArray.map((extraSkill, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
-                                    onClick={() => openModal(extraSkill)}
-                                >
-                                    <div className="relative group">
-                                        <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
-                                            <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
-                                                {extraSkill.icon}
+                            <div
+                                className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
+                            >
+                                {skillsArray.map((extraSkill, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
+                                        onClick={() => openModal(extraSkill)}
+                                    >
+                                        <div className="relative group">
+                                            <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
+                                                <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
+                                                    {extraSkill.icon}
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
+                                        <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none text-sm md:text-base">
+                                            {extraSkill.name}
+                                        </div>
                                     </div>
-                                    <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
-                                    <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none">
-                                        {extraSkill.name}
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </Carousel>
+                    </Carousel>
                 </CustomArrow>
             </div>
 
@@ -496,7 +502,7 @@ export default function Skills() {
                             initial={{ opacity: 0 }} // Inicia invisível
                             animate={{ opacity: 1 }} // Fica visível
                             exit={{ opacity: 0 }} // Sai de forma suave
-                            transition={{ duration: 0.3 }} // Transição suave
+                            transition={{ duration: 0.1 }} // Transição suave
                         >
                             <motion.div
                                 className="bg-black text-white p-6 mb-96 md:mr-10 lg:mr-20 xl:mr-36 rounded-lg w-80"
@@ -504,7 +510,13 @@ export default function Skills() {
                                 initial={{ scale: 0.9 }} // Inicializa o modal pequeno
                                 animate={{ scale: 1 }} // Expande para o tamanho normal
                                 exit={{ scale: 0.9 }} // Encolhe ao fechar
-                                transition={{ duration: 0.3 }} // Transição suave
+                                transition={{
+                                    duration: 0.1,
+                                    ease: "easeInOut",
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 10
+                                }}
                                 style={{
                                     borderLeft: "4px solid #aadd49",
                                     borderBottom: "4px solid #aadd49",
@@ -523,15 +535,21 @@ export default function Skills() {
                                 </button>
                             </motion.div>
                             <AnimatedTrapezoidalDiv
-                                className="flex items-center justify-center px-16 sm:px-24 md:px-28 lg:px-36 pt-10 text-justify"
+                                className="flex items-center justify-center px-10 sm:px-16 md:px-24 lg:px-36 pt-10 text-justify"
                                 onClick={(e) => e.stopPropagation()}
                                 initial={{ opacity: 0, x: isLargeScreen ? -100 : 0, y: isLargeScreen ? 0 : 100 }}
                                 animate={{ opacity: 1, x: 0, y: 0 }}
                                 exit={{ opacity: 0, x: isLargeScreen ? 100 : 0, y: isLargeScreen ? 0 : 100 }}
-                                transition={{ duration: 0.3 }}
+                                transition={{
+                                    duration: 0.1,
+                                    ease: "easeInOut",
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 10
+                                }}
                             >
                                 <div>
-                                    <p className="text-[#aadd49] text-[10px] lg:text-sm border-t-2 border-b-2 border-[#aadd49] py-3">
+                                    <p className="text-[#aadd49] text-[10px] lg:text-sm lg:border-t-2 lg:border-b-2 border-[#aadd49] py-3">
                                         {typeof modalData.descriptionTwo === "string" ? (
                                             modalData.descriptionTwo.split("\n").map((line, index) => (
                                                 <span key={index}>
@@ -561,11 +579,11 @@ export default function Skills() {
                                 }}
                                 exit={{ opacity: 0, color: 'black', x: isLargeScreen ? 100 : 0, y: isLargeScreen ? 0 : 100 }}
                                 transition={{
-                                    duration: 0.5,
+                                    duration: 0.2,
                                     ease: "easeInOut",
                                     type: "spring",
-                                    stiffness: 100,
-                                    damping: 20
+                                    stiffness: 300,
+                                    damping: 10
                                 }}
                             />
                         </motion.div>

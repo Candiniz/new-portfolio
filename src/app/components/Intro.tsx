@@ -43,7 +43,7 @@ export default function AboutMe() {
     const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
 
     return (
-        <div 
+        <div
             className="w-screen h-fit z-[-1] m-auto"
             style={{
                 background: 'radial-gradient(circle at center, #27292e 0%, #000 35%)', // Gradiente radial
@@ -52,6 +52,7 @@ export default function AboutMe() {
             <main
                 className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-center gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
             >
+                
                 <div className="text-white mx-8 xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
                     {/* Texto estático */}
                     <div id="about-title-container">
@@ -62,9 +63,8 @@ export default function AboutMe() {
                                 className="font-bold text-[#aadd49]"> {/* Apenas "Anderson" será digitado */}
                             </span>
                             <span
-                                className={`font-bold text-[#aadd49] ${
-                                    isTypingDone ? "visible" : "invisible"
-                                }`}
+                                className={`font-bold text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
+                                    }`}
                                 style={{
                                     marginLeft: "5px",
                                     animation: "blink 1s steps(1, end) infinite",

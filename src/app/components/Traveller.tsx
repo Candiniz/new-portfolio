@@ -1,12 +1,19 @@
 
 import "../globals.css";
-import { oswald } from "../fonts/Fonts";
+import { oswald, roboto } from "../fonts/Fonts";
 import InstagramFeed from "./Instagram/InstagramFeed";
+import AnimatedFeed from "./AnimatedFeed";
+import fitty from "fitty";
+import { useEffect } from "react";
 
 
 
 export default function Traveller() {
 
+  useEffect(() => {
+    // Este hook será chamado após o componente ser montado
+    fitty("#h1e");
+  }, []);
 
   return (
     <div className="w-full h-fit aspect-video mt-20">
@@ -37,10 +44,22 @@ export default function Traveller() {
       </div>
       <div className="bg-clip-text-bar-traveller h-20 w-full 2xl:block mt-3 lg:mb-0">
       </div>
-      <script src="https://static.elfsight.com/platform/platform.js" async></script>
-      <div className="w-[90vw] h-fit bg-[#1b1b1b] m-auto flex p-5 items-center justify-center mt-20" id="insta">
-        <InstagramFeed />
 
+      <div className="w-[100%] md:w-[90vw] lg:w-[85vw] mx-auto">
+        <div className="h-auto bg-[#1b1b1b] flex flex-col-reverse md:flex-row items-start justify-center p-5 gap-5" id="insta">
+          <InstagramFeed />
+          <div className={`flex flex-col items-start w-full ${oswald.className}`}>
+            <div id="h1e" className="w-[100px]">COESÃO E HARMONIA</div>
+            <div className={`${roboto.className} text-justify text-xs md:text-sm flex flex-row`}>
+              <div className="mx-auto w-full sm:w-[60%] xl:w-[50%]">
+                <div className="w-[60%] md:w-full float-left mr-3 md:mr-0"><AnimatedFeed /></div>
+                Ao longo das minhas viagens, percebi como é importante organizar e planejar um feed no Instagram para contar uma história visual coesa. Cada viagem me ensinou a equilibrar estética, conteúdo e narrativa. Hoje, aplico esses conceitos ao meu feed, criando uma experiência envolvente e harmônica, ao compartilhar minhas aventuras e descobertas pelo mundo. Além disso, utilizo minha experiência e habilidades para criar interfaces web, onde consigo integrar os princípios de design e arquitetura que aprendi ao longo dos anos. Como designer e arquiteto, consigo trazer um olhar único e estratégico para cada projeto, buscando sempre a harmonia entre forma, função e experiência.
+              </div>
+              <div className="hidden sm:block w-[40%] xl:w-[50%] h-[full] ml-4 bg-[#353535]">
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>

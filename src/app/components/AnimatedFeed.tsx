@@ -1,10 +1,18 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+// Função para gerar cores pasteis aleatórias
+const generatePastelColor = () => {
+    const r = Math.floor(Math.random() * 128 + 127); // Gera uma cor mais clara
+    const g = Math.floor(Math.random() * 128 + 127);
+    const b = Math.floor(Math.random() * 128 + 127);
+    return `rgb(${r}, ${g}, ${b})`;
+};
+
 const FeedPlanningAnimation = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [squareHeight, setSquareHeight] = useState(0);
-
+    const [colors, setColors] = useState<string[]>(Array(9).fill(generatePastelColor())); // Inicia com 9 cores aleatórias diferentes
 
     useEffect(() => {
         const updateSquareHeight = () => {
@@ -20,10 +28,17 @@ const FeedPlanningAnimation = () => {
         updateSquareHeight();
         window.addEventListener("resize", updateSquareHeight); // Recalcula ao redimensionar
 
-        return () => window.removeEventListener("resize", updateSquareHeight); // Cleanup
-    }, []);
+        // Intervalo para trocar as cores a cada 3 segundos
+        const intervalId = setInterval(() => {
+            // Atualiza as cores de cada quadrado individualmente
+            setColors(colors.map(() => generatePastelColor()));
+        }, 3000);
 
-
+        return () => {
+            window.removeEventListener("resize", updateSquareHeight); // Cleanup
+            clearInterval(intervalId); // Limpar o intervalo ao desmontar o componente
+        };
+    }, [colors]);
 
     return (
         <motion.div
@@ -49,181 +64,44 @@ const FeedPlanningAnimation = () => {
             >
                 {/* Padrão: 3 quadrados + 1 retângulo */}
                 <motion.div className="w-full flex justify-between gap-1">
-                    <motion.div
-                       className="flex-1 aspect-square"
-                       animate={{
-                           backgroundColor: ["#ffffff", "#ffffff", "#ffffff"],
-                       }}
-                       transition={{
-                           duration: 6,
-                           times: [0, 0.5, 1],
-                           repeat: Infinity,
-                           repeatType: "loop",
-                           ease: "linear",
-                       }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
+                    {Array(3).fill(null).map((_, index) => (
+                        <motion.div
+                            key={index}
+                            className="flex-1 aspect-square"
+                            style={{ backgroundColor: colors[index] }} // Aplica cor diferente para cada quadrado
+                        />
+                    ))}
                 </motion.div>
                 <motion.div
                     className="w-full"
                     ref={containerRef}
-                    style={{ height: squareHeight }}
-                    initial={{ backgroundColor: "#ffffff" }}
-                    animate={{
-                        backgroundColor: "#ffffff",
-                    }}
-                    exit={{ backgroundColor: "#ffffff" }}
-                    transition={{
-                        duration: 6,
-                        times: [0, 0.5, 1],
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        ease: "linear",
-                    }}
+                    style={{ height: squareHeight, backgroundColor: colors[3] }} // Aplica cor para o retângulo
                 />
 
                 {/* Repetindo o padrão */}
                 <motion.div className="w-full flex justify-between gap-1">
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
+                    {Array(3).fill(null).map((_, index) => (
+                        <motion.div
+                            key={index + 3}
+                            className="flex-1 aspect-square"
+                            style={{ backgroundColor: colors[index + 3] }} // Aplica cor diferente para cada quadrado
+                        />
+                    ))}
                 </motion.div>
                 <motion.div
                     className="w-full"
-                    style={{ height: squareHeight }}
-                    ref={containerRef}
-                    initial={{ backgroundColor: "#ffffff" }}
-                    animate={{
-                        backgroundColor: "#ffffff",
-                    }}
-                    exit={{ backgroundColor: "#ffffff" }}
-                    transition={{
-                        duration: 6,
-                        times: [0, 0.5, 1],
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        ease: "linear",
-                    }}
+                    style={{ height: squareHeight, backgroundColor: colors[6] }} // Aplica cor para o retângulo
                 />
 
                 {/* Repetindo o padrão novamente */}
                 <motion.div className="w-full flex justify-between gap-1">
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="flex-1 aspect-square"
-                        initial={{ backgroundColor: "#ffffff" }}
-                        animate={{
-                            backgroundColor: "#ffffff",
-                        }}
-                        exit={{ backgroundColor: "#ffffff" }}
-                        transition={{
-                            duration: 6,
-                            times: [0, 0.5, 1],
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "linear",
-                        }}
-                    />
+                    {Array(3).fill(null).map((_, index) => (
+                        <motion.div
+                            key={index + 6}
+                            className="flex-1 aspect-square"
+                            style={{ backgroundColor: colors[index + 6] }} // Aplica cor diferente para cada quadrado
+                        />
+                    ))}
                 </motion.div>
             </motion.div>
         </motion.div>

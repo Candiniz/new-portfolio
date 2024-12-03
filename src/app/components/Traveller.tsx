@@ -53,7 +53,9 @@ export default function Traveller() {
             <div className={`${roboto.className} text-justify text-xs md:text-sm flex flex-row`}>
               <div className="mx-auto w-full sm:w-[60%] xl:w-[50%]">
                 <div className="w-[60%] md:w-full float-left mr-3 md:mr-0"><AnimatedFeed /></div>
-                Ao longo das minhas viagens, percebi como é importante organizar e planejar um feed no Instagram para contar uma história visual coesa. Cada viagem me ensinou a equilibrar estética, conteúdo e narrativa. Hoje, aplico esses conceitos ao meu feed, criando uma experiência envolvente e harmônica, ao compartilhar minhas aventuras e descobertas pelo mundo. Além disso, utilizo minha experiência e habilidades para criar interfaces web, onde consigo integrar os princípios de design e arquitetura que aprendi ao longo dos anos. Como designer e arquiteto, consigo trazer um olhar único e estratégico para cada projeto, buscando sempre a harmonia entre forma, função e experiência.
+                Ao longo das minhas viagens, percebi como é importante organizar e planejar um feed no Instagram para contar uma história visual coesa. Cada viagem me ensinou a equilibrar estética, conteúdo e narrativa. Hoje, aplico esses conceitos ao meu feed, criando uma experiência envolvente e harmônica, ao compartilhar minhas aventuras e descobertas pelo mundo.
+                <br /><br />
+                Além disso, utilizo minha experiência e habilidades para criar interfaces web, onde consigo integrar os princípios de design e arquitetura que aprendi ao longo dos anos. Como designer e arquiteto, consigo trazer um olhar único e estratégico para cada projeto, buscando sempre a harmonia entre forma, função e experiência.
               </div>
               <div className="hidden sm:block w-[40%] xl:w-[50%] h-[full] ml-4 bg-[#353535]">
               </div>

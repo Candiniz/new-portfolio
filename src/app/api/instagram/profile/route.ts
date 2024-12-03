@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     const data = await response.json();
-    console.log("Dados do perfil do Instagram:", data);
+    // console.log("Dados do perfil do Instagram:", data);
 
     // Retorna os dados como JSON
     return NextResponse.json(data);

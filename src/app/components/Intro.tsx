@@ -115,7 +115,9 @@ export default function AboutMe() {
                         </p>
                     </div>
                 </div>
+
                 {StarsBackgroundMemoized}
+                
             </main>
         </div>
     );

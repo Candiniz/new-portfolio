@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Portfolio profissional - Candiniz",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{

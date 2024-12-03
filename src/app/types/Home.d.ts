@@ -16,3 +16,4 @@ export interface Project {
     icons: JSX.Element
     description?: string;
 }
+

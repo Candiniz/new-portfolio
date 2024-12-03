@@ -13,7 +13,7 @@ interface ProfileData {
   profile_picture_url: string; // Para o círculo da foto de perfil
 }
 
-export default function InstagramHeader() {
+export default function InstagramHeader({ isInModal }: { isInModal: boolean }) {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,7 +43,10 @@ export default function InstagramHeader() {
   }
 
   return (
-    <div className="flex flex-col items-center py-5 bg-[#414141] shadow-md rounded-none rounded-t-lg">
+    <div className={`
+      ${isInModal ? "modal-header" : "default-header"}
+      flex flex-col items-center py-5 bg-[#414141] shadow-md rounded-none rounded-t-lg`}
+    >
 
       {/* Linha 1: Foto e Nome */}
       <div className="flex items-center space-x-4">

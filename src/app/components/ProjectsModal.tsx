@@ -2,7 +2,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineClose } from "react-icons/ai";
 import { roboto } from "../fonts/Fonts";
-
+import styles from './ProjectsModal.module.css'
+import { useEffect } from "react";
 
 interface ModalProps {
     isOpen: boolean;
@@ -19,14 +20,33 @@ interface ModalProps {
     position: { top: number; left: number; width: number; height: number } | null;
 }
 
+
 export default function Modal({ isOpen, onClose, project, position }: ModalProps) {
+
+    useEffect(() => {
+        if (isOpen) {
+            document.documentElement.style.overflow = "hidden";
+        } else {
+            document.documentElement.style.overflow = "";
+        }
+        return () => {
+            document.documentElement.style.overflow = ""; // Reseta ao desmontar
+        };
+    }, [isOpen]);
+
     if (!project || !position) return null;
+
+    const renderDescription = (text: string) => {
+        return text.split("\n").map((line, index) => (
+            <p key={index} className="mb-2">{line}</p>
+        ));
+    };
 
     return (
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Fundo com blur e clique para fechar */}
+                    {/* Background Overlay */}
                     <motion.div
                         onClick={(e) => {
                             e.preventDefault();
@@ -39,56 +59,86 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
                         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-40"
                     />
 
-                    {/* Modal com animação */}
+                    {/* Barra Verde Animada */}
                     <motion.div
                         initial={{
-                            top: position.top,
+                            top: position.top + position.height - 4,
                             left: position.left,
                             width: position.width,
-                            height: position.height,
-                            opacity: 0,
+                            height: 4,
                         }}
                         animate={{
-                            top: "50%",
+                            top: "calc(100% - 4px)",
                             left: "50%",
-                            width: "80vw",
-                            height: "auto",
-                            opacity: 1,
-                            transform: "translate(-50%, -50%)",
+                            transform: "translate(-50%)",
+                            width: "80%",
+                            height: 4,
+                            transition: { duration: 0.5, ease: "easeInOut" },
                         }}
                         exit={{
-                            top: position.top,
+                            top: position.top + position.height - 4,
                             left: position.left,
                             width: position.width,
-                            height: position.height,
-                            opacity: 0,
+                            height: 4,
+                            transition: { duration: 0.5, ease: "easeInOut" },
                         }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className={`${roboto.className} fixed bg-[#25252565] rounded-t-lg shadow-lg z-50 overflow-hidden`}
+                        className="fixed bg-[#aadd49] z-50"
+                    />
+
+                    {/* Modal Principal Animado */}
+                    <motion.div
+                        key="modal"
+                        initial={{
+                            top: "100vh",
+                            opacity: 0,
+                            transform: "translateX(-50%)",
+                        }}
+                        animate={{
+                            top: "0",
+                            opacity: 1,
+                            transform: "translateX(-50%)",
+                            transition: {
+                                delay: 0.5,
+                                duration: 0.5,
+                                ease: "easeInOut",
+                            },
+                        }}
+                        exit={{
+                            top: "100vh",
+                            opacity: 0,
+                            transform: "translateX(-50%)",
+                            transition: { duration: 0.5, ease: "easeInOut" },
+                        }}
+                        className={`${roboto.className} fixed inset-0 left-1/2 transform -translate-x-1/2 w-[80%] bg-[#25252565] rounded-t-lg shadow-lg z-40 h-screen flex flex-col`}
                     >
-                        <div className="flex w-full !bg-[#353535b7] justify-between items-center p-4 mt-3">
-                            <h3 className="text-1xl sm:text-3xl font-bold ml-10 ">{project.name}</h3>
+                        {/* Título no topo */}
+                        <div className="flex w-full !bg-[#353535b7] justify-between items-center p-4">
+                            <h3 className="text-1xl sm:text-3xl font-bold ml-10">{project.name}</h3>
                             <button onClick={onClose} className="text-white hover:text-gray-500 pr-4">
                                 <AiOutlineClose size={24} />
                             </button>
                         </div>
-                        <div className="p-4 w-full flex flex-col lg:flex-row justify-center items-center lg:items-start">
-                            <img
-                                src={project.image.url}
-                                alt={project.image.alt}
-                                className="rounded-lg object-contain
-                                lg:w-[65%]"
-                            />
-                            <div className="flex flex-col lg:ml-4">
-                                <p className="text-white mb-4 mt-4 text-justify
-                                text-[0.65rem] sm:text-xs lg:mx-4
 
-                                ">
-                                    {project.image.alt}
-                                </p>
-                                <div className="flex items-center justify-center lg:justify-start lg:mx-4 gap-2 text-[#aadd49]">{project.icons}</div>
+                        {/* Conteúdo no centro com scroll automático */}
+                        <div className={styles.container}>
+                            <div className="flex flex-col justify-center items-center">
+                                <div className="imageWrapper flex justify-center mt-4">
+                                    <img
+                                        src={project.image.url}
+                                        alt={project.image.alt}
+                                        className="object-contain w-[90%] lg:w-[750px]"
+                                    />
+                                </div>
+                                <div className="mt-4 max-w-[750px] lg:w-[750px] m-auto text-justify text-sm lg:text-md px-5 sm:px-8 lg:px-0">
+                                    {project.image.alt && renderDescription(project.image.alt)}
+                                </div>
+                                <div className="flex gap-3 my-10 text-[#aadd49] m-auto text-[1.7rem] ">
+                                    {project.icons}
+                                </div>
                             </div>
                         </div>
+
+                        {/* Botões fixados na base */}
                         <div className="p-4 flex items-center justify-center gap-3 text-[0.5rem] text-center sm:text-xs w-full !bg-[#353535b7]">
                             <a
                                 href={project.projectLink || "#"}
@@ -115,11 +165,10 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
                                 Ver Post no LinkedIn
                             </a>
                         </div>
-                        <div className="w-full h-[4px] bg-[#aadd49]"></div>
-
                     </motion.div>
                 </>
             )}
         </AnimatePresence>
+
     );
 }

@@ -11,6 +11,13 @@ interface ProjectsProps {
     projects: Project[];
 }
 
+interface ProjectsModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    project: Project | null;
+    position: { top: number; left: number; width: number; height: number } | null;
+}
+
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -42,26 +49,30 @@ export default function Projects({ projects }: ProjectsProps) {
         height: number;
     } | null>(null);
 
-    const handleOpenModal = (project: Project, cardRef: HTMLElement | null) => {
-        if (!cardRef) return; // Proteção contra null
-        const rect = cardRef.getBoundingClientRect();
+    const handleOpenModal = (project: Project, cardElement: HTMLElement) => {
+        const rect = cardElement.getBoundingClientRect();
         setModalPosition({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height,
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
         });
         setSelectedProject(project);
         setIsModalOpen(true);
     };
+    
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setTimeout(() => {
+    };
+
+    useEffect(() => {
+        if (!isModalOpen) {
             setSelectedProject(null);
             setModalPosition(null);
-        }, 500); // Aguarda animação de saída
-    };
+        }
+    }, [isModalOpen]);
+    
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -90,9 +101,15 @@ export default function Projects({ projects }: ProjectsProps) {
 
     return (
         <>
-            <AnimatePresence>
-                {isModalOpen && (
+            <AnimatePresence
+                onExitComplete={() => {
+                    setSelectedProject(null);
+                    setModalPosition(null);
+                }}
+            >
+                {isModalOpen && selectedProject && modalPosition && (
                     <ProjectsModal
+                        key={selectedProject.name} // Garante reconstrução correta
                         isOpen={isModalOpen}
                         onClose={handleCloseModal}
                         project={selectedProject}
@@ -132,11 +149,11 @@ export default function Projects({ projects }: ProjectsProps) {
                         <li
                             key={project.name + index}
                             className="relative group flex flex-col items-center transition-transform duration-500 hover:scale-105"
-                            ref={(ref) => {
-                                if (!ref) return;
-                                ref.onclick = () => handleOpenModal(project, ref);
+                            onClick={(e) => {
+                                handleOpenModal(project, e.currentTarget);
                             }}
                         >
+
                             <div className="w-full aspect-[2/1] overflow-hidden bg-gray-200 relative">
                                 <Image
                                     src={project.image.url}

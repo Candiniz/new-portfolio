@@ -1,0 +1,27 @@
+/* Estilo para o container com scrollbar personalizado */
+
+.container {
+  overflow-y: auto; /* Ativa o scroll vertical */
+  height: 100%;
+}
+
+/* Personalização da barra de rolagem para o container */
+.container::-webkit-scrollbar {
+  width: 18px; /* Largura da barra de rolagem */
+  height: 8px; /* Altura do scrollbar horizontal, caso necessário */
+}
+
+.container::-webkit-scrollbar-track {
+  background: transparent; /* Fundo do track do scrollbar */
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3; /* Cor do polegar do scrollbar */
+  border-radius: 10px; /* Bordas arredondadas no polegar */
+  border: 2px solid transparent; /* Borda transparente */
+  background-clip: content-box; /* Clip para que a borda fique visível */
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #aadd49; /* Cor do polegar ao passar o mouse */
+}

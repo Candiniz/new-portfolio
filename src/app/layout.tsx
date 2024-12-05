@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Hydrate from "./components/Hydrate";
 import Header from "./components/Header";
-import { createRoot } from "react-dom/client"; 
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Portfolio | Candiniz",
@@ -18,11 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Inicializando o Concurrent Mode usando createRoot */}
         <Hydrate>
+          {/* Cabeçalho do site */}
           <Header />
+          {/* Suspense para lidar com carregamento assíncrono */}
           <Suspense fallback={<div>Carregando...</div>}>
-            {/* Envolvendo children com Suspense */}
             {children}
           </Suspense>
         </Hydrate>

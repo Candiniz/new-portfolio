@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import InstagramHeader from "./InstaHeader";
 
 
 // Tipos dos posts do Instagram

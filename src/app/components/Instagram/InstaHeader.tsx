@@ -4,7 +4,7 @@
 import "../../globals.css";
 import { useState, useEffect } from "react";
 
-interface ProfileData {
+export interface ProfileData {
   id: string;
   username: string;
   followers_count: number;
@@ -13,18 +13,28 @@ interface ProfileData {
   profile_picture_url: string; // Para o círculo da foto de perfil
 }
 
-export default function InstagramHeader({ isInModal }: { isInModal: boolean }) {
-  const [profile, setProfile] = useState<ProfileData | null>(null);
+let cachedProfile: ProfileData | null = null;
+
+export default function InstagramHeader({
+  isInModal,
+  profileData,
+}: {
+  isInModal: boolean;
+  profileData: ProfileData | null;
+}) {
+  const [profile, setProfile] = useState<ProfileData | null>(cachedProfile);
   const [error, setError] = useState<string | null>(null);
+  
 
   useEffect(() => {
+    if (profile) return; // Se os dados já estiverem carregados, não faz a chamada novamente
+
     const fetchProfile = async () => {
       try {
         const res = await fetch("/api/instagram/profile");
-        if (!res.ok) {
-          throw new Error("Erro ao carregar os dados do perfil.");
-        }
+        if (!res.ok) throw new Error("Erro ao carregar os dados do perfil.");
         const data = await res.json();
+        cachedProfile = data; // Armazena os dados no cache
         setProfile(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erro desconhecido");
@@ -32,7 +42,7 @@ export default function InstagramHeader({ isInModal }: { isInModal: boolean }) {
     };
 
     fetchProfile();
-  }, []);
+  }, [profile]);
 
   if (error) {
     return <div>Erro: {error}</div>;
@@ -42,6 +52,9 @@ export default function InstagramHeader({ isInModal }: { isInModal: boolean }) {
     return <div>Carregando perfil...</div>;
   }
 
+  if (!profileData) {
+    return <div>Carregando perfil...</div>;
+  }
   return (
     <div className={`
       ${isInModal ? "modal-header" : "default-header"}

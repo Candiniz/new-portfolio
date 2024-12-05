@@ -35,12 +35,6 @@ const InstagramFeed: React.FC<InstagramFeedProps> = ({ onPosts }) => {
   const [isPostModalOpen, setIsPostModalOpen] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
-  const blacklist = [
-    "18055954579703872",
-    "18095827462454450",
-    "17987717375586659",
-    "18009972238942892",
-  ];
 
   // Fetch dos posts do Instagram
   useEffect(() => {
@@ -57,13 +51,12 @@ const InstagramFeed: React.FC<InstagramFeedProps> = ({ onPosts }) => {
         const data = await res.json();
 
         if (Array.isArray(data)) {
-          // Filtrando posts pela blacklist
+
           const filteredPosts = data.filter(
             (post: InstagramPost) =>
               (post.media_type === "IMAGE" ||
                 post.media_type === "VIDEO" ||
-                post.media_type === "CAROUSEL_ALBUM") &&
-              !blacklist.includes(post.id)
+                post.media_type === "CAROUSEL_ALBUM")
           );
           setPosts(filteredPosts);
           onPosts(filteredPosts);
@@ -101,7 +94,7 @@ const InstagramFeed: React.FC<InstagramFeedProps> = ({ onPosts }) => {
 
   return (
     <div className="w-full">
-      <InstagramHeader isInModal={false} />
+      
 
       {/* Exibindo os posts */}
       <div className="grid grid-cols-3 gap-[0.1rem]">

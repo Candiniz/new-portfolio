@@ -8,52 +8,73 @@ import fitty from "fitty";
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import { Post } from "./Instagram/InstagramFeed"
-import InstagramHeader from "./Instagram/InstaHeader";
+import InstagramHeader, { ProfileData } from "./Instagram/InstaHeader";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { AiOutlineClose } from 'react-icons/ai';
+
+import styles from './Traveller.module.css'
 
 
 const GlobalStyle = createGlobalStyle`
   /* Estilize scrollbars apenas dentro de containers específicos */
   .custom-scrollbar-container {
-    overflow-y: auto; /* Ative o scroll personalizado */
+    overflow-y: auto; /* Ativa o scroll personalizado */
   }
 
-  .custom-scrollbar-container::-webkit-scrollbar {
-    width: 18px;
-    height: 8px;
-  }
+  /* Aplica o estilo do scrollbar somente em telas médias ou maiores */
+  @media (min-width: 768px) {
+    .custom-scrollbar-container::-webkit-scrollbar {
+      width: 18px;
+      height: 8px;
+    }
 
-  .custom-scrollbar-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
+    .custom-scrollbar-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-  .custom-scrollbar-container::-webkit-scrollbar-thumb {
-    background-color: #d3d3d3;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-  }
+    .custom-scrollbar-container::-webkit-scrollbar-thumb {
+      background-color: #d3d3d3;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
 
-  .custom-scrollbar-container::-webkit-scrollbar-thumb:hover {
-    background-color: #aadd49;
+    .custom-scrollbar-container::-webkit-scrollbar-thumb:hover {
+      background-color: #aadd49;
+    }
   }
 `;
 
 
+
+
+
+
 export default function Traveller() {
   const [isFeedModalOpen, setIsFeedModalOpen] = useState(false);
-  const [posts, setPosts] = useState<Post[]>([]); // Aqui vamos armazenar os posts
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
-  const openFeedModal = () => {
-    setIsFeedModalOpen(true);
+  const stopPropagation = (e) => {
+    e.stopPropagation();
   };
 
-  const closeFeedModal = () => {
-    setIsFeedModalOpen(false);
-  };
 
-  const handlePosts = (postsFromChild: Post[]) => {
-    setPosts(postsFromChild); // Armazenando os posts no pai
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("/api/instagram/profile");
+        if (!res.ok) throw new Error("Erro ao carregar os dados do perfil.");
+        const data = await res.json();
+        setProfileData(data);
+      } catch (err) {
+        console.error("Erro ao carregar perfil:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     if (isFeedModalOpen) {
@@ -66,10 +87,15 @@ export default function Traveller() {
     };
   }, [isFeedModalOpen]);
 
-  useEffect(() => {
-    fitty("#h1e");
-  }, []);
+  useEffect(() => { fitty("#h1e") }, []);
 
+
+  const openFeedModal = () => { setIsFeedModalOpen(true); };
+  const closeFeedModal = () => { setIsFeedModalOpen(false); };
+
+  const handlePosts = (postsFromChild: Post[]) => {
+    setPosts(postsFromChild);
+  };
 
   return (
     <>
@@ -107,8 +133,15 @@ export default function Traveller() {
           className="h-fit bg-[#1b1b1b] flex flex-col-reverse md:flex-row p-5 gap-5"
           id="insta"
         >
-          <div className="relative w-[95%] md:w-[60%] h-fit">
-            <div className="custom-scrollbar-container mx-auto mt-3 overflow-y-auto h-[840px] w-full">
+          <div className="relative w-[95%] md:w-[60%] h-fit m-auto">
+            <div className="absolute top-0 left-4 w-8 h-8 rounded-full bg-[#aadd49] border-2 border-[#222]">
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg opacity-0 transition-all duration-300 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+                Este é o texto do balão!
+                <div className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-0 h-0 border-t-[6px] border-t-gray-800 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent"></div>
+              </div>
+            </div>
+            <div className={styles.custom_scroll_container}>
+              <InstagramHeader isInModal={false} profileData={profileData} />
               <InstagramFeed
                 openFeedModal={openFeedModal}
                 onPosts={handlePosts}
@@ -123,33 +156,69 @@ export default function Traveller() {
           </div>
 
           {/* Modal de feed completo */}
-          {isFeedModalOpen && (
-            <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-md">
-              
-              <div className="relative max-w-4xl w-full h-full bg-[#00000068]">
-                <div className="absolute bottom-0 p-5 rounded-lg h-[90vh] overflow-y-auto custom-scrollbar-container">
-                  <InstagramHeader isInModal={true} />
-                  <button onClick={closeFeedModal} className="absolute top-2 right-2 text-xl text-gray-700">X</button>
-                  <div className="grid grid-cols-3 gap-[0.1rem]">
-                    {posts.map((post) => (
-                      <div key={post.id} className="aspect-square cursor-pointer">
-                        {post.media_type === "IMAGE" && (
-                          <img src={post.media_url} alt={post.caption} className="w-full h-full object-cover" />
-                        )}
-                        {post.media_type === "VIDEO" && (
-                          <img src={post.thumbnail_url || post.media_url} alt={post.caption} className="w-full h-full object-cover" />
-                        )}
-                        {post.media_type === "CAROUSEL_ALBUM" && "children" in post && (
-                          <img src={post.children[0].media_url} alt={`Carrossel ${post.id}`} className="w-full h-full object-cover" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+          <AnimatePresence>
+            {isFeedModalOpen && (
 
-            </div>
-          )}
+              <motion.div
+                onClick={closeFeedModal}
+                className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md"
+                initial={{ opacity: 0 }}  // Começa com opacidade 0 (invisível)
+                animate={{ opacity: 1 }}  // Finaliza com opacidade 1 (visível)
+                exit={{ opacity: 0 }}  // Sai com opacidade 0 (invisível)
+                transition={{ duration: 0.3 }}  // Duração do fade-in/fade-out
+              >
+                <button
+                  onClick={closeFeedModal}
+                  className="fixed top-2 right-2 text-white text-4xl hover:text-red-500 hover:scale-110 transition-all z-50"
+                >
+                  <AiOutlineClose />
+                </button>
+                <motion.div
+
+
+                  className="relative max-w-4xl w-full h-full bg-[#000000]"
+                  initial={{ y: "100%" }}  // Começa fora da tela (abaixo)
+                  animate={{ y: 0 }}  // Move para a posição original
+                  exit={{ y: "100%" }}  // Sai para fora da tela (abaixo)
+                  transition={{ duration: 0.5 }}  // Duração da animação de movimento
+                >
+                  <div onClick={stopPropagation} className="absolute bottom-0 p-5 rounded-lg h-[90vh] overflow-hidden">
+                    <div className={styles.custom_scroll_modal} >
+                      <InstagramHeader isInModal={true} profileData={profileData} />
+                      <div className="grid grid-cols-3 gap-[0.1rem]">
+                        {posts.map((post) => (
+                          <div key={post.id} className="aspect-square cursor-pointer">
+                            {post.media_type === "IMAGE" && (
+                              <img
+                                src={post.media_url}
+                                alt={post.caption}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            {post.media_type === "VIDEO" && (
+                              <img
+                                src={post.thumbnail_url || post.media_url}
+                                alt={post.caption}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            {post.media_type === "CAROUSEL_ALBUM" && "children" in post && (
+                              <img
+                                src={post.children[0].media_url}
+                                alt={`Carrossel ${post.id}`}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+            )}
+          </AnimatePresence>
 
           <div className={`flex flex-col items-start md:w-[40%] md:h-fit mb-10 ${oswald.className}`}>
             <div id="h1e">COESÃO E HARMONIA</div>
@@ -174,7 +243,40 @@ export default function Traveller() {
                 consigo trazer um olhar único e estratégico para cada projeto, buscando
                 sempre a harmonia entre forma, função e experiência.
               </div>
-              <div className="hidden md:block md:w-[30%] xl:w-[40%] h-auto ml-4 bg-[#353535]"></div>
+              <div className="hidden md:w-[30%] xl:w-[40%] h-auto ml-4 bg-[#ffffff] md:flex items-center justify-center shadow-inner-deep">
+                <div className="relative w-2 bg-black h-[90%] flex flex-col justify-between items-center shadow-custom-circle">
+                  {/* Brasil */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/br.png" alt="Bandeira do Brasil" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* Irlanda */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/ir.png" alt="Bandeira da Irlanda" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* Inglaterra */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/en.png" alt="Bandeira da Inglaterra" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* Escócia */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/sc.png" alt="Bandeira da Escócia" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* Marrocos */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/mc.png" alt="Bandeira de Marrocos" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* França */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/fr.png" alt="Bandeira da França" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                  {/* Itália */}
+                  <div className="w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">
+                    <Image src="/it.png" alt="Bandeira da Itália" className="rounded-full w-full h-full" width={40} height={40} />
+                  </div>
+                </div>
+
+              </div>
+
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';  // Marca este componente como "Client Component"
 
 import Image from 'next/image';
@@ -10,8 +11,8 @@ export default function Loading() {
       <img
         src="/favicon.png"
         alt="Logo"
-        width={200}
-        height={200}
+        width={100}
+        height={100}
         className="spinnerLogo"
       />
 
@@ -28,10 +29,12 @@ export default function Loading() {
 
         @keyframes revealLogo {
           0% {
+            scale: 0.8;
             opacity: 0;
             box-shadow: 0 0 20px rgba(0, 0, 0, 1);
           }
           100% {
+            scale: 1;
             opacity: 1;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0); /* Cor de sombra verde neon */
           }
@@ -54,8 +57,8 @@ export default function Loading() {
           position: fixed;
           border-top: 8px solid #aadd49;
           border-radius: 50%;
-          max-width: 300px;
-          max-height: 300px;
+          max-width: 200px;
+          max-height: 200px;
           width: 90vw;
           height: 90vw;
           animation: spin 1s linear infinite, neonGlow 1.5s ease-in-out infinite alternate;

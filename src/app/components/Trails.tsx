@@ -6,6 +6,7 @@ import { oswald, roboto } from "../fonts/Fonts";
 import Musician from "./Musician";
 import Traveller from "./Traveller";
 import { useEffect, useState } from "react";
+import Architect from "./Architect";
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -84,6 +85,7 @@ export default function Trails() {
       <div className="">
         <Musician />
         <Traveller />
+        <Architect />
       </div>
     </>
   );

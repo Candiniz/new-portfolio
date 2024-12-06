@@ -58,7 +58,7 @@ export default function InstagramHeader({
   return (
     <div className={`
       ${isInModal ? "modal-header" : "default-header"}
-      flex flex-col items-center py-5 bg-[#5b5b5b] shadow-md rounded-none rounded-t-lg`}
+      flex flex-col items-center py-5 bg-[#222] shadow-md rounded-none rounded-t-lg mb-[0.1rem]`}
     >
 
       {/* Linha 1: Foto e Nome */}

@@ -139,7 +139,7 @@ export const Traveller: React.FC = () => {
         </div>
 
         <div className="inset-0 flex lg:flex-row justify-center items-center  bg-black/80">
-          <p className={`${oswald.className} bg-clip-text-traveller text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 ml-3`}>
+          <p className={`${oswald.className} bg-clip-text-traveller text-justify lg:px-20 2xl:text-[1.5rem] xl:px-5 ml-3`}>
             Traveling is one of my greatest passions. I had the opportunity to study English in Ireland for a year and a half at ELI Language School in Drogheda, and I reached an advanced C1 level in the language. During my travels through Europe and Africa, I met incredible minds and learned a lot about architecture and technology. If you&apos;re also interested in these topics, it would be a pleasure to have you on our Instagram, where I share a bit of these experiences and discoveries!
           </p>
           <div className="w-full">
@@ -161,12 +161,12 @@ export const Traveller: React.FC = () => {
 
 
         <div
-          className="h-fit bg-[#1b1b1b] flex flex-col-reverse md:flex-row p-5 gap-5"
+          className="h-fit bg-[#fff] flex flex-col-reverse md:flex-row p-5 gap-5"
           id="insta"
         >
           <div className="relative w-[95%] md:w-[60%] h-fit m-auto">
             <motion.div
-              className="absolute top-0 left-4 w-10 h-10 rounded-full bg-[#aadd49] border-2 border-[#222] z-10 flex items-center justify-center text-3xl"
+              className="absolute top-0 left-4 w-10 h-10 rounded-full bg-[#aadd49] z-10 flex items-center justify-center text-3xl"
               animate={{
                 scale: [1, 1.3, 1],  // Pulsando de 1 para 1.1 e voltando para 1
               }}
@@ -181,15 +181,20 @@ export const Traveller: React.FC = () => {
               <BaloonTooltip />
             </motion.div>
             <div className={styles.custom_scroll_container}>
-              <InstagramHeader isInModal={false} profileData={profileData} /> {/* Passe os dados carregados */}
-              <InstagramFeed openPostModal={openPostModal} posts={posts} />
+              <div>
+                <InstagramHeader isInModal={false} profileData={profileData} /> {/* Passe os dados carregados */}
+                <InstagramFeed openPostModal={openPostModal} posts={posts} />
+              </div>
+              <div className="h-full w-[0.1rem] ml-[2px] bg-[#ffffff]"></div>
             </div>
             <button
               onClick={openFeedModal}
-              className="absolute bottom-0 left-0 right-0 text-center bg-black bg-opacity-75 text-white py-2 hover:bg-opacity-90 w-full"
+              className="absolute bottom-0 left-0 right-0 text-center bg-black bg-opacity-75 text-white py-2 hover:bg-opacity-90 w-full md:w-[calc(100%-20px)]"
             >
               Ver Mais
             </button>
+
+
           </div>
 
           {/* Modal de feed completo */}
@@ -248,6 +253,10 @@ export const Traveller: React.FC = () => {
                   exit={{ y: "100%" }}     // Quando sair, escala para baixo
                   transition={{ duration: 0.3 }} // Transição suave de 0.3 segundos]
                 >
+                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-2 items-center justify-center w-full">
+                    <div className="bg-[#5c5c5c] rounded-full w-[200px] h-[20px] z-50"></div>
+                    <div className="bg-[#5c5c5c] rounded-full w-[20px] h-[20px] z-50"></div>
+                  </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // Impede que o clique no botão propague
@@ -301,7 +310,7 @@ export const Traveller: React.FC = () => {
             )}
           </AnimatePresence>
 
-          <div className={`flex flex-col items-start md:w-[40%] md:h-fit mb-10 ${oswald.className}`}>
+          <div className={`flex flex-col items-start md:w-[40%] md:h-fit mb-10 text-[#222] ${oswald.className}`}>
             <div id="h1e">COESÃO E HARMONIA</div>
             <div
               className={`${roboto.className} text-[0.79rem] sm:text-xs md:text-sm flex flex-row`}
@@ -416,14 +425,26 @@ export const Traveller: React.FC = () => {
 
                     </motion.div>
                   </div>
-
                 </div>
-
               </div>
-
             </div>
           </div>
         </div>
+        <div className="relative h-auto w-full bg-white wave-div">
+          <div className="relative inset-0 z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+              <path fill="#000000" fillOpacity="1" d="M0,160L48,181.3C96,203,192,245,288,240C384,235,480,181,576,176C672,171,768,213,864,234.7C960,256,1056,256,1152,250.7C1248,245,1344,235,1392,229.3L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+          </div>
+          <div className="absolute inset-0 z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+              <path fill="#d6d6d6" fillOpacity="1" d="M0,288L80,288C160,288,320,288,480,250.7C640,213,800,139,960,117.3C1120,96,1280,128,1360,144L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+            </svg>
+          </div>
+        </div>
+
+
+
 
       </div >
     </>

@@ -78,6 +78,22 @@ body {
   /* Mantém a imagem fixa no scroll */
 }
 
+.bg-clip-text-architect {
+  background-image: url('../photos/edinburgh.jpg');
+  /* ou use uma cor gradiente */
+  background-clip: text;
+  -webkit-background-clip: text;
+  /* Suporte para WebKit */
+  color: transparent;
+  /* Torna o texto transparente */
+  background-size: cover;
+  /* Ajusta a imagem para cobrir o texto */
+  background-position: center;
+  /* Centraliza a imagem */
+  background-attachment: fixed;
+  /* Mantém a imagem fixa no scroll */
+}
+
 .video-container {
   position: relative;
   width: 100%;
@@ -188,6 +204,47 @@ body {
   -webkit-background-clip: text;
   color: transparent;
 }
+
+/* Architect */
+.bg-clip-text-bar-architect {
+  position: relative;
+  background-image: url('../photos/edinburgh.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.bg-architect-h {
+  height: 200px;
+  /* Altura padrão */
+  min-height: 8px;
+}
+
+@media (min-width: 400px) {
+
+  /* A partir da largura 'sm' (640px ou maior) */
+  .bg-architect-h {
+    height: calc(35vh - 30vw);
+    /* Aplica o cálculo apenas para telas sm ou maiores */
+  }
+}
+
+.bg-clip-text-bar-architect::before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../photos/edinburgh.jpg');
+  background-size: cover;
+  background-position: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+
 
 .transition-all {
   transition: all 0.3s ease-in-out;

@@ -6,14 +6,17 @@ import styled from 'styled-components';
 
 import { SiStyledcomponents } from "react-icons/si";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaDatabase, FaUniversalAccess, FaMobileAlt, FaShareAlt } from "react-icons/fa";
-import { RiNextjsFill, RiServerLine, RiTailwindCssFill } from "react-icons/ri";
-import { SiTypescript } from "react-icons/si";
-import { DiPhotoshop, DiIllustrator } from "react-icons/di";
+import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaShareAlt, FaCcStripe } from "react-icons/fa";
+import { TbApi } from "react-icons/tb";
+import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
+import { BiSolidServer } from "react-icons/bi";
+import { SiTypescript, SiPrisma  } from "react-icons/si";
+import { TiStopwatch } from "react-icons/ti";
+import { DiPhotoshop, DiIllustrator, DiDatabase, DiPostgresql  } from "react-icons/di";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
-import { MdSpeed } from "react-icons/md";
-import { AiOutlineTool } from "react-icons/ai";
+import { FaMeta } from "react-icons/fa6";
+
 
 export const skills = [
     {
@@ -71,10 +74,10 @@ export const skills = [
         descriptionTwo: "Com Figma, desenvolvo interfaces de usuário detalhadas e protótipos interativos, colaborando diretamente com equipes de design e desenvolvimento, sendo esta uma das principais ferramentas por mim utilizadas no brainstorm de um projeto"
     },
     {
-        icon: <FaWordpress />,
-        name: "WordPress",
-        description: "WordPress é um sistema de gerenciamento de conteúdo (CMS) usado para criar e gerenciar sites e blogs.",
-        descriptionTwo: "Tenho certa experiência em criar sites personalizados no WordPress, ajustando temas, configurando plugins e otimizando o desempenho do site."
+        icon: <SiStyledcomponents />,
+        name: "CSS in JS",
+        description: "Estilização moderna e dinâmica de componentes utilizando CSS-in-JS.",
+        descriptionTwo: "Tenho experiência com CSS-in-JS, criando estilos dinâmicos e escaláveis diretamente no JavaScript para aplicações modernas. Utilizo ferramentas como Styled-Components, Emotion e Tailwind CSS para criar interfaces visuais consistentes e reutilizáveis.\n\nMinha abordagem inclui a criação de temas personalizados, suporte a modos claro e escuro, e animações suaves para melhorar a experiência do usuário. Sou adepto das melhores práticas, garantindo código limpo e manutenção simplificada em projetos de diferentes tamanhos."
     },
     {
         icon: <RiTailwindCssFill />,
@@ -88,47 +91,53 @@ export const skills = [
         description: "Sass é um pré-processador de CSS que adiciona funcionalidades como variáveis, funções e mixins ao CSS.",
         descriptionTwo: "Com Sass, escrevo estilos de maneira modular e eficiente, utilizando mixins, funções e variáveis para criar códigos reutilizáveis e fáceis de manter."
     },
-    {
-        icon: <SiStyledcomponents />,
-        name: "CSS in JS",
-        description: "Estilização moderna e dinâmica de componentes utilizando CSS-in-JS.",
-        descriptionTwo: "Tenho experiência com CSS-in-JS, criando estilos dinâmicos e escaláveis diretamente no JavaScript para aplicações modernas. Utilizo ferramentas como Styled-Components, Emotion e Tailwind CSS para criar interfaces visuais consistentes e reutilizáveis.\n\nMinha abordagem inclui a criação de temas personalizados, suporte a modos claro e escuro, e animações suaves para melhorar a experiência do usuário. Sou adepto das melhores práticas, garantindo código limpo e manutenção simplificada em projetos de diferentes tamanhos."
-    },
 ];
 
 const extraSkills = (closeModal: () => void) => [
     {
-        icon: <FaDatabase />,
+        icon: <DiDatabase />,
         name: "SQL",
         description: "Linguagem usada para gerenciar e consultar bancos de dados relacionais.",
-        descriptionTwo: "Tenho conhecimento em SQL, criando e otimizando consultas complexas para extrair dados de maneira eficiente em bancos relacionais como MySQL e PostgreSQL.\n \nTenho experiência trabalhando com os banco de dados da Vercel, da Supabase e de algumas outras."
+        descriptionTwo: "Tenho experiência básica em SQL, com habilidades para criar e manipular tabelas, realizar consultas para extração de dados e executar operações como inserção, atualização e exclusão, sempre focando na organização e eficiência dos dados."
     },
     {
-        icon: <RiServerLine />,
-        name: "Servidores",
+        icon: <DiPostgresql />,
+        name: "PostgreSQL",
+        description: "Linguagem usada para gerenciar e consultar bancos de dados relacionais.",
+        descriptionTwo: "Tenho experiência básica em SQL, com habilidades para criar e manipular tabelas, realizar consultas para extração de dados e executar operações como inserção, atualização e exclusão, sempre focando na organização e eficiência dos dados."
+    },
+    {
+        icon: <BiSolidServer />,
+        name: "Manutenção de Banco de Dados",
         description: "Noções de configuração e gerenciamento básico de servidores.",
-        descriptionTwo: "Compreendo conceitos de servidores, incluindo configuração básica, manutenção e monitoramento para garantir um ambiente estável e seguro."
+        descriptionTwo: "Tenho noções práticas de manutenção de bancos de dados, como criação de backups, restauração de informações e monitoramento de operações básicas. Meu objetivo é garantir a integridade e disponibilidade dos dados em diferentes cenários. Tenho experiência com plataformas como Firebase e Supabase para gerenciar e monitorar bancos de dados, garantindo desempenho e organização. Também tenho familiaridade com a hospedagem e integração de projetos por meio do Vercel"
     },
     {
-        icon: <MdSpeed />,
+        icon: <TiStopwatch />,
         name: "Performance",
         description: "Técnicas de otimização para melhorar a performance das aplicações web.",
         descriptionTwo: "Estou focando meus estudos atuais em otimizar a performance web, reduzindo tempos de carregamento e utilizando técnicas como lazy loading, minificação e caching."
     },
     {
-        icon: <FaUniversalAccess />,
-        name: "Acessibilidade",
-        description: "Práticas para tornar interfaces acessíveis a todos.",
-        descriptionTwo: "Prioritizo a acessibilidade em meus projetos sempre seguindo a metodologia 'Mobile First', garantindo que as interfaces sejam utilizáveis por pessoas com diferentes habilidades."
+        icon: <SiPrisma />,
+        name: "Prisma",
+        description: "Prisma é uma ferramenta poderosa para gerenciar bancos de dados de forma eficiente e tipada.",
+        descriptionTwo: "Possuo experiência no uso do Prisma, desde a modelagem de esquemas até a execução de consultas otimizadas, integrando-o com sistemas modernos e escaláveis."
     },
     {
-        icon: <AiOutlineTool />,
+        icon: <FaCcStripe />,
+        name: "Stripe",
+        description: "Stripe é uma plataforma líder para gerenciamento de pagamentos online.",
+        descriptionTwo: "Tenho experiência no uso do Stripe para integrar pagamentos seguros e eficientes, implementando desde transações simples até soluções de assinatura e webhook para automação financeira."
+    },
+    {
+        icon: <TbApi />,
         name: "Construção de API's",
         description: "Desenvolvimento e manutenção de APIs para comunicação entre diferentes sistemas e plataformas.",
         descriptionTwo: "Tenho certa experiência no desenvolvimento e manutenção de APIs, tanto RESTful quanto GraphQL, garantindo performance, segurança e escalabilidade. Construo soluções robustas que permitem a integração de diferentes sistemas, serviços e plataformas, atendendo às necessidades específicas de cada projeto. Já trabalhei com tecnologias e frameworks como Node.js e Express para criar APIs que conectam frontends e bancos de dados de forma eficiente. "
     },
     {
-        icon: <FaMobileAlt />,
+        icon: <FaMeta />,
         name: "Construção de Apps Meta",
         description: "Desenvolvimento de aplicativos interativos e otimizados para a plataforma Meta.",
         descriptionTwo: (
@@ -151,12 +160,6 @@ const extraSkills = (closeModal: () => void) => [
 
             </>
         )
-    },
-    {
-        icon: <FaShareAlt />,
-        name: "Manutenção e Design de Redes Sociais",
-        description: "Gestão criativa e técnica de redes sociais para engajamento e presença digital.",
-        descriptionTwo: "Tenho experiência em manter e melhorar perfis de redes sociais como Instagram, LinkedIn e Twitter. Meu trabalho inclui design gráfico personalizado, otimização de conteúdo para engajamento e análise de desempenho com ferramentas como Google Analytics e Meta Business Suite.\n\nRealizo desde a criação de identidades visuais até a gestão de campanhas estratégicas, garantindo um impacto positivo e consistente na presença online de marcas e projetos."
     },
 ];
 

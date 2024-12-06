@@ -173,7 +173,7 @@ export default function Education() {
                             </div>
 
                             {/* Ponto na linha do tempo */}
-                            <div className="absolute w-8 h-8 bg-[#aadd49] rounded-full border-4 border-white left-1/4 transform -translate-x-1/2 z-10  top-1/2 -translate-y-1/2">
+                            <div className="absolute w-8 h-8 bg-[#aadd49] rounded-full border-4 border-white left-1/4 transform -translate-x-1/2 z-10  top-1/2 -translate-y-1/2 hover:scale-110 transition-all duration-150">
                                 <span className="sr-only">Ponto na linha do tempo</span>
                             </div>
 

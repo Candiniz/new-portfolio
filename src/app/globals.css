@@ -32,7 +32,8 @@ html::-webkit-scrollbar-thumb:hover {
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
-html, body {
+html,
+body {
 
   margin: 0;
   padding: 0;
@@ -46,29 +47,43 @@ html, body {
 
 /* Texto com efeito de máscara */
 .bg-clip-text-musician {
-  background-image: url('../photos/me-w-guitar.jpg'); /* ou use uma cor gradiente */
+  background-image: url('../photos/me-w-guitar.jpg');
+  /* ou use uma cor gradiente */
   background-clip: text;
-  -webkit-background-clip: text; /* Suporte para WebKit */
-  color: transparent; /* Torna o texto transparente */
-  background-size: cover; /* Ajusta a imagem para cobrir o texto */
-  background-position: center; /* Centraliza a imagem */
-  background-attachment: fixed; /* Mantém a imagem fixa no scroll */
+  -webkit-background-clip: text;
+  /* Suporte para WebKit */
+  color: transparent;
+  /* Torna o texto transparente */
+  background-size: cover;
+  /* Ajusta a imagem para cobrir o texto */
+  background-position: center;
+  /* Centraliza a imagem */
+  background-attachment: fixed;
+  /* Mantém a imagem fixa no scroll */
 }
 
 .bg-clip-text-traveller {
-  background-image: url('../photos/edinburgh.jpg'); /* ou use uma cor gradiente */
+  background-image: url('../photos/edinburgh.jpg');
+  /* ou use uma cor gradiente */
   background-clip: text;
-  -webkit-background-clip: text; /* Suporte para WebKit */
-  color: transparent; /* Torna o texto transparente */
-  background-size: cover; /* Ajusta a imagem para cobrir o texto */
-  background-position: center; /* Centraliza a imagem */
-  background-attachment: fixed; /* Mantém a imagem fixa no scroll */
+  -webkit-background-clip: text;
+  /* Suporte para WebKit */
+  color: transparent;
+  /* Torna o texto transparente */
+  background-size: cover;
+  /* Ajusta a imagem para cobrir o texto */
+  background-position: center;
+  /* Centraliza a imagem */
+  background-attachment: fixed;
+  /* Mantém a imagem fixa no scroll */
 }
 
 .video-container {
   position: relative;
-  width: 100%; /* O vídeo ocupará toda a largura disponível */
-  padding-top: 56.25%; /* Proporção de 16:9 (altura/width = 9/16 = 0.5625) */
+  width: 100%;
+  /* O vídeo ocupará toda a largura disponível */
+  padding-top: 56.25%;
+  /* Proporção de 16:9 (altura/width = 9/16 = 0.5625) */
   height: 0;
   overflow: hidden;
 }
@@ -77,18 +92,22 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* O vídeo ocupará 100% da largura da div */
-  height: 100%; /* A altura será ajustada automaticamente para manter a proporção */
+  width: 100%;
+  /* O vídeo ocupará 100% da largura da div */
+  height: 100%;
+  /* A altura será ajustada automaticamente para manter a proporção */
 }
 
 .skill.visible {
-  opacity: 1 !important; /* Altera a opacidade para visível */
-  transform: translateY(0) !important; /* Faz o item aparecer com o efeito de subida */
+  opacity: 1 !important;
+  /* Altera a opacidade para visível */
+  transform: translateY(0) !important;
+  /* Faz o item aparecer com o efeito de subida */
 }
 
 @keyframes blink {
   50% {
-      opacity: 0;
+    opacity: 0;
   }
 }
 
@@ -102,13 +121,17 @@ html, body {
 }
 
 .bg-musician-h {
-  height: 270px; /* Altura padrão */
+  height: 270px;
+  /* Altura padrão */
   min-height: 8px;
 }
 
-@media (min-width: 400px) { /* A partir da largura 'sm' (640px ou maior) */
+@media (min-width: 400px) {
+
+  /* A partir da largura 'sm' (640px ou maior) */
   .bg-musician-h {
-    height: calc(39vh - 28vw); /* Aplica o cálculo apenas para telas sm ou maiores */
+    height: calc(39vh - 28vw);
+    /* Aplica o cálculo apenas para telas sm ou maiores */
   }
 }
 
@@ -137,13 +160,17 @@ html, body {
 }
 
 .bg-traveller-h {
-  height: 200px; /* Altura padrão */
+  height: 200px;
+  /* Altura padrão */
   min-height: 8px;
 }
 
-@media (min-width: 400px) { /* A partir da largura 'sm' (640px ou maior) */
+@media (min-width: 400px) {
+
+  /* A partir da largura 'sm' (640px ou maior) */
   .bg-traveller-h {
-    height: calc(25vh - 20vw); /* Aplica o cálculo apenas para telas sm ou maiores */
+    height: calc(25vh - 20vw);
+    /* Aplica o cálculo apenas para telas sm ou maiores */
   }
 }
 
@@ -168,7 +195,8 @@ html, body {
 
 @layer utilities {
   .text-glow {
-    @apply text-white;  /* Cor do texto */
+    @apply text-white;
+    /* Cor do texto */
     transition: text-shadow 0.3s ease-in-out;
   }
 
@@ -181,6 +209,7 @@ html, body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -190,3 +219,14 @@ html, body {
   animation: spin-slow 5s linear infinite;
 }
 
+#skillsText {
+  opacity: 0;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-duration: 500ms;
+}
+
+#skillsText.visible {
+  opacity: 1 !important;
+}

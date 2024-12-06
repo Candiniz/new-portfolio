@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
+import { roboto } from '../fonts/Fonts';
+import styles from './Education.module.css'
 
 interface Course {
     image: string;
@@ -13,10 +15,26 @@ interface Course {
     description: string;
 }
 
+// Função para simular o efeito de digitação
+const typingEffect = (text: string, callback: () => void) => {
+    let index = 0;
+    const interval = setInterval(() => {
+        const element = document.getElementById("education-typing-title");
+        if (element) {
+            element.textContent = text.slice(0, index + 1);
+            index++;
+        }
+        if (index === text.length) {
+            clearInterval(interval);
+            callback();
+        }
+    }, 100);
+};
 
 export default function Education() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    const [isTypingDone, setIsTypingDone] = useState(false);
 
     const educationData: Course[] = [
         {
@@ -77,19 +95,71 @@ export default function Education() {
         e.stopPropagation();
     };
 
+    // Efeito de digitação
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const element = document.getElementById("education-typing-title");
+
+                    if (entry.isIntersecting) {
+                        if (element) element.textContent = ""; // Garante que o texto esteja vazio antes de reiniciar
+                        setIsTypingDone(false); // Reinicia o estado para reiniciar o efeito
+                        typingEffect("Formação Acadêmica", () => setIsTypingDone(true));
+                    } else {
+                        if (element) element.textContent = ""; // Remove o texto quando sai da viewport
+                        setIsTypingDone(false); // Garante que o cursor _ também desapareça
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        const target = document.getElementById("title-container");
+        if (target) observer.observe(target);
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className="py-10 w-full mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">Formação Acadêmica</h2>
+        <div className="pt-10 w-full mx-auto mt-36">
+            <div className="w-full scroll-mt-24" id="education">
+                <div
+                    id="title-container"
+                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
+                >
+                    <h2
+                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                    >
+                        <span id="education-typing-title"></span>
+                        <span
+                            className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
+                                }`}
+                            style={{
+                                marginLeft: "5px",
+                                animation: "blink 1s steps(1, end) infinite",
+                            }}
+                        >
+                            _
+                        </span>
+                    </h2>
+                </div>
+                <div className="bg-[#676767] h-[2px] w-full"></div>
+            </div>
 
             <div className="relative">
                 {/* Linha do tempo */}
                 <div className="absolute left-1/4 transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
-
+                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
+                {/* Adicionando a bola verde no final */}
+                <div className="absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4">
+                    <div className={styles.sonarBall}></div>
+                </div>
                 <div>
                     {educationData.map((item, index) => (
                         <div
                             key={index}
-                            className="relative min-h-32 w-full h-32 hover:bg-[#222] my-10 transition-all duration-300 cursor-pointer"
+                            className="relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
                             onClick={() => openModal(item)}
                         >
                             {/* Imagem da instituição */}
@@ -131,7 +201,7 @@ export default function Education() {
                     >
                         <motion.div
                             onClick={stopPropagation}
-                            className="relative bg-white rounded-lg w-4/5 md:w-1/2 p-6 px-16"
+                            className="relative bg-white rounded-lg w-4/5 md:w-2/3 p-10"
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.8 }}
@@ -139,26 +209,27 @@ export default function Education() {
                         >
                             <button
                                 onClick={closeModal}
-                                className="absolute top-[1px] right-[1px] text-xl text-white bg-black rounded-full"
+                                className="absolute top-[2px] right-[2px] text-xl text-white bg-black rounded-full"
                             >
                                 <AiOutlineClose />
                             </button>
 
-                            <div className="flex items-center">
+                            <div className="flex flex-col md:flex-row items-start md:items-center">
                                 {/* Foto da instituição */}
                                 <div className="mr-4">
                                     <Image
                                         alt={selectedCourse.institution}
                                         src={selectedCourse.image}
-                                        width={60}
-                                        height={60}
+                                        layout="intrinsic" 
+                                        width={100}
+                                        height={100}
                                     />
                                 </div>
                                 {/* Texto com título e descrição */}
                                 <div>
                                     <h3 className="text-xl font-semibold text-black">{selectedCourse.degree}</h3>
                                     <p className="text-sm text-gray-600">{selectedCourse.institution}</p>
-                                    <p className="text-sm text-gray-500 mt-2">{selectedCourse.description}</p>
+                                    <p className="text-xs md:text-sm text-gray-500 mt-2">{selectedCourse.description}</p>
                                 </div>
                             </div>
                         </motion.div>

@@ -163,10 +163,10 @@ const extraSkills = (closeModal: () => void) => [
 
 
 // Função para simular o efeito de digitação
-const typingEffect = (text: string, callback: () => void) => {
+const typingEffect = (text: string, elementId: string, callback: () => void) => {
     let index = 0;
+    const element = document.getElementById(elementId);
     const interval = setInterval(() => {
-        const element = document.getElementById("typing-title");
         if (element) {
             element.textContent = text.slice(0, index + 1);
             index++;
@@ -276,7 +276,8 @@ const AnimatedTrapezoidalDiv2 = styled(motion.div)`
 
 export default function Skills() {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 1024);
-    const [isTypingDone, setIsTypingDone] = useState(false);
+    const [isTypingTitleDone, setIsTypingTitleDone] = useState(false);
+    const [isTypingTextDone, setIsTypingTextDone] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState<{
         icon: JSX.Element,
@@ -302,15 +303,15 @@ export default function Skills() {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    const element = document.getElementById("typing-title");
+                    const element = document.getElementById("skills-typing-title");
 
                     if (entry.isIntersecting) {
                         if (element) element.textContent = ""; // Garante que o texto esteja vazio antes de reiniciar
-                        setIsTypingDone(false); // Reinicia o estado para reiniciar o efeito
-                        typingEffect("Habilidades", () => setIsTypingDone(true));
+                        setIsTypingTitleDone(false); // Reinicia o estado para reiniciar o efeito
+                        typingEffect("Habilidades", "skills-typing-title", () => setIsTypingTitleDone(true));
                     } else {
                         if (element) element.textContent = ""; // Remove o texto quando sai da viewport
-                        setIsTypingDone(false); // Garante que o cursor _ também desapareça
+                        setIsTypingTitleDone(false); // Garante que o cursor _ também desapareça
                     }
                 });
             },
@@ -322,6 +323,33 @@ export default function Skills() {
 
         return () => observer.disconnect();
     }, []);
+
+    // Efeito de digitação para o parágrafo
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const element = document.getElementById("skills-typing-text");
+
+                    if (entry.isIntersecting) {
+                        if (element) element.textContent = ""; // Garante que o texto esteja vazio antes de reiniciar
+                        setIsTypingTextDone(false); // Reinicia o estado para reiniciar o efeito
+                        typingEffect("Um pouco do que sei e do que estou aprendendo \\(^_^)\/", "skills-typing-text", () => setIsTypingTextDone(true));
+                    } else {
+                        if (element) element.textContent = ""; // Remove o texto quando sai da viewport
+                        setIsTypingTextDone(false); // Garante que o cursor _ também desapareça
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        const target = document.getElementById("skills-text-container");
+        if (target) observer.observe(target);
+
+        return () => observer.disconnect();
+    }, []);
+
 
     const openModal = (skill: {
         icon: JSX.Element;
@@ -375,9 +403,9 @@ export default function Skills() {
                     <h2
                         className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
                     >
-                        <span id="typing-title"></span>
+                        <span id="skills-typing-title"></span>
                         <span
-                            className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
+                            className={`text-[#aadd49] ${isTypingTitleDone ? "visible" : "invisible"
                                 }`}
                             style={{
                                 marginLeft: "5px",
@@ -401,8 +429,12 @@ export default function Skills() {
                     }}
                 >
 
-                    <div className={`${roboto.className} hidden lg:block lg:absolute xl:right-[70px] lg:right-[40px] top-[50%] xl:w-[40%] lg:w-[30%]`}>
-                        <p>Um pouco do que sei e do que estou aprendendo \(^_^)/</p>
+                    <div
+                        className={`${roboto.className} hidden lg:block lg:absolute xl:right-[70px] lg:right-[40px] top-[50%] xl:w-[40%] lg:w-[30%]`}
+                        id="skills-text-container"
+                    >
+                        <p id="skills-typing-text" className="transition-opacity duration-500">
+                            Um pouco do que sei e do que estou aprendendo \(^_^)/</p>
                     </div>
 
                 </div>

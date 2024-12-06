@@ -1,0 +1,16 @@
+@keyframes sonarAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.sonarBall {
+    width: 12px; /* Tamanho da bola */
+    height: 12px;
+    background-color: #aadd49;
+    border-radius: 50%;
+    animation: sonarAnimation 1s ease-in-out infinite;
+}

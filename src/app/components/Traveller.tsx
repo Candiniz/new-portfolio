@@ -315,8 +315,8 @@ export const Traveller: React.FC = () => {
             <div
               className={`${roboto.className} text-[0.79rem] sm:text-xs md:text-sm flex flex-row`}
             >
-              <div className="mx-auto w-full md:w-[70%] xl:w-[60%] text-justify h-full">
-                <div className="w-[60%] md:w-full float-left mr-3 md:mr-0 ">
+              <div className="mx-auto w-[80%] md:w-[70%] xl:w-[60%] text-justify h-full flex flex-col">
+                <div className="w-full mr-3 md:mr-0 ">
                   <AnimatedFeed />
                 </div>
                 Ao longo das minhas viagens, percebi como é importante organizar e
@@ -333,7 +333,7 @@ export const Traveller: React.FC = () => {
                 consigo trazer um olhar único e estratégico para cada projeto, buscando
                 sempre a harmonia entre forma, função e experiência.
               </div>
-              <div className="hidden md:w-[30%] xl:w-[40%] h-auto ml-4 bg-[#ffffff] md:flex items-center justify-center shadow-inner-deep overflow-hidden">
+              <div className="w-[20%] md:w-[30%] xl:w-[40%] h-auto ml-4 bg-[#ffffff] flex items-center justify-center shadow-inner-deep overflow-hidden">
                 <div className="relative w-2 bg-black h-[90%] flex flex-col justify-between items-center shadow-custom-circle">
                   {/* Brasil */}
                   <div className="z-10 w-10 h-10 rounded-full bg-black border-4 border-black flex items-center justify-center transform transition-transform hover:scale-[2] shadow-custom-circle hover:shadow-custom-hover">

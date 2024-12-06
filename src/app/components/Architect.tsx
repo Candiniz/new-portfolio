@@ -1,5 +1,7 @@
 import "../globals.css";
 import { oswald } from "../fonts/Fonts";
+import { Carousel } from "react-responsive-carousel";
+import ArchitectCarousel from "./ArchitectCarousel";
 
 
 // Função para rolar suavemente para o próximo vídeo
@@ -18,6 +20,48 @@ const scrollToAnchor = (e) => {
 
 export default function Architect() {
 
+  const projectImages = [
+    {
+      name: "Projeto de Casa Sobrado em São Paulo: fachada principal",
+      link: "https://i.imgur.com/QErZmRb.jpeg",
+      alt: "Projeto feito por mim para uma casa sobrado no bairro do morumbi na cidade de São Paulo para uma família de 5 pessoas.",
+    },
+    {
+      name: "Projeto de Casa Sobrado em São Paulo: sala de jantar",
+      link: "https://i.imgur.com/3T5oz0l.jpeg",
+      alt: "Projeto feito por mim para uma casa sobrado no bairro do morumbi na cidade de São Paulo para uma família de 5 pessoas.",
+    },
+    {
+      name: "Projeto de Casa Sobrado em São Paulo: sala de estar",
+      link: "https://i.imgur.com/MqX0Srs.jpeg",
+      alt: "Projeto feito por mim para uma casa sobrado no bairro do morumbi na cidade de São Paulo para uma família de 5 pessoas.",
+    },
+    {
+      name: "Projeto de Interiores: Apartamento em Osasco: sala e cozinha",
+      link: "https://i.imgur.com/82I8CLu.jpeg",
+      alt: "Projeto feito por mim para um apartamento no centro da cidade de Osasco para uma família de 4 pessoas.",
+    },
+    {
+      name: "Projeto de Interiores: Apartamento em Osasco: vista pro painel & sala de jantar",
+      link: "https://i.imgur.com/bMVFkgo.jpeg",
+      alt: "Projeto feito por mim para um apartamento no centro da cidade de Osasco para uma família de 4 pessoas.",
+    },
+    {
+      name: "Projeto de Interiores: Apartamento em Osasco: varanda",
+      link: "https://i.imgur.com/TXfU8zU.jpeg",
+      alt: "Projeto feito por mim para um apartamento no centro da cidade de Osasco para uma família de 4 pessoas.",
+    },
+    {
+      name: "Projeto de Interiores: Apartamento em Osasco: detalhe da marcenaria do balcão",
+      link: "https://i.imgur.com/PFmpdEd.jpeg",
+      alt: "Projeto feito por mim para um apartamento no centro da cidade de Osasco para uma família de 4 pessoas.",
+    },
+    {
+      name: "Projeto de Interiores: Apartamento em Osasco: quarto do casal",
+      link: "https://i.imgur.com/LilJMCU.png",
+      alt: "Projeto feito por mim para um apartamento no centro da cidade de Osasco para uma família de 4 pessoas.",
+    },
+  ]
 
 
   return (
@@ -40,6 +84,9 @@ export default function Architect() {
         </p>
       </div>
       <div className="bg-clip-text-bar-architect h-20 w-full 2xl:block mt-3 mb-4 lg:mb-0">
+      </div>
+      <div>
+        <ArchitectCarousel />
       </div>
     </div>
   );

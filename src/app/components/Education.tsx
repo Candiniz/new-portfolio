@@ -15,18 +15,21 @@ interface Course {
     description: string;
 }
 
-// Função para simular o efeito de digitação
+// Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
     let index = 0;
+    const element = document.getElementById("education-typing-title");
+    if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
+
     const interval = setInterval(() => {
-        const element = document.getElementById("education-typing-title");
         if (element) {
             element.textContent = text.slice(0, index + 1);
             index++;
-        }
-        if (index === text.length) {
-            clearInterval(interval);
-            callback();
+            if (index === text.length) {
+                clearInterval(interval);
+                if (element) element.classList.add("visible"); // Torna visível após digitar
+                callback();
+            }
         }
     }, 100);
 };
@@ -95,7 +98,6 @@ export default function Education() {
         e.stopPropagation();
     };
 
-    // Efeito de digitação
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -103,29 +105,30 @@ export default function Education() {
                     const element = document.getElementById("education-typing-title");
 
                     if (entry.isIntersecting) {
-                        if (element) element.textContent = ""; // Garante que o texto esteja vazio antes de reiniciar
-                        setIsTypingDone(false); // Reinicia o estado para reiniciar o efeito
+                        if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
+                        setIsTypingDone(false); // Reinicia o estado
                         typingEffect("Formação Acadêmica", () => setIsTypingDone(true));
                     } else {
-                        if (element) element.textContent = ""; // Remove o texto quando sai da viewport
-                        setIsTypingDone(false); // Garante que o cursor _ também desapareça
+                        if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
+                        setIsTypingDone(false); // Desativa o estado
                     }
                 });
             },
-            { threshold: 0.5 }
+            { threshold: 0.5 } // Aciona quando 50% do título está visível
         );
 
-        const target = document.getElementById("title-container");
+        const target = document.getElementById("education-title-container");
         if (target) observer.observe(target);
 
         return () => observer.disconnect();
     }, []);
 
+
     return (
         <div className="pt-10 w-full mx-auto mt-36">
             <div className="w-full scroll-mt-24" id="education">
                 <div
-                    id="title-container"
+                    id="education-title-container"
                     className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2
@@ -181,7 +184,7 @@ export default function Education() {
                             <div className="absolute left-[30%] text-left top-1/2 -translate-y-1/2 px-5 select-none">
                                 <div className="text-md lg:text-lg font-semibold">{item.degree}</div>
                                 <div className="text-gray-600">{item.institution}</div>
-                                <div className="text-sm text-gray-500">{item.year}</div>
+                                <div className="text-sm text-[#aadd49] font-bold">{item.year}</div>
                             </div>
                         </div>
                     ))}
@@ -220,7 +223,7 @@ export default function Education() {
                                     <Image
                                         alt={selectedCourse.institution}
                                         src={selectedCourse.image}
-                                        layout="intrinsic" 
+                                        layout="intrinsic"
                                         width={100}
                                         height={100}
                                     />

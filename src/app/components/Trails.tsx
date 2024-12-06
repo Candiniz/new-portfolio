@@ -2,7 +2,7 @@
 
 import "../globals.css";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { oswald, roboto } from "../fonts/Fonts";
+import { roboto } from "../fonts/Fonts";
 import Musician from "./Musician";
 import Traveller from "./Traveller";
 import { useEffect, useState } from "react";
@@ -10,21 +10,21 @@ import Architect from "./Architect";
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
-    let index = 0;
-    const element = document.getElementById("trails-typing-title");
-    if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
+  let index = 0;
+  const element = document.getElementById("trails-typing-title");
+  if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
 
-    const interval = setInterval(() => {
-        if (element) {
-            element.textContent = text.slice(0, index + 1);
-            index++;
-            if (index === text.length) {
-                clearInterval(interval);
-                if (element) element.classList.add("visible"); // Torna visível após digitar
-                callback();
-            }
-        }
-    }, 100);
+  const interval = setInterval(() => {
+    if (element) {
+      element.textContent = text.slice(0, index + 1);
+      index++;
+      if (index === text.length) {
+        clearInterval(interval);
+        if (element) element.classList.add("visible"); // Torna visível após digitar
+        callback();
+      }
+    }
+  }, 100);
 };
 
 export default function Trails() {

@@ -116,14 +116,20 @@ export default function Header() {
             {/* Menu Lateral */}
             <AnimatePresence>
                 {isMenuOpen && (
-                    <div className="fixed lg:hidden inset-0 z-20 bg-black bg-opacity-40 backdrop-blur-sm" onClick={toggleMenu}>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: 'easeInOut' }}
+                        className="fixed lg:hidden inset-0 z-20 bg-black bg-opacity-40 backdrop-blur-sm"
+                        onClick={toggleMenu}>
                         <motion.div
-                            className="fixed right-5 w-[80px] h-[500px] bg-black border-r-2 border-b-2 rounded-none rounded-br-full border-[#aadd49] shadow-md py-4 px-2 z-20"
-                            initial={{ y: '-100%', opacity: 0 }}  // Inicialmente fora da tela
-                            animate={{ y: 0, opacity: 1 }}  // Animação para quando o menu for aberto
-                            exit={{ y: '-100%', opacity: 0 }}  // Quando o menu for fechado
-                            transition={{ duration: 0.5 }}  // Duração da animação
-                            onClick={(e) => e.stopPropagation()} // Evita que o clique no menu feche o menu
+                            className="fixed right-5 w-[80px] h-full bg-black border-l-2 rounded-none border-[#aadd49] shadow-md py-4 px-2 z-20"
+                            initial={{ x: '200%', opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: '200%', opacity: 0 }}
+                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <nav className="flex flex-col text-4xl gap-8 pt-[100px] items-center relative">
                                 <button
@@ -253,7 +259,7 @@ export default function Header() {
                             </nav>
                         </motion.div>
 
-                    </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </>

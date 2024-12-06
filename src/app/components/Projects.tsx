@@ -102,14 +102,9 @@ export default function Projects({ projects }: ProjectsProps) {
     return (
         <>
             <AnimatePresence
-                onExitComplete={() => {
-                    setSelectedProject(null);
-                    setModalPosition(null);
-                }}
             >
                 {isModalOpen && selectedProject && modalPosition && (
                     <ProjectsModal
-                        key={selectedProject.name} // Garante reconstrução correta
                         isOpen={isModalOpen}
                         onClose={handleCloseModal}
                         project={selectedProject}

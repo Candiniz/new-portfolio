@@ -1,7 +1,7 @@
 
 import AboutMe from "./components/Intro";
 import Projects from "./components/Projects";
-import Trails from "./components/AboutMe";
+import Trails from "./components/Trails";
 import Skills from "./components/Skills";
 import "./globals.css";
 
@@ -9,6 +9,7 @@ import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma } from "react-icons/fa";
 import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript, SiPrisma, SiStyledcomponents } from "react-icons/si";
 import { DiPhotoshop } from "react-icons/di";
+import Education from "./components/Education";
 
 export default function Home() {
 
@@ -146,6 +147,7 @@ export default function Home() {
       <div>
         <Skills />
         <Projects projects={projects} />
+        <Education />
         <Trails />
       </div>
     </>

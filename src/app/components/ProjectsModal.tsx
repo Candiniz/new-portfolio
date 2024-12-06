@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineClose } from "react-icons/ai";
 import { roboto } from "../fonts/Fonts";
 import styles from './ProjectsModal.module.css'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ModalProps {
     isOpen: boolean;
@@ -22,6 +22,7 @@ interface ModalProps {
 
 
 export default function Modal({ isOpen, onClose, project, position }: ModalProps) {
+    const [exitComplete, setExitComplete] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
@@ -42,8 +43,12 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
         ));
     };
 
+    const handleExitComplete = () => {
+      setExitComplete(true);  // Marca que a animação de saída foi completada
+    };
+    
     return (
-        <AnimatePresence>
+        <AnimatePresence mode='wait'>
             {isOpen && (
                 <>
                     {/* Background Overlay */}
@@ -57,6 +62,7 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-40"
+                        onAnimationComplete={handleExitComplete}
                     />
 
                     {/* Barra Verde Animada */}

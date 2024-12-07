@@ -6,7 +6,7 @@ import Link from "next/link";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
 import { useEffect, useState, useMemo } from "react";
-
+import { motion, AnimatePresence } from "framer-motion";
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -34,6 +34,7 @@ const typingEffect = (text: string, callback: () => void) => {
 
 export default function AboutMe() {
     const [isTypingDone, setIsTypingDone] = useState(false);
+    const [isCVVisible, setIsCVVisible] = useState(false);
 
     useEffect(() => {
         // Apenas o "Anderson" será digitado
@@ -41,6 +42,10 @@ export default function AboutMe() {
     }, []);
 
     const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
+
+    const toggleCV = () => {
+        setIsCVVisible(!isCVVisible); // Alternar a visibilidade dos botões
+    };
 
     return (
         <div
@@ -81,17 +86,56 @@ export default function AboutMe() {
 
                     <div className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3">
                         <Link
-                            href="/contatos"
+                            href="#contact"
                             className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all px-10 hover:bg-[#30344600] hover:border border-[#aadd49] hover:text-[#aadd49]"
                         >
                             Vamos conversar!
                         </Link>
-                        <Link
-                            href="/contatos"
+                        <motion.button
+                            onClick={toggleCV}
                             className="rounded-full text-center w-[270px] h-15 p-1 border border-[#aadd49] bg-[#30344600] text-[#aadd49] text-lg transition-all px-10 hover:bg-[#aadd49] hover:text-[#21232b] hover:border-none"
                         >
-                            Baixe meu CV!
-                        </Link>
+                            {isCVVisible ? 'Fechar' : 'Baixe meu CV!'}
+                        </motion.button>
+                    
+
+                    {/* Animação dos botões com as bandeiras */}
+                    <AnimatePresence>
+                    {isCVVisible && (
+                        <motion.div
+                            className="flex gap-10 mt-4"
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 1, scale: 0 }}
+                            transition={{ type: "spring", stiffness: 200 }}
+                        >
+                            <motion.a
+                                className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/640px-Flag_of_Brazil.svg.png')]"
+                                initial={{ opacity: 0, y: -30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -30 }}
+                                transition={{ type: "spring", stiffness: 200 }}
+                                whileHover={{ scale: 1.1 }}
+                                href="/CandinizCV_PT.pdf"
+                                download
+                            >
+                                
+                            </motion.a>
+                            <motion.a
+                                className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/2560px-Flag_of_the_United_States_%28Pantone%29.svg.png')]"
+                                initial={{ opacity: 0, y: -30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -30 }}
+                                transition={{ type: "spring", stiffness: 200 }}
+                                whileHover={{ scale: 1.1 }}
+                                href="/CandinizCV_EN.pdf"
+                                download
+                            >
+                              
+                            </motion.a>
+                        </motion.div>
+                    )}
+                    </AnimatePresence>
                     </div>
 
                     <ul className="select-none flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">

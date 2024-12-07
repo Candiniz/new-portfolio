@@ -1,4 +1,4 @@
-import { Caveat, Oswald } from 'next/font/google';
+import { Caveat, Oswald, Parisienne } from 'next/font/google';
 import { IBM_Plex_Mono } from 'next/font/google';
 import { Roboto_Mono } from 'next/font/google';
 
@@ -23,5 +23,11 @@ export const roboto = Roboto_Mono({
 export const caveat = Caveat({
   subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
   weight: ['400', '700'], // Pesos desejados
+  style: 'normal', // Ou 'italic' se for o caso
+})
+
+export const parisienne = Parisienne({
+  subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
+  weight: ['400'], // Pesos desejados
   style: 'normal', // Ou 'italic' se for o caso
 })

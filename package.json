@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@tippyjs/react": "^4.2.6",
+    "axios": "^1.7.9",
     "embla-carousel": "^8.5.1",
     "expo": "^52.0.9",
     "fitty": "^2.4.2",

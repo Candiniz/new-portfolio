@@ -1,7 +1,7 @@
 import CopyButton from "./CopyButton";
 import Image from "next/image";
 import contatosBG from "../../../public/contactBG.png"
-import { caveat, roboto } from "../fonts/Fonts";
+import { caveat, parisienne, roboto } from "../fonts/Fonts";
 
 import { AiOutlineMail } from "react-icons/ai";
 import { FaWhatsapp, FaLinkedin, FaGithubSquare, FaInstagram } from "react-icons/fa";
@@ -21,13 +21,16 @@ export default function Contatos() {
                 </svg>
             </div>
             <div className="bg-black w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="-mb-1" style={{ display: "block" }}><path fill="#fff" fillOpacity="1" d="M0,192L60,202.7C120,213,240,235,360,250.7C480,267,600,277,720,277.3C840,277,960,267,1080,234.7C1200,203,1320,149,1380,122.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#fff" fillOpacity="1" d="M0,192L60,202.7C120,213,240,235,360,250.7C480,267,600,277,720,277.3C840,277,960,267,1080,234.7C1200,203,1320,149,1380,122.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
             </div>
-            <div className="bg-white h-[200px] w-full text-black -my-3 flex items-center justify-center text-xl md:text-3xl">
+            <div className="relative bg-white h-[200px] w-full text-black -my-3 flex items-center justify-center text-xl md:text-3xl border-t-2 border-b-2 border-white">
                 <p className={`${caveat.className}`}>vamos construir algo incrível juntos?</p>
+                <div className="w-full absolute left-0 -bottom-[2px] h-[2px] bg-white z-30"></div>
+                <div className="w-full absolute left-0 -top-[2px] h-1 bg-white z-30"></div>
+
             </div>
             <div className="z-20 bg-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="-mt-1" style={{ display: "block" }}><path fill="#ffffff" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#ffffff" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
             </div>
             <div className="w-full flex items-center justify-center md:gap-10 mb-7">
                 <div>
@@ -40,7 +43,7 @@ export default function Contatos() {
                     />
                 </div>
                 <div className="space-y-8 md:space-y-16">
-                    <h1 className={`${caveat.className} -ml-32 md:ml-0 text-6xl md:text-8xl font-bold`}>Contatos:</h1>
+                    <h1 className={`${parisienne.className} -ml-32 md:ml-0 text-6xl md:text-8xl font-bold`}>Contatos:</h1>
 
                     <ul className="flex md:hidden flex-col gap-7 text-[#aadd49] text-4xl items-center justify-center" id="contact">
                         <li className="ml-2">

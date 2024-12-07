@@ -11,6 +11,7 @@ import { SiTypescript, SiPrisma, SiStyledcomponents } from "react-icons/si";
 import { DiPhotoshop } from "react-icons/di";
 import Education from "./components/Education";
 import Contatos from "./components/Contatos";
+import TranslateButton from "./components/TranslateButton";
 
 export default function Home() {
 
@@ -142,6 +143,7 @@ export default function Home() {
 
   return (
     <>
+      {/* <TranslateButton /> */}
       <div className="mt-[100px]">
         <AboutMe />
       </div>

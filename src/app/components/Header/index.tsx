@@ -90,7 +90,7 @@ export default function Header() {
 
     return (
         <>
-            <header className={`${roboto.className} bg-black fixed z-40 w-full text-sm flex flex-col items-center top-0`}>
+            <header className={`${roboto.className} bg-black fixed z-50 w-full text-sm flex flex-col items-center top-0`}>
                 <div className="flex justify-between py-2 px-8 w-full">
                     <Link href="/">
                         <Image alt="Logotipo" src={zLogo} height={50} />
@@ -105,7 +105,7 @@ export default function Header() {
                         <Link onClick={(e) => scrollToAnchor(e, "projects")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#projects">Projetos</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Formação</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "aboutMe")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#aboutMe">Sobre Mim</Link>
-                        <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="/contatos">Contatos</Link>
+                        <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contact">Contatos</Link>
                     </nav>
                 </div>
                 {/* Linha de separação após a navbar */}
@@ -121,7 +121,7 @@ export default function Header() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5, ease: 'easeInOut' }}
-                        className="fixed lg:hidden inset-0 z-20 bg-black bg-opacity-40 backdrop-blur-sm"
+                        className="fixed lg:hidden inset-0 z-40 bg-black bg-opacity-40 backdrop-blur-sm"
                         onClick={toggleMenu}>
                         <motion.div
                             className="fixed right-5 w-[80px] h-full bg-black border-l-2 rounded-none border-[#aadd49] shadow-md py-4 px-2 z-20"
@@ -178,7 +178,7 @@ export default function Header() {
                                 </button>
                                 <button
                                     onClick={(e) => {
-                                        scrollToAnchor(e, "contacts")
+                                        scrollToAnchor(e, "contact")
                                         toggleMenu();
                                     }}
                                     className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'contacts' ? 'text-[#aadd49]' : ''}`}

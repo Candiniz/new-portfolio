@@ -204,7 +204,7 @@ export default function Education() {
                     >
                         <motion.div
                             onClick={stopPropagation}
-                            className="relative bg-white rounded-lg w-4/5 md:w-2/3 p-10"
+                            className="relative bg-white rounded-lg w-4/5 p-10"
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.8 }}
@@ -219,13 +219,14 @@ export default function Education() {
 
                             <div className="flex flex-col md:flex-row items-start md:items-center">
                                 {/* Foto da instituição */}
-                                <div className="mr-4">
+                                <div className="mr-4 min-w-[100px]">
                                     <Image
                                         alt={selectedCourse.institution}
                                         src={selectedCourse.image}
                                         layout="intrinsic"
                                         width={100}
                                         height={100}
+                                        className='object-cover min-w-[100px]'
                                     />
                                 </div>
                                 {/* Texto com título e descrição */}

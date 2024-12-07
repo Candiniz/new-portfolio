@@ -79,7 +79,7 @@ body {
 }
 
 .bg-clip-text-architect {
-  background-image: url('../photos/edinburgh.jpg');
+  background-image: url('../photos/architect-mobile.jpg');
   /* ou use uma cor gradiente */
   background-clip: text;
   -webkit-background-clip: text;
@@ -92,6 +92,19 @@ body {
   /* Centraliza a imagem */
   background-attachment: fixed;
   /* Mantém a imagem fixa no scroll */
+}
+
+@media (min-width: 700px) {
+
+  .bg-clip-text-architect   {
+    background-image: url('../photos/architect.jpg') !important;
+  }
+  div.bg-clip-text-bar-architect {
+    background-image: url('../photos/architect.jpg') !important;
+  }
+  div.bg-clip-text-bar-architect::before {
+    background-image: url('../photos/architect.jpg') !important;
+  }
 }
 
 .video-container {
@@ -205,14 +218,7 @@ body {
   color: transparent;
 }
 
-/* Architect */
-.bg-clip-text-bar-architect {
-  position: relative;
-  background-image: url('../photos/edinburgh.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
+
 
 .bg-architect-h {
   height: 200px;
@@ -229,6 +235,14 @@ body {
   }
 }
 
+/* Architect */
+.bg-clip-text-bar-architect {
+  position: relative;
+  background-image: url('../photos/architect-mobile.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
 .bg-clip-text-bar-architect::before {
   content: " ";
   position: absolute;
@@ -236,7 +250,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../photos/edinburgh.jpg');
+  background-image: url('../photos/architect-mobile.jpg');
   background-size: cover;
   background-position: center;
   background-clip: text;

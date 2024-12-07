@@ -65,7 +65,7 @@ export default function Architect() {
 
 
   return (
-    <div className="w-full h-fit aspect-video mt-20">
+    <div className="w-full h-fit mt-20">
       <div className="relative w-full h-72 mb-3">
         <div className="absolute top-0 right-0 inset-0 bg-gradient-to-b from-black to-transparent z-[11] "></div>
         <div className="bg-clip-text-bar-architect w-full h-full relative z-10">

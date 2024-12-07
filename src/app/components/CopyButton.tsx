@@ -14,7 +14,7 @@ export default function CopyButton({ textToCopy }: CopyButtonProps) {
     }
 
     return (
-        <button onClick={handleCopy} className="inline-flex justify-center items-center">
+        <button onClick={handleCopy} className="inline-flex justify-center items-center text-[#aadd49]">
             <FaRegCopy title="Clique aqui para copiar" />
         </button>
     )

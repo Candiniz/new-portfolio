@@ -10,6 +10,7 @@ import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
 import { SiTypescript, SiPrisma, SiStyledcomponents } from "react-icons/si";
 import { DiPhotoshop } from "react-icons/di";
 import Education from "./components/Education";
+import Contatos from "./components/Contatos";
 
 export default function Home() {
 
@@ -18,7 +19,7 @@ export default function Home() {
       slug: 'projex',
       name: 'ProjEx',
       projectLink: 'https://proj-ex.vercel.app',
-      repositoryLink: '',
+      repositoryLink: 'https://github.com/Candiniz/ProjEX',
       linkedIn: '',
       icons: (
         <>
@@ -37,8 +38,8 @@ export default function Home() {
     {
       slug: 'sobrinha-artesanatos',
       name: 'Sobrinha | Loja Virtual',
-      projectLink: '',
-      repositoryLink: '',
+      projectLink: 'https://www.sobrinha.store',
+      repositoryLink: 'https://github.com/Candiniz/next-commerce-1',
       linkedIn: '',
       icons: (
         <>
@@ -149,6 +150,7 @@ export default function Home() {
         <Projects projects={projects} />
         <Education />
         <Trails />
+        <Contatos />
       </div>
     </>
   );

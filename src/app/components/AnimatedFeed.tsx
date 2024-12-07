@@ -42,7 +42,7 @@ const FeedPlanningAnimation = () => {
 
     return (
         <motion.div
-            className="w-full max-w-full bg-[#000] p-1 gap-1 flex flex-col lg:mr-2 mb-2 border-t-4 border-b-4 border-black"
+            className="w-full max-w-full bg-[#ffffff] p-1 gap-1 flex flex-col lg:mr-2 mb-2"
             style={{
                 position: "relative",
                 aspectRatio: "1", // O aspecto pode ser ajustado conforme necessário

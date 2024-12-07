@@ -29,12 +29,12 @@ export default function Loading() {
 
         @keyframes revealLogo {
           0% {
-            scale: 0.8;
+            /* scale: 0.8; */
             opacity: 0;
             box-shadow: 0 0 20px rgba(0, 0, 0, 1);
           }
           100% {
-            scale: 1;
+            /* scale: 1; */
             opacity: 1;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0); /* Cor de sombra verde neon */
           }

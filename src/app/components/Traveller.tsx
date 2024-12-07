@@ -203,7 +203,7 @@ export const Traveller: React.FC = () => {
 
               <motion.div
                 onClick={closeFeedModal}
-                className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-md"
+                className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md"
                 initial={{ opacity: 0 }}  // Começa com opacidade 0 (invisível)
                 animate={{ opacity: 1 }}  // Finaliza com opacidade 1 (visível)
                 exit={{ opacity: 0 }}  // Sai com opacidade 0 (invisível)

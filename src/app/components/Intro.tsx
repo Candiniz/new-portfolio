@@ -57,7 +57,7 @@ export default function AboutMe() {
             <main
                 className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-center gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
             >
-                
+
                 <div className="text-white mx-8 xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
                     {/* Texto estático */}
                     <div id="about-title-container">
@@ -84,7 +84,9 @@ export default function AboutMe() {
                         <h2>Sou um desenvolvedor frontend apaixonado por criar interfaces </h2>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3">
+                    <motion.div 
+                    layout
+                    className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3 transition-all">
                         <Link
                             href="#contact"
                             className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all px-10 hover:bg-[#30344600] hover:border border-[#aadd49] hover:text-[#aadd49]"
@@ -97,54 +99,58 @@ export default function AboutMe() {
                         >
                             {isCVVisible ? 'Fechar' : 'Baixe meu CV!'}
                         </motion.button>
-                    
 
-                    {/* Animação dos botões com as bandeiras */}
-                    <AnimatePresence>
-                    {isCVVisible && (
-                        <motion.div
-                            className="flex gap-10 mt-4"
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 1, scale: 0 }}
-                            transition={{ type: "spring", stiffness: 200 }}
-                        >
-                            <motion.a
-                                className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/640px-Flag_of_Brazil.svg.png')]"
-                                initial={{ opacity: 0, y: -30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -30 }}
-                                transition={{ type: "spring", stiffness: 200 }}
-                                whileHover={{ scale: 1.1 }}
-                                href="/CandinizCV_PT.pdf"
-                                download
-                            >
-                                
-                            </motion.a>
-                            <motion.a
-                                className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/2560px-Flag_of_the_United_States_%28Pantone%29.svg.png')]"
-                                initial={{ opacity: 0, y: -30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -30 }}
-                                transition={{ type: "spring", stiffness: 200 }}
-                                whileHover={{ scale: 1.1 }}
-                                href="/CandinizCV_EN.pdf"
-                                download
-                            >
-                              
-                            </motion.a>
-                        </motion.div>
-                    )}
-                    </AnimatePresence>
-                    </div>
 
-                    <ul className="select-none flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20">
-                        <li className="bg-[#2f74c0] text-[#ffffff] w-fit p-2 rounded-md">typescript</li>
-                        <li className="bg-[#6bddfa] text-[#000000] w-fit p-2 rounded-md">react</li>
-                        <li className="bg-[#efd81d] text-[#000000] w-fit p-2 rounded-md">javascript</li>
-                        <li className="bg-[#353535] text-[#ffffff] w-fit p-2 rounded-md">next.js</li>
-                        <li className="bg-[#c762de] text-[#ffffff] w-fit p-2 rounded-md">UX/UI</li>
-                    </ul>
+                        {/* Animação dos botões com as bandeiras */}
+                        <AnimatePresence>
+                            {isCVVisible && (
+                                <motion.div
+                                    className="flex gap-10 mt-4"
+                                    initial={{ opacity: 0, scale: 0 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 1, scale: 0 }}
+                                    transition={{ type: "spring", stiffness: 200 }}
+                                >
+                                    <motion.a
+                                        className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/640px-Flag_of_Brazil.svg.png')]"
+                                        initial={{ opacity: 0, y: -30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -30 }}
+                                        transition={{ type: "spring", stiffness: 200 }}
+                                        whileHover={{ scale: 1.1 }}
+                                        href="/CandinizCV_PT.pdf"
+                                        download
+                                    >
+
+                                    </motion.a>
+                                    <motion.a
+                                        className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/2560px-Flag_of_the_United_States_%28Pantone%29.svg.png')]"
+                                        initial={{ opacity: 0, y: -30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -30 }}
+                                        transition={{ type: "spring", stiffness: 200 }}
+                                        whileHover={{ scale: 1.1 }}
+                                        href="/CandinizCV_EN.pdf"
+                                        download
+                                    >
+
+                                    </motion.a>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    <motion.div
+                    layout
+                    >
+                        <ul className="select-none flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20 transition-all">
+                            <li className="bg-[#2f74c0] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">typescript</li>
+                            <li className="bg-[#6bddfa] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">react</li>
+                            <li className="bg-[#efd81d] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">javascript</li>
+                            <li className="bg-[#353535] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">next.js</li>
+                            <li className="bg-[#c762de] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">UX/UI</li>
+                        </ul>
+                    </motion.div>
                 </div>
                 <div className="m-0 p-0 z-[10]">
                     <div className="relative m-auto w-4/5 md:w-[350px] xl:w-[500px]">
@@ -161,7 +167,7 @@ export default function AboutMe() {
                 </div>
 
                 {StarsBackgroundMemoized}
-                
+
             </main>
         </div>
     );

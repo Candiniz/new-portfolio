@@ -155,7 +155,7 @@ export default function Projects({ projects }: ProjectsProps) {
                                     alt={project.image.alt}
                                     width={600}
                                     height={300}
-                                    layout="intrinsic"
+                                    
                                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-black bg-opacity-70 transition-opacity duration-500 group-hover:opacity-0"></div>

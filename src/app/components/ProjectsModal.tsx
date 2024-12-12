@@ -115,7 +115,7 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
                             transform: "translateX(-50%)",
                             transition: { duration: 0.5, ease: "easeInOut" },
                         }}
-                        className={`${roboto.className} fixed inset-0 left-1/2 transform -translate-x-1/2 w-[80%] bg-[#25252565] rounded-t-lg shadow-lg z-50 h-screen flex flex-col`}
+                        className={`${roboto.className} fixed inset-0 left-1/2 transform -translate-x-1/2 w-[80%] bg-[#25252565] rounded-t-lg shadow-lg z-50 h-screen max-h-screen flex flex-col`}
                     >
                         {/* Título no topo */}
                         <div className="flex w-full !bg-[#353535b7] justify-between items-center p-4">

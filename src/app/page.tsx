@@ -11,11 +11,30 @@ import { SiTypescript, SiPrisma, SiStyledcomponents } from "react-icons/si";
 import { DiPhotoshop } from "react-icons/di";
 import Education from "./components/Education";
 import Contatos from "./components/Contatos";
-import TranslateButton from "./components/TranslateButton";
 
 export default function Home() {
 
   const projects = [
+    {
+      slug: 'hexis',
+      name: 'HEXIS!',
+      projectLink: 'https://hexis.vercel.app',
+      repositoryLink: 'https://github.com/Candiniz/hexis',
+      linkedIn: 'https://www.linkedin.com/feed/update/urn:li:activity:7278147027002179585/',
+      icons: (
+        <>
+          <FaReact />
+          <FaJs />
+          <FaCss3Alt />
+          <FaFigma />
+        </>
+      ),
+      image: {
+        url: 'https://i.imgur.com/kEtAOJn.png',
+        alt: "Hexis é um projeto que nasceu do desejo de me auto desafiar e explorar novos horizontes no desenvolvimento de aplicações interativas. Inspirado no jogo mobile Trigon, da IEC Games, decidi recriar sua essência por meio de uma abordagem de clonagem por observação. Esse método exigiu que eu confiasse exclusivamente na minha experiência como jogador para projetar funcionalidades e mecânicas, sem qualquer acesso ao código-fonte do jogo original. O objetivo era não apenas replicar a jogabilidade, mas também compreender e implementar os fundamentos lógicos e visuais que tornam Trigon tão cativante.\n\nO processo foi um dos mais desafiadores que já enfrentei. Desde o início, a construção do tabuleiro com SVGs revelou-se uma tarefa minuciosa e complexa, exigindo atenção aos detalhes visuais e funcionais. Definir as coordenadas de cada triângulo que compõe o tabuleiro foi outro obstáculo significativo, pois demandou cálculos geométricos precisos para garantir a interação fluida entre as peças e o tabuleiro. Além disso, criar uma dinâmica em que as peças reconhecem seus posicionamentos e interagem corretamente com o ambiente reforçou minhas habilidades em lógica de programação e manipulação de DOM no React.js.\n\nHexis não foi apenas um projeto técnico, mas também uma oportunidade de aprendizado e crescimento. Ele solidificou meu domínio em React.js e JavaScript avançado, ao mesmo tempo que me desafiou a sair da zona de conforto. O resultado final é um jogo totalmente funcional, que agora pode ser experimentado por qualquer pessoa em 'https://hexis.vercel.app'. Este projeto ocupa um lugar especial no meu portfólio, pois simboliza a combinação de determinação, criatividade e aprendizado contínuo que trago para cada desafio que enfrento.",
+        date: '04/12/2024'
+      }
+    },
     {
       slug: 'restora',
       name: 'reStora',
@@ -53,7 +72,7 @@ export default function Home() {
       ),
       image: {
         url: 'https://i.imgur.com/ekDJKin.png',
-        alt: "Este projeto foi desenvolvido com o objetivo de dominar operações básicas em JavaScript, como manipulação de valores numéricos e monetários, além de administrar valores dinâmicos e a conexão entre front-end e back-end. Inicialmente, a aplicação utilizava um simples JSON server para armazenar e recuperar dados. No entanto, ao perceber as limitações dessa abordagem, decidi migrar para uma solução mais robusta, adotando o Firebase como banco de dados.\n\nCom a integração do Firebase, o projeto ganhou escalabilidade e desempenho, e, para garantir a segurança e a experiência do usuário, implementei um sistema de login completo, utilizando autenticação por email e senha. Isso permitiu um acesso mais ágil e seguro às funcionalidades da aplicação, como gerenciamento de projetos e criação de novos itens.\n\n Esse projeto me proporcionou um entendimento profundo sobre manipulação de dados, integração de tecnologias e o gerenciamento de operações financeiras e de valores em um sistema de back-end escalável, além de consolidar meu conhecimento sobre autenticação de usuários e estruturação de dados dinâmicos em tempo real.",
+        alt: "Este projeto foi desenvolvido com o objetivo de dominar operações básicas em JavaScript, como manipulação de valores numéricos e monetários, além de administrar valores dinâmicos e a conexão entre front-end e back-end. Inicialmente, a aplicação utilizava um simples JSON server para armazenar e recuperar dados. No entanto, ao perceber as limitações dessa abordagem, decidi migrar para uma solução mais robusta, adotando o Firebase como banco de dados.\n\nCom a integração do Firebase, o projeto ganhou escalabilidade e desempenho, e, para garantir a segurança e a experiência do usuário, implementei um sistema de login completo, utilizando autenticação por email e senha. Isso permitiu um acesso mais ágil e seguro às funcionalidades da aplicação, como gerenciamento de projetos e criação de novos itens. Essas características fazem com que este projeto possa ser considerado um início de um Software as a Service (SaaS), demonstrando os fundamentos básicos de um sistema escalável e seguro.\n\nNo futuro, planejo aprimorá-lo para torná-lo um autêntico SaaS, incluindo funcionalidades como um modelo de monetização com planos de assinatura, suporte multiusuário avançado e permissões personalizadas. Além disso, pretendo implementar melhorias na interface do usuário e introduzir relatórios automáticos para proporcionar uma experiência ainda mais rica e completa aos usuários. Este projeto tem sido uma jornada desafiadora e enriquecedora, consolidando meu entendimento sobre autenticação, estruturação de dados dinâmicos e escalabilidade em sistemas modernos.",
         date: '04/12/2024'
       }
     },

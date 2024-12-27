@@ -6,6 +6,7 @@ import { roboto } from "../fonts/Fonts";
 import { useEffect, useState } from "react";
 import ProjectsModal from "./ProjectsModal";
 import { AnimatePresence } from "framer-motion";
+import { FaLinkedin } from "react-icons/fa";
 
 interface ProjectsProps {
     projects: Project[];
@@ -38,6 +39,7 @@ const typingEffect = (text: string, callback: () => void) => {
     }, 100);
 };
 
+
 export default function Projects({ projects }: ProjectsProps) {
     const [isTypingDone, setIsTypingDone] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,7 +62,7 @@ export default function Projects({ projects }: ProjectsProps) {
         setSelectedProject(project);
         setIsModalOpen(true);
     };
-    
+
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -72,7 +74,7 @@ export default function Projects({ projects }: ProjectsProps) {
             setModalPosition(null);
         }
     }, [isModalOpen]);
-    
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -138,6 +140,20 @@ export default function Projects({ projects }: ProjectsProps) {
                 <div className="bg-[#676767] h-[2px] w-full"></div>
             </div>
 
+            <div className="w-full px-10 md:px-0 md:w-[70vw] m-auto h-max mb-8">
+                <h3
+                    className={`${roboto.className} lg:pl-9 w-full text-1xl z-[1] md:text-3xl font-bold lg:text-5xl py-4 text-center lg:text-left text-[#a7a7a7]`}
+                >
+                    <span className="flex items-center gap-2">
+                        <span className="text-[#587fd3]"> <FaLinkedin /> </span> Meu mais novo projeto:
+                    </span>
+                </h3>
+                <iframe className="w-full h-[500px] iframe-container"
+                    src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7278146730485858305"
+                    title="Publicação incorporada"
+                >
+                </iframe>
+            </div>
             <article className="space-y-16 flex flex-col items-center xl:items-start text-center xl:text-left px-10">
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center xl:justify-start w-full">
                     {projects.map((project, index) => (
@@ -155,7 +171,7 @@ export default function Projects({ projects }: ProjectsProps) {
                                     alt={project.image.alt}
                                     width={600}
                                     height={300}
-                                    
+
                                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-black bg-opacity-70 transition-opacity duration-500 group-hover:opacity-0"></div>

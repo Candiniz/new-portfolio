@@ -135,7 +135,7 @@ export default function Modal({ isOpen, onClose, project, position }: ModalProps
                                         className="object-contain w-[90%] lg:w-[750px]"
                                     />
                                 </div>
-                                <div className="mt-4 max-w-[750px] lg:w-[750px] m-auto text-justify text-sm lg:text-md px-5 sm:px-8 lg:px-0">
+                                <div className="mt-4 max-w-[750px] lg:w-[750px] m-auto text-justify text-xs lg:text-md px-5 sm:px-8 lg:px-0">
                                     {project.image.alt && renderDescription(project.image.alt)}
                                 </div>
                                 <div className="flex gap-3 my-10 text-[#aadd49] m-auto text-[1.7rem] ">

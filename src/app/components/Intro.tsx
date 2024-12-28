@@ -160,7 +160,7 @@ export default function AboutMe() {
                             className="rounded-full"
                         />
                         <p className="p-4 w-fit text-base leading-tight bg-[#787d96] rounded-xl text-white absolute -bottom-[0.75rem]">
-                            <span className="text-4xl ">1+</span>
+                            <span className="text-4xl ">2+</span>
                             <br /> ano de experiência
                         </p>
                     </div>

@@ -140,7 +140,7 @@ export default function Projects({ projects }: ProjectsProps) {
                 <div className="bg-[#676767] h-[2px] w-full"></div>
             </div>
 
-            <div className="w-full px-10 md:px-0 md:w-[70vw] m-auto h-max mb-8">
+            <div className="w-full px-10 md:px-0 md:w-[65vw] m-auto h-max mb-8">
                 <h3
                     className={`${roboto.className} lg:pl-9 w-full text-1xl z-[1] md:text-3xl font-bold lg:text-5xl py-4 text-center lg:text-left text-[#a7a7a7]`}
                 >

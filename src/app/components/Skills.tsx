@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 import { SiStyledcomponents } from "react-icons/si";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaWordpress, FaSass, FaShareAlt, FaCcStripe } from "react-icons/fa";
+import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaAws, FaSass, FaNodeJs, FaCcStripe } from "react-icons/fa";
 import { TbApi } from "react-icons/tb";
-import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
-import { BiSolidServer } from "react-icons/bi";
-import { SiTypescript, SiPrisma  } from "react-icons/si";
+import { RiNextjsFill, RiTailwindCssFill, RiSupabaseLine  } from "react-icons/ri";
+import { BiSolidServer, BiLogoMongodb  } from "react-icons/bi";
+import { SiTypescript, SiPrisma, SiFirebase   } from "react-icons/si";
 import { TiStopwatch } from "react-icons/ti";
 import { DiPhotoshop, DiIllustrator, DiDatabase, DiPostgresql  } from "react-icons/di";
 import { useEffect, useState } from "react";
@@ -95,10 +95,34 @@ export const skills = [
 
 const extraSkills = (closeModal: () => void) => [
     {
-        icon: <DiDatabase />,
-        name: "SQL",
-        description: "Linguagem usada para gerenciar e consultar bancos de dados relacionais.",
-        descriptionTwo: "Tenho experiência básica em SQL, com habilidades para criar e manipular tabelas, realizar consultas para extração de dados e executar operações como inserção, atualização e exclusão, sempre focando na organização e eficiência dos dados."
+        icon: <FaNodeJs />,
+        name: "Node.js",
+        description: "Ambiente de execução para JavaScript no lado do servidor, amplamente utilizado para criar aplicações escaláveis e de alto desempenho.",
+        descriptionTwo: "Tenho qualificações de nível básico a intermediário em Node.js, com experiência no desenvolvimento de APIs RESTful e no uso de frameworks como Express.js para criar rotas e middleware. Além disso, sou capaz de integrar bancos de dados, implementar autenticação e lidar com operações assíncronas utilizando Promises e Async/Await. Busco continuamente melhorar minha proficiência nessa tecnologia, aproveitando sua eficiência para construir soluções escaláveis e modulares."
+    },
+    {
+        icon: <SiFirebase />,
+        name: "Firebase",
+        description: "Plataforma de desenvolvimento de aplicações móveis e web fornecida pelo Google, conhecida por seus serviços escaláveis e de fácil integração.",
+        descriptionTwo: "Tenho habilidades sólidas no uso do Firebase para o desenvolvimento de aplicações modernas e eficientes. Minha experiência inclui a implementação de autenticação segura com o Firebase Authentication, utilizando métodos como email/senha e provedores de login social. Também domino o uso do Realtime Database e do Firestore para o armazenamento e sincronização de dados em tempo real, garantindo alta performance e organização. Sou capaz de configurar regras de segurança para proteger os dados e integrar esses serviços a aplicações front-end, criando soluções robustas e escaláveis."
+    },
+    {
+        icon: <BiLogoMongodb />,
+        name: "MongoDB",
+        description: "Banco de dados NoSQL orientado a documentos, ideal para trabalhar com dados flexíveis e dinâmicos.",
+        descriptionTwo: "Possuo qualificações iniciais em MongoDB, com experiência na criação e manipulação de coleções e documentos, além de realizar consultas utilizando filtros e operadores específicos. Sei configurar conexões entre aplicações Node.js e MongoDB usando bibliotecas como Mongoose, garantindo um fluxo de dados eficiente e organizado. Estou familiarizado com práticas de modelagem de dados não-relacionais para otimizar desempenho e escalabilidade."
+    },
+    {
+        icon: <FaAws />,
+        name: "AWS",
+        description: "Plataforma de computação em nuvem que oferece uma ampla gama de serviços para o desenvolvimento e gerenciamento de aplicações.",
+        descriptionTwo: "Tenho noções básicas em AWS, com foco em implementar soluções funcionais e eficientes. Sou capaz de utilizar o serviço S3 para armazenamento de arquivos, além de configurar integrações com bancos de dados, garantindo segurança e escalabilidade para aplicações. Estou em processo de aprofundamento nas práticas recomendadas para trabalhar com a plataforma e explorar mais ferramentas do ecossistema AWS."
+    },
+    {
+        icon: <RiSupabaseLine  />,
+        name: "Supabase",
+        description: "Plataforma de código aberto que fornece uma alternativa ao Firebase, oferecendo funcionalidades completas de backend como banco de dados, autenticação e armazenamento.",
+        descriptionTwo: "Tenho familiaridade com o Supabase e experiência na integração de suas principais funcionalidades em projetos. Já utilizei bancos de dados PostgreSQL para armazenar e gerenciar informações de forma eficiente, configurei sistemas básicos de autenticação e trabalhei com o Supabase Storage para gerenciar arquivos. Minha prática inclui explorar o uso do dashboard para configuração de APIs e gerenciamento de permissões. Embora minhas habilidades sejam mais introdutórias, sinto-me confiante em aplicar o Supabase para construir soluções funcionais e escaláveis."
     },
     {
         icon: <DiPostgresql />,
@@ -540,7 +564,7 @@ export default function Skills() {
                             transition={{ duration: 0.1 }} // Transição suave
                         >
                             <motion.div
-                                className="bg-black text-white p-6 mb-96 md:mr-10 lg:mr-20 xl:mr-36 rounded-lg w-80"
+                                className="bg-black text-white p-6 mb-96 lg:mb-60 md:mr-10 lg:mr-20 xl:mr-36 rounded-lg w-80"
                                 onClick={(e) => e.stopPropagation()}
                                 initial={{ scale: 0.9 }} // Inicializa o modal pequeno
                                 animate={{ scale: 1 }} // Expande para o tamanho normal

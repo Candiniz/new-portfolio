@@ -81,7 +81,7 @@ export default function AboutMe() {
                     </div>
 
                     <div className="mb-12">
-                        <h2>Sou um desenvolvedor frontend apaixonado por criar interfaces </h2>
+                        <h2>Sou um desenvolvedor de sistemas apaixonado por criar interfaces </h2>
                     </div>
 
                     <motion.div 

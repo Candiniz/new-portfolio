@@ -149,7 +149,7 @@ export default function Projects({ projects }: ProjectsProps) {
                     </span>
                 </h3>
                 <iframe className="w-full h-[500px] iframe-container"
-                    src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7278146730485858305"
+                    src="https://www.linkedin.com/feed/update/urn:li:activity:7312852213691826177/"
                     title="Publicação incorporada"
                 >
                 </iframe>

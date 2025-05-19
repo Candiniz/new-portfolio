@@ -148,10 +148,7 @@ export default function Projects({ projects }: ProjectsProps) {
                         <span className="text-[#587fd3]"> <FaLinkedin /> </span> Meu mais novo projeto:
                     </span>
                 </h3>
-                <iframe className="w-full h-[500px] iframe-container"
-                    src="https://www.linkedin.com/feed/update/urn:li:activity:7312852213691826177/"
-                    title="Publicação incorporada"
-                >
+                <iframe className="w-full h-[500px] iframe-container" allowFullScreen={true} src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7312851929284419585?collapsed=1" height="541" width="504" title="Publicação incorporada">
                 </iframe>
             </div>
             <article className="space-y-16 flex flex-col items-center xl:items-start text-center xl:text-left px-10">

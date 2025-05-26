@@ -148,7 +148,7 @@ export default function AboutMe() {
                             <li className="bg-[#6bddfa] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">react</li>
                             <li className="bg-[#efd81d] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">javascript</li>
                             <li className="bg-[#353535] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">next.js</li>
-                            <li className="bg-[#c762de] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">UX/UI</li>
+                            <li className="bg-[#366297] text-[#efd81d] w-fit p-2 rounded-md hover:scale-110 transition-all">python</li>
                         </ul>
                     </motion.div>
                 </div>

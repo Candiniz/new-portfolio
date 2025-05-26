@@ -8,14 +8,16 @@ import { SiStyledcomponents } from "react-icons/si";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaAws, FaSass, FaNodeJs, FaCcStripe } from "react-icons/fa";
 import { TbApi } from "react-icons/tb";
-import { RiNextjsFill, RiTailwindCssFill, RiSupabaseLine  } from "react-icons/ri";
-import { BiSolidServer, BiLogoMongodb  } from "react-icons/bi";
-import { SiTypescript, SiPrisma, SiFirebase   } from "react-icons/si";
+import { RiNextjsFill, RiTailwindCssFill, RiSupabaseLine } from "react-icons/ri";
+import { BiSolidServer, BiLogoMongodb } from "react-icons/bi";
+import { SiTypescript, SiPrisma, SiFirebase } from "react-icons/si";
 import { TiStopwatch } from "react-icons/ti";
-import { DiPhotoshop, DiIllustrator, DiDatabase, DiPostgresql  } from "react-icons/di";
+import { DiPhotoshop, DiIllustrator, DiDatabase, DiPostgresql } from "react-icons/di";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaMeta } from "react-icons/fa6";
+import { FaPython } from "react-icons/fa";
+
 
 
 export const skills = [
@@ -68,10 +70,10 @@ export const skills = [
         descriptionTwo: "Utilizo o Illustrator para desenvolver logotipos e elementos gráficos vetoriais com precisão, garantindo que sejam escaláveis sem perda de qualidade."
     },
     {
-        icon: <FaFigma />,
-        name: "Figma",
-        description: "Figma é uma ferramenta de design colaborativo para criar interfaces de usuário, protótipos e gráficos.",
-        descriptionTwo: "Com Figma, desenvolvo interfaces de usuário detalhadas e protótipos interativos, colaborando diretamente com equipes de design e desenvolvimento, sendo esta uma das principais ferramentas por mim utilizadas no brainstorm de um projeto"
+        icon: <FaPython />,
+        name: "Python",
+        description: "Python é uma linguagem de programação de alto nível, conhecida por sua sintaxe clara e legibilidade, amplamente utilizada em ciência de dados, automação, desenvolvimento web e muito mais.",
+        descriptionTwo: "Possuo conhecimentos básicos em Python, sendo capaz de escrever scripts simples, manipular dados com listas e dicionários, e entender os conceitos fundamentais de programação como estruturas de controle, funções e manipulação de arquivos."
     },
     {
         icon: <SiStyledcomponents />,
@@ -119,7 +121,7 @@ const extraSkills = (closeModal: () => void) => [
         descriptionTwo: "Tenho noções básicas em AWS, com foco em implementar soluções funcionais e eficientes. Sou capaz de utilizar o serviço S3 para armazenamento de arquivos, além de configurar integrações com bancos de dados, garantindo segurança e escalabilidade para aplicações. Estou em processo de aprofundamento nas práticas recomendadas para trabalhar com a plataforma e explorar mais ferramentas do ecossistema AWS."
     },
     {
-        icon: <RiSupabaseLine  />,
+        icon: <RiSupabaseLine />,
         name: "Supabase",
         description: "Plataforma de código aberto que fornece uma alternativa ao Firebase, oferecendo funcionalidades completas de backend como banco de dados, autenticação e armazenamento.",
         descriptionTwo: "Tenho familiaridade com o Supabase e experiência na integração de suas principais funcionalidades em projetos. Já utilizei bancos de dados PostgreSQL para armazenar e gerenciar informações de forma eficiente, configurei sistemas básicos de autenticação e trabalhei com o Supabase Storage para gerenciar arquivos. Minha prática inclui explorar o uso do dashboard para configuração de APIs e gerenciamento de permissões. Embora minhas habilidades sejam mais introdutórias, sinto-me confiante em aplicar o Supabase para construir soluções funcionais e escaláveis."

@@ -11,6 +11,7 @@ import { SiTypescript, SiPrisma, SiStyledcomponents } from "react-icons/si";
 import { DiPhotoshop } from "react-icons/di";
 import Education from "./components/Education";
 import Contatos from "./components/Contatos";
+import Experience from "./components/Experience";
 
 export default function Home() {
 
@@ -247,6 +248,7 @@ return (
     <div>
       <Skills />
       <Projects projects={projects} />
+      <Experience />
       <Education />
       <Trails />
       <Contatos />

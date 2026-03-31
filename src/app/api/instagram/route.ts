@@ -15,6 +15,7 @@ export async function GET() {
 
     // Lista de IDs de posts a serem ignorados (blacklist)
     const blacklist = [
+      "18495400690077212",
       "18055954579703872",
       "18095827462454450",
       "17987717375586659",

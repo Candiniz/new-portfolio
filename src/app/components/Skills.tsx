@@ -4,170 +4,98 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import styled from 'styled-components';
 
-import { SiStyledcomponents } from "react-icons/si";
+import { SiNodedotjs, SiStyledcomponents } from "react-icons/si";
 import { ibmPlexMono, roboto } from "../fonts/Fonts";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaAws, FaSass, FaNodeJs, FaCcStripe } from "react-icons/fa";
-import { TbApi } from "react-icons/tb";
+import { FaJs, FaReact, FaFigma, FaAws, FaSass, FaNodeJs, FaCcStripe, FaMicrosoft, FaGoogle } from "react-icons/fa";
 import { RiNextjsFill, RiTailwindCssFill, RiSupabaseLine } from "react-icons/ri";
-import { BiSolidServer, BiLogoMongodb } from "react-icons/bi";
+import { BiLogoMongodb } from "react-icons/bi";
 import { SiTypescript, SiPrisma, SiFirebase } from "react-icons/si";
-import { TiStopwatch } from "react-icons/ti";
-import { DiPhotoshop, DiIllustrator, DiDatabase, DiPostgresql } from "react-icons/di";
+import { DiPhotoshop, DiIllustrator, DiPostgresql } from "react-icons/di";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaMeta } from "react-icons/fa6";
 import { FaPython } from "react-icons/fa";
+import { SiGooglecloud } from "react-icons/si";
+import { SiN8N } from "react-icons/si";
+
+import PPLogo from "./PPLogo"
 
 
 
-export const skills = [
+export const skills = (closeModal: () => void) => [
     {
-        icon: <FaHtml5 />,
-        name: "HTML5",
-        description: "HTML5 é a versão mais recente da linguagem de marcação para criar conteúdo estruturado na web.",
-        descriptionTwo: "Tenho experiência sólida com HTML5, criando estruturas semânticas e acessíveis para websites. Utilizo as melhores práticas, como o uso correto de tags e atributos, para garantir SEO e acessibilidade ideais.\n \nMinha experiência com a linguagem começou em 2011, com um curso profissionalizante que me apresentou para o mercado, e desde então me continuo me aprimorando"
+        icons: [<SiTypescript />, <RiNextjsFill />],
+        name: "TypeScript & Next.js 15",
+        description: "Desenvolvimento Full Stack moderno com tipagem estática e renderização de alta performance.",
+        descriptionTwo: "Minha stack principal para construção de aplicações robustas. Utilizo TypeScript para garantir segurança de tipos e manutenibilidade, explorando os recursos mais recentes do Next.js 15 (App Router, Server Actions) para entregar performance máxima e SEO otimizado."
     },
     {
-        icon: <FaCss3Alt />,
-        name: "CSS3",
-        description: "CSS3 é a folha de estilo usada para descrever a aparência de um documento HTML, com suporte para animações e layouts responsivos.",
-        descriptionTwo: "Com CSS3, sou capaz de criar designs modernos e responsivos, aplicando animações, transições e layouts flexíveis que se adaptam a diferentes dispositivos.\n \nIgualmente ao HTML, possuo vários anos de experiência e tive a oportunidade de ver a sua evolução constante."
+        icons: [<RiTailwindCssFill />, <FaSass />, <SiStyledcomponents />],
+        name: "Modern Styling (Tailwind & Ecosystem)",
+        description: "Criação de interfaces responsivas e sistemas de design eficientes utilizando utilitários e CSS moderno.",
+        descriptionTwo: "Especialista em Tailwind CSS para prototipagem rápida e layouts escaláveis. Possuo sólida experiência com Styled-Components, Sass e bibliotecas de animação (Framer Motion), focando sempre em acessibilidade, temas dinâmicos e experiência do usuário (UX)."
     },
     {
-        icon: <FaJs />,
-        name: "JavaScript",
-        description: "JavaScript é uma linguagem de programação usada para criar interatividade em sites dinâmicos.",
-        descriptionTwo: "Domino JavaScript para desenvolver funcionalidades dinâmicas e interativas. Tenho experiência com manipulação de DOM, integração de APIs e resolução de problemas em aplicações web."
+        icons: [<FaReact />, <FaJs />],
+        name: "React Ecosystem",
+        description: "Criação de interfaces modulares e gerenciamento de estados complexos.",
+        descriptionTwo: "Domínio de hooks avançados, Context API e gerenciamento de estado global. Foco em arquitetura de componentes reutilizáveis e otimização de renderização para aplicações single-page de grande escala."
     },
     {
-        icon: <SiTypescript />,
-        name: "TypeScript",
-        description: "TypeScript é um superset do JavaScript, que adiciona tipagem estática e outros recursos avançados.",
-        descriptionTwo: "Utilizo TypeScript para escrever código mais robusto e escalável, aproveitando a tipagem estática para evitar erros e melhorar a manutenção de projetos complexos. Juntamente com o NextJS 15, estas são minhas principais ferramentas atualmente."
+        icons: [<DiPhotoshop />, <DiIllustrator />, <FaFigma />],
+        name: "Design & Creative Vision",
+        description: "Mais de 8 anos de experiência em design visual, manipulação de imagens e criação de identidades.",
+        descriptionTwo: "Background sólido como Arquiteto e Designer Gráfico utilizando Photoshop e Illustrator. Essa base me permite transitar entre o design e o código com facilidade, criando interfaces que são tecnicamente precisas e visualmente profissionais."
     },
     {
-        icon: <RiNextjsFill />,
-        name: "Next.js",
-        description: "Next.js é um framework React que facilita a criação de aplicações com renderização no servidor (SSR) e geração de sites estáticos.",
-        descriptionTwo: "Tenho experiência em construir aplicações modernas com Next.js, utilizando SSR e SSG para melhorar a performance e SEO, além de lidar com rotas dinâmicas e otimização de imagens. Esta é minha principal ferramente atualmente e pretendo me aprofundar cada vez mais nessa incrivel ferramenta."
+        icons: [<PPLogo />, <FaMicrosoft />],
+        name: "Microsoft Power Platform",
+        description: "Automação de processos empresariais e desenvolvimento Low-Code de alto impacto.",
+        descriptionTwo: "Desenvolvimento de soluções no ecossistema Microsoft (Power Apps, Power Automate) integradas a SharePoint, SQL e APIs externas. Foco em transformar fluxos manuais em processos digitais eficientes e inteligentes."
     },
     {
-        icon: <FaReact />,
-        name: "React",
-        description: "React é uma biblioteca JavaScript para construir interfaces de usuário interativas e baseadas em componentes.",
-        descriptionTwo: "Possuo um ótimo conhecimento em React, sendo capaz de criar componentes reutilizáveis e gerenciar estados complexos com ferramentas como Context API e Redux, garantindo interfaces rápidas e escaláveis."
+        icons: <FaPython />,
+        name: "Python & Automation",
+        description: "Scripts de automação, manipulação de dados e integração com inteligência artificial.",
+        descriptionTwo: "Conhecimentos em Python voltados para a criação de ferramentas auxiliares, web scraping e integração de modelos de IA, complementando a stack de desenvolvimento com versatilidade."
     },
     {
-        icon: <DiPhotoshop />,
-        name: "Photoshop",
-        description: "Adobe Photoshop é um software de edição de imagens amplamente utilizado para edição de gráficos e fotos.",
-        descriptionTwo: "Uso o Photoshop para edição e manipulação de imagens, criação de mockups e otimização de gráficos para projetos web, sempre buscando qualidade visual profissional. Possuo mais de 8 anos de experiência na ferramenta, tendo atuado com a mesma como Arquiteto, Designer Gráfico, Projetista e atuamente Desenvolvedor Front End"
+        icons: [<SiPrisma />, <DiPostgresql />, <RiSupabaseLine />],
+        name: "Bancos de Dados Relacionais",
+        description: "Gerenciamento de dados estruturados utilizando PostgreSQL com foco em integridade, performance e modelagem relacional.",
+        descriptionTwo: "Experiência no design de esquemas e manipulação de dados complexos. Utilizo o Prisma ORM para garantir consultas tipadas e seguras, além de integrar essas soluções com Supabase para backends rápidos e escaláveis"
     },
     {
-        icon: <DiIllustrator />,
-        name: "Illustrator",
-        description: "Adobe Illustrator é um software de design gráfico vetorial usado para criar ilustrações e logotipos.",
-        descriptionTwo: "Utilizo o Illustrator para desenvolver logotipos e elementos gráficos vetoriais com precisão, garantindo que sejam escaláveis sem perda de qualidade."
+        icons: [<SiNodedotjs />, <SiFirebase />],
+        name: "Back-end & Infraestrutura",
+        description: "Desenvolvimento de servidores robustos e integração com serviços de nuvem para armazenamento e processamento.",
+        descriptionTwo: "Construção de APIs RESTful e GraphQL com Node.js/Express, utilizando AWS (S3) para persistência de arquivos e Firebase para funcionalidades em tempo real e autenticação rápida."
     },
     {
-        icon: <FaPython />,
-        name: "Python",
-        description: "Python é uma linguagem de programação de alto nível, conhecida por sua sintaxe clara e legibilidade, amplamente utilizada em ciência de dados, automação, desenvolvimento web e muito mais.",
-        descriptionTwo: "Possuo conhecimentos básicos em Python, sendo capaz de escrever scripts simples, manipular dados com listas e dicionários, e entender os conceitos fundamentais de programação como estruturas de controle, funções e manipulação de arquivos."
+        icons: [<SiGooglecloud />, <FaGoogle />],
+        name: "Google Cloud Platform",
+        description: "Plataforma de infraestrutura em nuvem que oferece computação, armazenamento e inteligência de dados com a segurança e escala do Google",
+        descriptionTwo: "Gerencio recursos em nuvem focados em escalabilidade e disponibilidade. Tenho experiência prática na configuração de buckets para armazenamento, deploy de aplicações e integração de serviços gerenciados para otimizar o ciclo de vida do software."
     },
     {
-        icon: <SiStyledcomponents />,
-        name: "CSS in JS",
-        description: "Estilização moderna e dinâmica de componentes utilizando CSS-in-JS.",
-        descriptionTwo: "Tenho experiência com CSS-in-JS, criando estilos dinâmicos e escaláveis diretamente no JavaScript para aplicações modernas. Utilizo ferramentas como Styled-Components, Emotion e Tailwind CSS para criar interfaces visuais consistentes e reutilizáveis.\n\nMinha abordagem inclui a criação de temas personalizados, suporte a modos claro e escuro, e animações suaves para melhorar a experiência do usuário. Sou adepto das melhores práticas, garantindo código limpo e manutenção simplificada em projetos de diferentes tamanhos."
-    },
-    {
-        icon: <RiTailwindCssFill />,
-        name: "Tailwind CSS",
-        description: "Tailwind CSS é um framework de CSS utilitário que facilita a criação de designs personalizados e responsivos.",
-        descriptionTwo: "Utilizo Tailwind CSS para desenvolver rapidamente layouts responsivos e modernos, aproveitando sua abordagem baseada em utilitários para designs personalizados, sendo um aliado praticamente indispensável para a versaticidade e praticidade juntamente com o NextJS."
-    },
-    {
-        icon: <FaSass />,
-        name: "Sass",
-        description: "Sass é um pré-processador de CSS que adiciona funcionalidades como variáveis, funções e mixins ao CSS.",
-        descriptionTwo: "Com Sass, escrevo estilos de maneira modular e eficiente, utilizando mixins, funções e variáveis para criar códigos reutilizáveis e fáceis de manter."
-    },
-];
-
-const extraSkills = (closeModal: () => void) => [
-    {
-        icon: <FaNodeJs />,
-        name: "Node.js",
-        description: "Ambiente de execução para JavaScript no lado do servidor, amplamente utilizado para criar aplicações escaláveis e de alto desempenho.",
-        descriptionTwo: "Tenho qualificações de nível básico a intermediário em Node.js, com experiência no desenvolvimento de APIs RESTful e no uso de frameworks como Express.js para criar rotas e middleware. Além disso, sou capaz de integrar bancos de dados, implementar autenticação e lidar com operações assíncronas utilizando Promises e Async/Await. Busco continuamente melhorar minha proficiência nessa tecnologia, aproveitando sua eficiência para construir soluções escaláveis e modulares."
-    },
-    {
-        icon: <SiFirebase />,
-        name: "Firebase",
-        description: "Plataforma de desenvolvimento de aplicações móveis e web fornecida pelo Google, conhecida por seus serviços escaláveis e de fácil integração.",
-        descriptionTwo: "Tenho habilidades sólidas no uso do Firebase para o desenvolvimento de aplicações modernas e eficientes. Minha experiência inclui a implementação de autenticação segura com o Firebase Authentication, utilizando métodos como email/senha e provedores de login social. Também domino o uso do Realtime Database e do Firestore para o armazenamento e sincronização de dados em tempo real, garantindo alta performance e organização. Sou capaz de configurar regras de segurança para proteger os dados e integrar esses serviços a aplicações front-end, criando soluções robustas e escaláveis."
-    },
-    {
-        icon: <BiLogoMongodb />,
-        name: "MongoDB",
-        description: "Banco de dados NoSQL orientado a documentos, ideal para trabalhar com dados flexíveis e dinâmicos.",
-        descriptionTwo: "Possuo qualificações iniciais em MongoDB, com experiência na criação e manipulação de coleções e documentos, além de realizar consultas utilizando filtros e operadores específicos. Sei configurar conexões entre aplicações Node.js e MongoDB usando bibliotecas como Mongoose, garantindo um fluxo de dados eficiente e organizado. Estou familiarizado com práticas de modelagem de dados não-relacionais para otimizar desempenho e escalabilidade."
-    },
-    {
-        icon: <FaAws />,
-        name: "AWS",
-        description: "Plataforma de computação em nuvem que oferece uma ampla gama de serviços para o desenvolvimento e gerenciamento de aplicações.",
-        descriptionTwo: "Tenho noções básicas em AWS, com foco em implementar soluções funcionais e eficientes. Sou capaz de utilizar o serviço S3 para armazenamento de arquivos, além de configurar integrações com bancos de dados, garantindo segurança e escalabilidade para aplicações. Estou em processo de aprofundamento nas práticas recomendadas para trabalhar com a plataforma e explorar mais ferramentas do ecossistema AWS."
-    },
-    {
-        icon: <RiSupabaseLine />,
-        name: "Supabase",
-        description: "Plataforma de código aberto que fornece uma alternativa ao Firebase, oferecendo funcionalidades completas de backend como banco de dados, autenticação e armazenamento.",
-        descriptionTwo: "Tenho familiaridade com o Supabase e experiência na integração de suas principais funcionalidades em projetos. Já utilizei bancos de dados PostgreSQL para armazenar e gerenciar informações de forma eficiente, configurei sistemas básicos de autenticação e trabalhei com o Supabase Storage para gerenciar arquivos. Minha prática inclui explorar o uso do dashboard para configuração de APIs e gerenciamento de permissões. Embora minhas habilidades sejam mais introdutórias, sinto-me confiante em aplicar o Supabase para construir soluções funcionais e escaláveis."
-    },
-    {
-        icon: <DiPostgresql />,
-        name: "PostgreSQL",
-        description: "Linguagem usada para gerenciar e consultar bancos de dados relacionais.",
-        descriptionTwo: "Tenho experiência básica em SQL, com habilidades para criar e manipular tabelas, realizar consultas para extração de dados e executar operações como inserção, atualização e exclusão, sempre focando na organização e eficiência dos dados."
-    },
-    {
-        icon: <BiSolidServer />,
-        name: "Manutenção de Banco de Dados",
-        description: "Noções de configuração e gerenciamento básico de servidores.",
-        descriptionTwo: "Tenho noções práticas de manutenção de bancos de dados, como criação de backups, restauração de informações e monitoramento de operações básicas. Meu objetivo é garantir a integridade e disponibilidade dos dados em diferentes cenários. Tenho experiência com plataformas como Firebase e Supabase para gerenciar e monitorar bancos de dados, garantindo desempenho e organização. Também tenho familiaridade com a hospedagem e integração de projetos por meio do Vercel"
-    },
-    {
-        icon: <TiStopwatch />,
-        name: "Performance",
-        description: "Técnicas de otimização para melhorar a performance das aplicações web.",
-        descriptionTwo: "Estou focando meus estudos atuais em otimizar a performance web, reduzindo tempos de carregamento e utilizando técnicas como lazy loading, minificação e caching."
-    },
-    {
-        icon: <SiPrisma />,
-        name: "Prisma",
-        description: "Prisma é uma ferramenta poderosa para gerenciar bancos de dados de forma eficiente e tipada.",
-        descriptionTwo: "Possuo experiência no uso do Prisma, desde a modelagem de esquemas até a execução de consultas otimizadas, integrando-o com sistemas modernos e escaláveis."
-    },
-    {
-        icon: <FaCcStripe />,
+        icons: <FaCcStripe />,
         name: "Stripe",
         description: "Stripe é uma plataforma líder para gerenciamento de pagamentos online.",
         descriptionTwo: "Tenho experiência no uso do Stripe para integrar pagamentos seguros e eficientes, implementando desde transações simples até soluções de assinatura e webhook para automação financeira."
     },
     {
-        icon: <TbApi />,
-        name: "Construção de API's",
-        description: "Desenvolvimento e manutenção de APIs para comunicação entre diferentes sistemas e plataformas.",
-        descriptionTwo: "Tenho certa experiência no desenvolvimento e manutenção de APIs, tanto RESTful quanto GraphQL, garantindo performance, segurança e escalabilidade. Construo soluções robustas que permitem a integração de diferentes sistemas, serviços e plataformas, atendendo às necessidades específicas de cada projeto. Já trabalhei com tecnologias e frameworks como Node.js e Express para criar APIs que conectam frontends e bancos de dados de forma eficiente. "
+        icons: <SiN8N />,
+        name: "IA, Agentes, Orquestração (n8n)",
+        description: "Desenvolvimento de sistemas autônomos e fluxos inteligentes que utilizam LLMs (Large Language Models) para executar tarefas complexas e processamento de dados.",
+        descriptionTwo: "Especialista na criação de Agentes de IA orquestrados via n8n, conectando modelos de linguagem a ferramentas externas, bancos de dados e APIs. Desenvolvo automações de 'malha fechada' (Human-in-the-loop), onde a IA raciocina sobre os dados, toma decisões e executa ações em larga escala, otimizando processos que antes exigiam intervenção manual constante."
     },
     {
-        icon: <FaMeta />,
+        icons: <FaMeta />,
         name: "Construção de Apps Meta",
         description: "Desenvolvimento de aplicativos interativos e otimizados para a plataforma Meta.",
         descriptionTwo: (
             <>
+
                 Tenho experiência no desenvolvimento de aplicativos para o ecossistema Meta, incluindo integração com APIs do Facebook, Instagram e WhatsApp. Desenvolvo aplicações interativas, otimizadas e seguras, aproveitando ferramentas como o GraphQL e o Meta SDK.<br /><br />
                 Possuo um componente simples demonstrativo feito com base em dados coletados pelo meu app meta linkado com meu instagram pessoal{" "}
                 <a className="text-yellow-400 font-bold hover:text-yellow-200"
@@ -206,62 +134,6 @@ const typingEffect = (text: string, elementId: string, callback: () => void) => 
         }
     }, 100);
 };
-
-interface DotProps {
-    selected: boolean;
-}
-
-const DotsWrapper = styled.div`
-  position: absolute;
-  bottom: 20px; /* Ajuste a posição */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  z-index: 1;
-`;
-
-const Dot = styled.div<DotProps>`
-  width: 16px;
-  height: 16px;
-  margin: 0 5px;  /* Distância entre os pontos */
-  border-radius: 50%;
-  background-color: ${(props) => (props.selected ? '#4CAF50' : '#ccc')}; /* Cor verde quando selecionado */
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
-
-  /* Torna os pontos maiores quando não estão selecionados */
-  &:hover {
-    transform: scale(1.3);
-  }
-
-  /* Estilo para o ponto selecionado */
-  ${(props) =>
-        props.selected &&
-        `
-    transform: scale(1.5); /* Aumenta o tamanho do ponto selecionado */
-    background-color: #4CAF50; /* Cor verde */
-  `}
-`;
-
-const CustomArrow = styled.div`
-  .carousel .control-arrow {
-    font-size: 10rem;  // Aumentando o tamanho
-    color: #aadd49;
-    z-index: 2;
-  }
-
-  .carousel .control-arrow:hover {
-    color: #aadd49;
-  }
-
-  .carousel .control-prev::before {
-    border-right: 10px solid #aadd49;
-  }
-
-  .carousel .control-next::before {
-    border-left: 10px solid #aadd49;
-  }
-`;
 
 const AnimatedTrapezoidalDiv = styled(motion.div)`
     width: 600px;
@@ -309,7 +181,7 @@ export default function Skills() {
     const [isTypingTextDone, setIsTypingTextDone] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState<{
-        icon: JSX.Element,
+        icons: JSX.Element | JSX.Element[],
         name: string,
         description: string,
         descriptionTwo: string | JSX.Element;
@@ -381,7 +253,7 @@ export default function Skills() {
 
 
     const openModal = (skill: {
-        icon: JSX.Element;
+        icons: JSX.Element | JSX.Element[];
         name: string;
         description: string;
         descriptionTwo: string | JSX.Element;
@@ -392,6 +264,61 @@ export default function Skills() {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const SkillIcon = ({ icons }) => {
+        const [index, setIndex] = useState(0);
+        const [fade, setFade] = useState(true);
+
+        useEffect(() => {
+            if (!Array.isArray(icons) || icons.length <= 1) return;
+
+            // Geramos um atraso aleatório entre 0 e 2000ms
+            const randomDelay = Math.floor(Math.random() * 2000);
+            let interval: NodeJS.Timeout;
+
+            // Criamos um timeout inicial para "desencontrar" os timers
+            const timeout = setTimeout(() => {
+
+                // Só depois do delay inicial começamos o intervalo fixo
+                interval = setInterval(() => {
+                    setFade(false);
+
+                    setTimeout(() => {
+                        setIndex((prev) => (prev + 1) % icons.length);
+                        setFade(true);
+                    }, 600);
+
+                }, 3000); // Aumentei um pouco para 2.5s para ficar mais calmo
+
+            }, randomDelay);
+
+            return () => {
+                clearTimeout(timeout);
+                if (interval) clearInterval(interval);
+            };
+        }, [icons]);
+
+        return (
+            <div className="relative flex items-center justify-center [perspective:1000px]">
+                <AnimatePresence mode="popLayout">
+                    <motion.div
+                        key={index} // A key muda, então o Framer sabe que um sai e outro entra
+                        initial={{ rotateY: -90, opacity: 0, scale: 0.8 }}
+                        animate={{ rotateY: 0, opacity: 1, scale: 1 }}
+                        exit={{ rotateY: 90, opacity: 0, scale: 0.8 }}
+                        transition={{
+                            duration: 0.6,
+                            ease: "easeInOut"
+                        }}
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ backfaceVisibility: "hidden" }}
+                    >
+                        {icons[index]}
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        );
     };
 
     useEffect(() => {
@@ -419,7 +346,7 @@ export default function Skills() {
         };
     }, []);
 
-    const skillsArray = extraSkills(closeModal);
+    const skillsArray = skills(closeModal);
 
     return (
         <>
@@ -430,7 +357,7 @@ export default function Skills() {
                     className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                        className={`${roboto.className} lg:pl-9 text-3xl lg:ml-20 z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
                     >
                         <span id="skills-typing-title"></span>
                         <span
@@ -449,25 +376,24 @@ export default function Skills() {
             </div>
 
             {/* Conteúdo com ícones e habilidades */}
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden flex flex-col lg:flex-row">
                 <div
-                    className="absolute inset-0 bg-cover md:bg-center bg-fixed bg-no-repeat z-[0] h-full w-full "
+                    className={`${roboto.className} z-10 relative m-auto text-[10px] mt-10 lg:mt-0 lg:text-sm lg:block lg:absolute xl:right-[70px] lg:right-[40px] top-[50%] xl:w-[40%] lg:w-[30%]`}
+                    id="skills-text-container"
+                >
+                    <p id="skills-typing-text" className="transition-opacity duration-500">
+                        Um pouco do que sei e do que estou aprendendo \(^_^)/</p>
+                </div>
+                <div
+                    className="absolute blur-sm inset-0 bg-cover md:bg-center bg-fixed bg-no-repeat z-[0] h-full w-full"
                     style={{
                         backgroundImage: "url('/me-in-park.jpg')",
                         backgroundPosition: "70% center",
                     }}
                 >
-
-                    <div
-                        className={`${roboto.className} hidden lg:block lg:absolute xl:right-[70px] lg:right-[40px] top-[50%] xl:w-[40%] lg:w-[30%]`}
-                        id="skills-text-container"
-                    >
-                        <p id="skills-typing-text" className="transition-opacity duration-500">
-                            Um pouco do que sei e do que estou aprendendo \(^_^)/</p>
-                    </div>
-
                 </div>
-                <CustomArrow>
+
+                {/* <CustomArrow>
                     <Carousel
                         preventMovementUntilSwipeScrollTolerance={true}
                         swipeScrollTolerance={20}
@@ -485,7 +411,6 @@ export default function Skills() {
                                         selected={!isSelected}  // Passando a prop 'selected' para aplicar o estilo correto
                                         onClick={clickHandler}
                                     />
-                                    {/* Adicionando um segundo ponto ao lado */}
                                     <Dot
                                         selected={isSelected}  // O segundo ponto vai refletir a seleção também
                                         onClick={clickHandler}
@@ -495,62 +420,40 @@ export default function Skills() {
                         }}
                         infiniteLoop={true}
                     >
-                        <div
-                            className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
-                        >
-                            <div
-                                className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
-                            >
-                                {skills.map((skill, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
-                                        onClick={() => openModal(skill)}
-                                    >
-                                        <div className="relative group">
-                                            <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
-                                                <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
-                                                    {skill.icon}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
-                                        <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none text-sm md:text-base">
-                                            {skill.name}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div
-                            className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center md:items-start text-center`}
-                        >
-                            <div
-                                className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4  gap-8 my-20 w-fit md:ml-10 lg:ml-28"
-                            >
-                                {skillsArray.map((extraSkill, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
-                                        onClick={() => openModal(extraSkill)}
-                                    >
-                                        <div className="relative group">
-                                            <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
-                                                <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
-                                                    {extraSkill.icon}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
-                                        <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none text-sm md:text-base">
-                                            {extraSkill.name}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
                     </Carousel>
-                </CustomArrow>
+                </CustomArrow> */}
+
+                <div
+                    className={`${ibmPlexMono.className}  space-y-16 flex flex-col items-center lg:items-start text-center`}
+                >
+                    <div
+                        className="grid grid-cols-3 md:grid-cols-4 lg:pl-20 lg:grid-cols-4  gap-8 my-20 w-fit lg:ml-10 lg:ml-28"
+                    >
+                        {skillsArray.map((skill, index) => (
+                            <div
+                                key={index}
+                                className="bg-gradient-to-t from-[#9497a555] to-[#3034461c] rounded-t-2xl skill flex flex-col items-center justify-center relative group opacity-0 transform -translate-x-24 transition-all duration-500 w-20 h-20 md:w-28 md:h-28"
+                                onClick={() => openModal(skill)}
+                            >
+                                <div className="relative group">
+                                    <div className="w-full h-full flex items-center justify-center border-transparent transition-all duration-300 overflow-hidden">
+                                        <div className="text-5xl md:text-6xl text-[#fff] group-hover:text-[#aadd49] group-hover:opacity-30 transition-all duration-300">
+                                            {Array.isArray(skill.icons) ? (
+                                                <SkillIcon icons={skill.icons} />
+                                            ) : (
+                                                skill.icons
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-0 w-full h-[2px] bg-[#aadd49] z-30 group-hover:shadow-[0_0_15px_2px_#aadd49] transition-shadow duration-300"></div>
+                                <div className="absolute inset-0 flex items-center rounded-t-2xl justify-center bg-[#63667169] bg-opacity-80 text-[#fff] opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none text-sm md:text-base">
+                                    {skill.name}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {/* Modal */}
@@ -584,7 +487,13 @@ export default function Skills() {
                                 }}
                             >
                                 <h3 className="text-2xl font-bold flex items-center gap-5">
-                                    <span className="text-[#aadd49]">{modalData.icon}</span>
+                                    <span className="text-[#aadd49]">
+                                        {Array.isArray(modalData.icons) ? (
+                                            <SkillIcon icons={modalData.icons} />
+                                        ) : (
+                                            modalData.icons
+                                        )}
+                                    </span>
                                     {modalData.name}
                                 </h3>
                                 <p className="mt-2 text-sm ">{modalData.description}</p>

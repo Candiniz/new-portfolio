@@ -45,7 +45,7 @@ export default function Education() {
             degree: 'Graduação em Análise e Desenvolvimento de Sistemas',
             institution: 'Fatec São Paulo',
             year: '2025 - 2027',
-            description: 'Atualmente, estou cursando o primeiro semestre da graduação em Análise e Desenvolvimento de Sistemas na FATEC São Paulo, no período noturno. Com experiência prévia como desenvolvedor freelancer, busco essa formação para aprimorar meu nível técnico, aprofundar meus conhecimentos em engenharia de software e formalizar minha transição de carreira para a área de tecnologia. Meu objetivo é consolidar uma base acadêmica sólida, aliando teoria e prática para me tornar um profissional ainda mais capacitado no desenvolvimento de sistemas.',
+            description: 'Atualmente, estou cursando o terceiro semestre da graduação em Análise e Desenvolvimento de Sistemas na FATEC São Paulo, no período noturno. Com experiência prévia como desenvolvedor freelancer, busco essa formação para aprimorar meu nível técnico, aprofundar meus conhecimentos em engenharia de software e formalizar minha transição de carreira para a área de tecnologia. Meu objetivo é consolidar uma base acadêmica sólida, aliando teoria e prática para me tornar um profissional ainda mais capacitado no desenvolvimento de sistemas.',
         },
         {
             image: "/udemy.png",
@@ -139,7 +139,7 @@ export default function Education() {
                     className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
                     >
                         <span id="education-typing-title"></span>
                         <span

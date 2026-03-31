@@ -122,7 +122,7 @@ export default function Projects({ projects }: ProjectsProps) {
                     className="h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
+                        className={`${roboto.className}  lg:ml-20 lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
                     >
                         <span id="projects-typing-title"></span>
                         <span

@@ -1,12 +1,14 @@
 'use client';
 
 import Image from "next/image";
-import fotoPerfil from "../../photos/portrait.png";
+import fotoPerfil from "../../photos/portrait.jpg";
 import Link from "next/link";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
 import { useEffect, useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
+
+
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -32,9 +34,22 @@ const typingEffect = (text: string, callback: () => void) => {
     }, 100);
 };
 
+const initialTechs = [
+    { id: 1, name: "typescript", bg: "#2f74c0", text: "#ffffff" },
+    { id: 2, name: "power platform", bg: "#6bddfa", text: "#000000" },
+    { id: 3, name: "react", bg: "#efd81d", text: "#000000" },
+    { id: 4, name: "next.js", bg: "#353535", text: "#ffffff" },
+    { id: 5, name: "python", bg: "#366297", text: "#efd81d" },
+    { id: 6, name: "python rpa", bg: "#2A39FF", text: "#efd81d" },
+    { id: 7, name: "n8n", bg: "#F5276C", text: "#efd81d" },
+];
+
+
 export default function AboutMe() {
     const [isTypingDone, setIsTypingDone] = useState(false);
     const [isCVVisible, setIsCVVisible] = useState(false);
+    const [techs, setTechs] = useState(initialTechs);
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         // Apenas o "Anderson" será digitado
@@ -47,6 +62,62 @@ export default function AboutMe() {
         setIsCVVisible(!isCVVisible); // Alternar a visibilidade dos botões
     };
 
+    const variants = {
+        hidden: {
+            opacity: 0,
+            scale: 0.8,
+            filter: "blur(4px)",
+            transition: { duration: 0.4 }
+        },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            transition: {
+                type: "spring",
+                stiffness: 200,
+                damping: 25
+            }
+        }
+    };
+
+    // Função para embaralhar o array
+    const shuffle = (array) => {
+        return [...array].sort(() => Math.random() - 0.5);
+    };
+
+    useEffect(() => {
+        let timeoutId: NodeJS.Timeout;
+
+        const startLoop = () => {
+            const randomTime = 4000 + Math.random() * 2000;
+
+            timeoutId = setTimeout(() => {
+                // FASE 1: Esconder
+                setIsVisible(false);
+
+                // FASE 2: Trocar os dados enquanto está escondido
+                // Aumentamos levemente para 600ms para garantir que a transição 'hidden' terminou
+                setTimeout(() => {
+                    setTechs(prev => shuffle(prev));
+
+                    // FASE 3: Mostrar
+                    // Usamos um pequeno atraso de 50ms para garantir que o React 
+                    // processou o novo array antes de disparar a animação de entrada
+                    setTimeout(() => {
+                        setIsVisible(true);
+                    }, 50);
+                }, 500);
+
+                startLoop(); // Agenda a próxima execução
+            }, randomTime);
+        };
+
+        startLoop();
+
+        return () => clearTimeout(timeoutId);
+    }, []);
+
     return (
         <div
             className="w-screen h-fit z-[-1] m-auto"
@@ -55,10 +126,10 @@ export default function AboutMe() {
             }}
         >
             <main
-                className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-center gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
+                className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
             >
 
-                <div className="text-white mx-8 xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
+                <div className="text-white mx-8 text-center xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
                     {/* Texto estático */}
                     <div id="about-title-container">
                         <h1 className="text-5xl md:text-[6vw] xl:text-[4vw]">
@@ -80,13 +151,13 @@ export default function AboutMe() {
                         </h1>
                     </div>
 
-                    <div className="mb-12">
-                        <h2>Sou um desenvolvedor de sistemas apaixonado por criar interfaces </h2>
+                    <div className="mb-12 text-center xl:text-left">
+                        <h2>Sou um desenvolvedor de sistemas e automações!</h2>
                     </div>
 
-                    <motion.div 
-                    layout
-                    className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3 transition-all">
+                    <motion.div
+                        layout
+                        className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3 transition-all">
                         <Link
                             href="#contact"
                             className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all px-10 hover:bg-[#30344600] hover:border border-[#aadd49] hover:text-[#aadd49]"
@@ -140,15 +211,21 @@ export default function AboutMe() {
                         </AnimatePresence>
                     </motion.div>
 
-                    <motion.div
-                    layout
-                    >
-                        <ul className="select-none flex flex-wrap justify-center xl:grid xl:grid-cols-2 xl:w-fit gap-3 text-xl mt-20 transition-all">
-                            <li className="bg-[#2f74c0] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">typescript</li>
-                            <li className="bg-[#6bddfa] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">react</li>
-                            <li className="bg-[#efd81d] text-[#000000] w-fit p-2 rounded-md hover:scale-110 transition-all">javascript</li>
-                            <li className="bg-[#353535] text-[#ffffff] w-fit p-2 rounded-md hover:scale-110 transition-all">next.js</li>
-                            <li className="bg-[#366297] text-[#efd81d] w-fit p-2 rounded-md hover:scale-110 transition-all">python</li>
+                    <motion.div>
+                        <ul className="select-none flex flex-wrap gap-3 items-center justify-center lg:justify-start text-xl mt-20 transition-all max-w-md">
+                            {techs.map((tech) => (
+                                <motion.li
+                                    key={tech.id}
+                                    layout="position"
+                                    variants={variants}
+                                    initial="visible"
+                                    animate={isVisible ? "visible" : "hidden"}
+                                    style={{ backgroundColor: tech.bg, color: tech.text }}
+                                    className="p-2 rounded-md select-none"
+                                >
+                                    {tech.name}
+                                </motion.li>
+                            ))}
                         </ul>
                     </motion.div>
                 </div>
@@ -161,7 +238,7 @@ export default function AboutMe() {
                         />
                         <p className="p-4 w-fit text-base leading-tight bg-[#787d96] rounded-xl text-white absolute -bottom-[0.75rem]">
                             <span className="text-4xl ">2+</span>
-                            <br /> ano de experiência
+                            <br /> anos de experiência
                         </p>
                     </div>
                 </div>

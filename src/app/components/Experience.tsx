@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { roboto } from '../fonts/Fonts';
-import styles from './education.module.css'
+import styles from './Education.module.css'
 
 interface Section {
     title: string;

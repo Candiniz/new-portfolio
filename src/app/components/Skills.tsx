@@ -24,73 +24,73 @@ import PPLogo from "./PPLogo"
 
 export const skills = (closeModal: () => void) => [
     {
-        icons: [<SiTypescript />, <RiNextjsFill />],
+        icons: [<SiTypescript key="ts" />, <RiNextjsFill key="nx" />],
         name: "TypeScript & Next.js 15",
         description: "Desenvolvimento Full Stack moderno com tipagem estática e renderização de alta performance.",
         descriptionTwo: "Minha stack principal para construção de aplicações robustas. Utilizo TypeScript para garantir segurança de tipos e manutenibilidade, explorando os recursos mais recentes do Next.js 15 (App Router, Server Actions) para entregar performance máxima e SEO otimizado."
     },
     {
-        icons: [<RiTailwindCssFill />, <FaSass />, <SiStyledcomponents />],
+        icons: [<RiTailwindCssFill key="tw" />, <FaSass key="ss" />, <SiStyledcomponents key="sc" />],
         name: "Modern Styling (Tailwind & Ecosystem)",
         description: "Criação de interfaces responsivas e sistemas de design eficientes utilizando utilitários e CSS moderno.",
         descriptionTwo: "Especialista em Tailwind CSS para prototipagem rápida e layouts escaláveis. Possuo sólida experiência com Styled-Components, Sass e bibliotecas de animação (Framer Motion), focando sempre em acessibilidade, temas dinâmicos e experiência do usuário (UX)."
     },
     {
-        icons: [<FaReact />, <FaJs />],
+        icons: [<FaReact key="rc" />, <FaJs key="js" />],
         name: "React Ecosystem",
         description: "Criação de interfaces modulares e gerenciamento de estados complexos.",
         descriptionTwo: "Domínio de hooks avançados, Context API e gerenciamento de estado global. Foco em arquitetura de componentes reutilizáveis e otimização de renderização para aplicações single-page de grande escala."
     },
     {
-        icons: [<DiPhotoshop />, <DiIllustrator />, <FaFigma />],
+        icons: [<DiPhotoshop key="ph" />, <DiIllustrator key="ll" />, <FaFigma key="fg" />],
         name: "Design & Creative Vision",
         description: "Mais de 8 anos de experiência em design visual, manipulação de imagens e criação de identidades.",
         descriptionTwo: "Background sólido como Arquiteto e Designer Gráfico utilizando Photoshop e Illustrator. Essa base me permite transitar entre o design e o código com facilidade, criando interfaces que são tecnicamente precisas e visualmente profissionais."
     },
     {
-        icons: [<PPLogo />, <FaMicrosoft />],
+        icons: [<PPLogo key="ppl" />, <FaMicrosoft key="ms" />],
         name: "Microsoft Power Platform",
         description: "Automação de processos empresariais e desenvolvimento Low-Code de alto impacto.",
         descriptionTwo: "Desenvolvimento de soluções no ecossistema Microsoft (Power Apps, Power Automate) integradas a SharePoint, SQL e APIs externas. Foco em transformar fluxos manuais em processos digitais eficientes e inteligentes."
     },
     {
-        icons: <FaPython />,
+        icons: <FaPython key="py" />,
         name: "Python & Automation",
         description: "Scripts de automação, manipulação de dados e integração com inteligência artificial.",
         descriptionTwo: "Conhecimentos em Python voltados para a criação de ferramentas auxiliares, web scraping e integração de modelos de IA, complementando a stack de desenvolvimento com versatilidade."
     },
     {
-        icons: [<SiPrisma />, <DiPostgresql />, <RiSupabaseLine />],
+        icons: [<SiPrisma key="pr" />, <DiPostgresql key="pg" />, <RiSupabaseLine key="sb" />],
         name: "Bancos de Dados Relacionais",
         description: "Gerenciamento de dados estruturados utilizando PostgreSQL com foco em integridade, performance e modelagem relacional.",
         descriptionTwo: "Experiência no design de esquemas e manipulação de dados complexos. Utilizo o Prisma ORM para garantir consultas tipadas e seguras, além de integrar essas soluções com Supabase para backends rápidos e escaláveis"
     },
     {
-        icons: [<SiNodedotjs />, <SiFirebase />],
+        icons: [<SiNodedotjs key="nd" />, <SiFirebase key="fb" />],
         name: "Back-end & Infraestrutura",
         description: "Desenvolvimento de servidores robustos e integração com serviços de nuvem para armazenamento e processamento.",
         descriptionTwo: "Construção de APIs RESTful e GraphQL com Node.js/Express, utilizando AWS (S3) para persistência de arquivos e Firebase para funcionalidades em tempo real e autenticação rápida."
     },
     {
-        icons: [<SiGooglecloud />, <FaGoogle />],
+        icons: [<SiGooglecloud key="gc" />, <FaGoogle key="gg" />],
         name: "Google Cloud Platform",
         description: "Plataforma de infraestrutura em nuvem que oferece computação, armazenamento e inteligência de dados com a segurança e escala do Google",
         descriptionTwo: "Gerencio recursos em nuvem focados em escalabilidade e disponibilidade. Tenho experiência prática na configuração de buckets para armazenamento, deploy de aplicações e integração de serviços gerenciados para otimizar o ciclo de vida do software."
     },
     {
-        icons: <FaCcStripe />,
+        icons: <FaCcStripe key="st" />,
         name: "Stripe",
         description: "Stripe é uma plataforma líder para gerenciamento de pagamentos online.",
         descriptionTwo: "Tenho experiência no uso do Stripe para integrar pagamentos seguros e eficientes, implementando desde transações simples até soluções de assinatura e webhook para automação financeira."
     },
     {
-        icons: <SiN8N />,
+        icons: <SiN8N key="n8n" />,
         name: "IA, Agentes, Orquestração (n8n)",
         description: "Desenvolvimento de sistemas autônomos e fluxos inteligentes que utilizam LLMs (Large Language Models) para executar tarefas complexas e processamento de dados.",
         descriptionTwo: "Especialista na criação de Agentes de IA orquestrados via n8n, conectando modelos de linguagem a ferramentas externas, bancos de dados e APIs. Desenvolvo automações de 'malha fechada' (Human-in-the-loop), onde a IA raciocina sobre os dados, toma decisões e executa ações em larga escala, otimizando processos que antes exigiam intervenção manual constante."
     },
     {
-        icons: <FaMeta />,
+        icons: <FaMeta key="mt" />,
         name: "Construção de Apps Meta",
         description: "Desenvolvimento de aplicativos interativos e otimizados para a plataforma Meta.",
         descriptionTwo: (

@@ -44,7 +44,7 @@ export default function Education() {
             image: "/fatec.png",
             degree: 'Graduação em Análise e Desenvolvimento de Sistemas',
             institution: 'Fatec São Paulo',
-            year: '2025 - 2027',
+            year: '2025 - 2028npm',
             description: 'Atualmente, estou cursando o terceiro semestre da graduação em Análise e Desenvolvimento de Sistemas na FATEC São Paulo, no período noturno. Com experiência prévia como desenvolvedor freelancer, busco essa formação para aprimorar meu nível técnico, aprofundar meus conhecimentos em engenharia de software e formalizar minha transição de carreira para a área de tecnologia. Meu objetivo é consolidar uma base acadêmica sólida, aliando teoria e prática para me tornar um profissional ainda mais capacitado no desenvolvimento de sistemas.',
         },
         {

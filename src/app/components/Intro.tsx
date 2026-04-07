@@ -183,7 +183,7 @@ export default function AboutMe() {
                                     transition={{ type: "spring", stiffness: 200 }}
                                 >
                                     <motion.a
-                                        className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/640px-Flag_of_Brazil.svg.png')]"
+                                        className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('/br.png')]"
                                         initial={{ opacity: 0, y: -30 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -30 }}
@@ -195,7 +195,7 @@ export default function AboutMe() {
 
                                     </motion.a>
                                     <motion.a
-                                        className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/2560px-Flag_of_the_United_States_%28Pantone%29.svg.png')]"
+                                        className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('/en.png')]"
                                         initial={{ opacity: 0, y: -30 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -30 }}

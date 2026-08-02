@@ -32,7 +32,7 @@ export default function Contatos() {
             <div className="z-20 bg-black">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#aadd49" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
             </div>
-            <div id="contatos" className="w-full flex items-center justify-center md:gap-10 mb-7">
+            <div className="w-full flex items-center justify-center md:gap-10 mb-7">
                 <div>
                     <Image
                         src={contatosBG}
@@ -42,7 +42,7 @@ export default function Contatos() {
                         className="max-w-[50vw] md:max-w-none"
                     />
                 </div>
-                <div className="space-y-8 md:space-y-16">
+                <div className="space-y-8 md:space-y-16" id="contatos">
                     <h1 className={`${roboto.className} -ml-32 md:ml-0 text-4xl sm:text-5xl md:text-6xl font-bold`}>Contatos:</h1>
 
                     <ul className="flex md:hidden flex-col gap-7 text-[#aadd49] text-4xl items-center justify-center" id="contact">

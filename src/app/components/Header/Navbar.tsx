@@ -107,7 +107,7 @@ export default function Navbar() {
                         <Link onClick={(e) => scrollToAnchor(e, "experience")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Experiência</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Formação</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "aboutMe")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#aboutMe">Sobre Mim</Link>
-                        <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contatos">Contatos</Link>
+                        <Link onClick={(e) => scrollToAnchor(e, "contatos")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contatos">Contatos</Link>
                     </nav>
                 </div>
                 {/* Linha de separação após a navbar */}

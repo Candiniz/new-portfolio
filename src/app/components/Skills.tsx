@@ -26,7 +26,7 @@ const pillars = [
         subtitle: "Do levantamento de requisitos ao protótipo de alta fidelidade.",
         description: "Minha base como projetista e arquiteto me deu uma vantagem única: a habilidade de escutar clientes, entender regras de negócio complexas e traduzi-las em soluções viáveis. Antes do código, garanto a viabilidade do projeto estruturando o design system e a arquitetura da informação.",
         icons: [<FaFigma key="fg" />, <BiLogoAdobe key="ad" />],
-        videoSrc: "/skillVideos/arch.mp4"
+        videoSrc: "/skillVideos/Arch.mp4"
     },
     {
         id: "frontend",
@@ -34,7 +34,7 @@ const pillars = [
         subtitle: "Interfaces escaláveis, tipadas e focadas em performance.",
         description: "Construo SPAs e aplicações modernas utilizando o ecossistema React. Mesclo a flexibilidade do Tailwind CSS com o poder de renderização do Next.js e a segurança do TypeScript para entregar produtos de alto impacto visual e técnico.",
         icons: [<RiNextjsFill key="nx" />, <FaReact key="rc" />, <SiTypescript key="ts" />, <RiTailwindCssFill key="tw" />, <FaMicrosoft key="ms" />],
-        videoSrc: "/skillVideos/coding.mp4"
+        videoSrc: "/skillVideos/Coding.mp4"
     },
     {
         id: "backend-infra",
@@ -42,7 +42,7 @@ const pillars = [
         subtitle: "Autonomia completa do banco de dados ao deploy em produção.",
         description: "Desenvolvo APIs robustas e orquestro automações complexas (n8n, Python). Além do código, possuo total autonomia em DevOps, gerenciando ambientes de produção containerizados via Docker em instâncias próprias (VPS Hostinger, Oracle Cloud) e Google Cloud Platform.",
         icons: [<FaNodeJs key="nd" />, <FaPython key="py" />, <DiPostgresql key="pg" />, <FaDocker key="dk" />, <SiGooglecloud key="gc" />, <GrOracle key="or" />, <IoLogoFirebase key="fb" />, <SiMetabase key="mb" />],
-        videoSrc: "/skillVideos/infra.mp4"
+        videoSrc: "/skillVideos/Infra.mp4"
     }
 ];
 

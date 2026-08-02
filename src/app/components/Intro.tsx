@@ -7,30 +7,7 @@ import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
-
-// Função de efeito de digitação
-const typingEffect = (text: string, callback: () => void) => {
-    let index = 0;
-    const element = document.getElementById("about-typing-title");
-
-    // Garante que o elemento comece invisível
-    if (element) element.classList.remove("visible");
-
-    const interval = setInterval(() => {
-        if (element) {
-            // Usa textContent para digitar os caracteres de forma normal
-            element.textContent = text.slice(0, index + 1);
-            index++;
-            if (index === text.length) {
-                clearInterval(interval);
-                if (element) {
-                    element.classList.add("visible"); // Torna visível após a digitação
-                }
-                callback();
-            }
-        }
-    }, 300);
-};
+import { useTypingEffect } from '../hooks/useTypingEffect';
 
 const initialTechs = [
     { id: 1, name: "typescript", bg: "#2f74c0", text: "#ffffff" },
@@ -43,16 +20,10 @@ const initialTechs = [
 ];
 
 export default function AboutMe() {
-    const [isTypingDone, setIsTypingDone] = useState(false);
     const [isCVVisible, setIsCVVisible] = useState(false);
     const [techs, setTechs] = useState(initialTechs);
     const [isVisible, setIsVisible] = useState(true);
-
-    useEffect(() => {
-        // Apenas o "Anderson" será digitado
-        typingEffect("Anderson", () => setIsTypingDone(true));
-    }, []);
-
+    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Anderson");
     const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
 
     const toggleCV = () => {
@@ -63,13 +34,11 @@ export default function AboutMe() {
         hidden: {
             opacity: 0,
             scale: 0.8,
-            filter: "blur(4px)",
             transition: { duration: 0.4 }
         },
         visible: {
             opacity: 1,
             scale: 1,
-            filter: "blur(0px)",
             transition: {
                 type: "spring",
                 stiffness: 200,
@@ -117,11 +86,12 @@ export default function AboutMe() {
 
     return (
         <div
-            className="mb-20 lg:pt-10 lg:h-screen z-[-1]"
+            className="relative mb-20 lg:pt-10 lg:h-screen overflow-hidden"
             style={{
                 background: 'radial-gradient(circle at center, #27292e 0%, #000 30%)', // Gradiente radial
             }}
         >
+            <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-b from-transparent to-black z-[1]"></div>
             <div
                 className="absolute 
                 -top-[50%] -right-[80%] w-[1000px] h-[800px]
@@ -139,7 +109,7 @@ export default function AboutMe() {
                 }}
             ></div>
             <main
-                className={`${roboto.className} relative z-[10] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 py-10 text-lg xl:flex-nowrap `}
+                className={`${roboto.className} relative z-[10] mt-[100px] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 py-10 text-lg xl:flex-nowrap `}
             >
 
 
@@ -148,12 +118,12 @@ export default function AboutMe() {
                 flex flex-col items-center xl:items-start gap-4 z-[10]"
                 >
                     {/* Texto estático */}
-                    <div id="about-title-container reveal">
+                    <div id="about-title-container reveal" ref={containerRef}>
                         <h1 className="text-5xl md:text-[6vw] xl:text-[4vw] reveal" style={{ transitionDelay: "0.3s" }}>
                             Prazer, sou{" "}<br />
                             <span
                                 id="about-typing-title"
-                                className="font-bold text-[#aadd49]"> {/* Apenas "Anderson" será digitado */}
+                                className="font-bold text-[#aadd49]">{displayedText}{/* Apenas "Anderson" será digitado */}
                             </span>
                             <span
                                 className={`font-bold text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
@@ -162,8 +132,7 @@ export default function AboutMe() {
                                     marginLeft: "5px",
                                     animation: "blink 1s steps(1, end) infinite",
                                 }}
-                            >
-                                _
+                            >_
                             </span>
                         </h1>
                     </div>
@@ -230,7 +199,6 @@ export default function AboutMe() {
                             {techs.map((tech) => (
                                 <motion.li
                                     key={tech.id}
-                                    layout="position"
                                     variants={variants}
                                     initial="visible"
                                     animate={isVisible ? "visible" : "hidden"}

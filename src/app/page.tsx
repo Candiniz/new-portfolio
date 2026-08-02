@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <main>
       {/* <TranslateButton /> */}
-      <div className="mt-[100px]">
+      <div className="">
         <AboutMe />
       </div>
       <div className="">

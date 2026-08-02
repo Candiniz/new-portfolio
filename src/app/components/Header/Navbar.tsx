@@ -1,6 +1,8 @@
 'use client'
 
 import { RiUserLine, RiCodeLine, RiBriefcaseLine, RiGraduationCapLine, RiMailLine } from 'react-icons/ri';
+import { HiOutlineCog8Tooth } from "react-icons/hi2";
+
 import Image from "next/image";
 import Link from "next/link";
 import zLogo from "../../../photos/cd-logo2.png";
@@ -12,7 +14,7 @@ import { roboto } from "@/app/fonts/Fonts";
 const scrollToAnchor = (e: React.MouseEvent, target: string) => {
     e.preventDefault(); // Impede que a URL seja alterada com a âncora
     const element = document.getElementById(target);
-    const navbarHeight = 60; // Ajuste para a altura da sua navbar fixa
+    const navbarHeight = 60; // Ajuste para a altura da navbar
 
     if (element) {
         window.scrollTo({
@@ -62,11 +64,10 @@ const BurgerIcon = ({ isOpen, onClick }: { isOpen: boolean, onClick: () => void 
     );
 };
 
-export default function Header() {
+export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Controle do menu
     const [isFadeVisible, setIsFadeVisible] = useState(false); // Controle do fade das seções
     const [hoveredIcon, setHoveredIcon] = useState<string | null>(null); // Estado para controlar qual ícone está em hover
-
 
     // Função para alternar o menu
     const toggleMenu = useCallback(() => {
@@ -91,21 +92,22 @@ export default function Header() {
     return (
         <>
             <header className={`${roboto.className} bg-black fixed z-50 w-full text-sm flex flex-col items-center top-0`}>
-                <div className="flex justify-between py-2 px-8 w-full">
+                <div className="flex justify-between py-2 px-8 w-full min-[2000px]:py-4">
                     <Link href="/">
-                        <Image alt="Logotipo" src={zLogo} height={50} />
+                        <Image alt="Logotipo" src={zLogo} className='h-[50px] min-[2000px]:h-[80px] w-auto' />
                     </Link>
 
                     {/* Ícone de menu hamburguer */}
                     <BurgerIcon isOpen={isMenuOpen} onClick={toggleMenu} />
 
                     {/* Navbar principal */}
-                    <nav className="hidden lg:flex items-center gap-1 text-md z-50">
+                    <nav className="hidden lg:flex items-center gap-1 text-md min-[2000px]:text-xl z-50">
                         <Link onClick={(e) => scrollToAnchor(e, "skills")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#skills">Habilidades</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "projects")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#projects">Projetos</Link>
+                        <Link onClick={(e) => scrollToAnchor(e, "experience")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Experiência</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Formação</Link>
                         <Link onClick={(e) => scrollToAnchor(e, "aboutMe")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#aboutMe">Sobre Mim</Link>
-                        <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contact">Contatos</Link>
+                        <Link className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contatos">Contatos</Link>
                     </nav>
                 </div>
                 {/* Linha de separação após a navbar */}
@@ -152,6 +154,17 @@ export default function Header() {
                                     onMouseEnter={() => handleIconHover('projects')}
                                     onMouseLeave={() => handleIconHover(null)}
                                 >
+                                    <HiOutlineCog8Tooth className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        scrollToAnchor(e, "experience")
+                                        toggleMenu();
+                                    }}
+                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'experience' ? 'text-[#aadd49]' : ''}`}
+                                    onMouseEnter={() => handleIconHover('experience')}
+                                    onMouseLeave={() => handleIconHover(null)}
+                                >
                                     <RiBriefcaseLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
                                 </button>
                                 <button
@@ -178,7 +191,7 @@ export default function Header() {
                                 </button>
                                 <button
                                     onClick={(e) => {
-                                        scrollToAnchor(e, "contact")
+                                        scrollToAnchor(e, "contatos")
                                         toggleMenu();
                                     }}
                                     className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'contacts' ? 'text-[#aadd49]' : ''}`}
@@ -222,6 +235,17 @@ export default function Header() {
                                             </button>
                                             <button
                                                 onClick={(e) => {
+                                                    scrollToAnchor(e, "experience")
+                                                    toggleMenu();
+                                                }}
+                                                className={`transition-all duration-300 group ${hoveredIcon === 'experience' ? 'text-[#aadd49]' : ''}`}
+                                                onMouseEnter={() => handleIconHover('experience')}
+                                                onMouseLeave={() => handleIconHover(null)}
+                                            >
+                                                Experiência
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
                                                     scrollToAnchor(e, "education")
                                                     toggleMenu();
                                                 }}
@@ -244,7 +268,7 @@ export default function Header() {
                                             </button>
                                             <button
                                                 onClick={(e) => {
-                                                    scrollToAnchor(e, "contacts")
+                                                    scrollToAnchor(e, "contatos")
                                                     toggleMenu();
                                                 }}
                                                 className={`transition-all duration-300 group ${hoveredIcon === 'contacts' ? 'text-[#aadd49]' : ''}`}

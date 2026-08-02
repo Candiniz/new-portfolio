@@ -8,7 +8,7 @@ import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 const scrollToAnchor = (e) => {
   e.preventDefault(); // Impede a alteração da URL
   const element = document.getElementById("hide-button"); // Alvo da rolagem suave
-  const navbarHeight = 60; // Ajuste para a altura da sua navbar ou área fixa
+  const navbarHeight = 60; // Ajuste para a altura da navbar
 
   if (element) {
     window.scrollTo({

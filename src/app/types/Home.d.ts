@@ -8,13 +8,33 @@ export interface Project {
     slug: string,
     name: string,
 
-    projectLink: string,
-    repositoryLink: string,
-    linkedIn: string,
+    projectLink?: string;
+    repositoryLink?: string;
+    linkedIn?: string;
 
+    role?: string;
+    status?: string;
+    impactBadge?: string;
+    
     image: Images,
     icons: JSX.Element
     description?: string;
+}
+
+export interface Course {
+    image: string;
+    degree: string;
+    institution: string;
+    year: string;
+    description: string;
+}
+
+export interface Experience {
+    image: string;
+    degree: string;
+    institution: string;
+    year: string;
+    sections: Array;
 }
 
 export interface CarouselPost extends InstagramPost {

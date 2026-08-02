@@ -5,59 +5,15 @@ import "../globals.css";
 import { roboto } from "../fonts/Fonts";
 import Musician from "./Musician";
 import Traveller from "./Traveller";
-import { useEffect, useState } from "react";
 import Architect from "./Architect";
-
-// Função de efeito de digitação
-const typingEffect = (text: string, callback: () => void) => {
-  let index = 0;
-  const element = document.getElementById("trails-typing-title");
-  if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
-
-  const interval = setInterval(() => {
-    if (element) {
-      element.textContent = text.slice(0, index + 1);
-      index++;
-      if (index === text.length) {
-        clearInterval(interval);
-        if (element) element.classList.add("visible"); // Torna visível após digitar
-        callback();
-      }
-    }
-  }, 100);
-};
+import { useTypingEffect } from '../hooks/useTypingEffect'; // Ajuste o caminho conforme sua estrutura
 
 export default function Trails() {
-  const [isTypingDone, setIsTypingDone] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const element = document.getElementById("trails-typing-title");
-
-          if (entry.isIntersecting) {
-            if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
-            setIsTypingDone(false); // Reinicia o estado
-            typingEffect("Sobre Mim:", () => setIsTypingDone(true));
-          } else {
-            if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
-            setIsTypingDone(false); // Desativa o estado
-          }
-        });
-      },
-      { threshold: 0.5 } // Aciona quando 50% do título está visível
-    );
-
-    const target = document.getElementById("trails-title-container");
-    if (target) observer.observe(target);
-
-    return () => observer.disconnect();
-  }, []);
+  const { displayedText, isTypingDone, containerRef } = useTypingEffect("Sobre mim");
 
   return (
     <>
-      <div id="aboutMe" className="scroll-mt-24 mt-36">
+      <div ref={containerRef} id="aboutMe" className="scroll-mt-24 mt-36">
         {/* Cabeçalho com efeito de digitação e gradiente no fundo */}
         <div
           id="trails-title-container"
@@ -66,7 +22,7 @@ export default function Trails() {
           <h2
             className={`${roboto.className} lg:pl-9 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff]`}
           >
-            <span id="trails-typing-title"></span>
+            <span id="trails-typing-title">{displayedText}</span>
             <span
               className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"}`}
               style={{
@@ -78,7 +34,9 @@ export default function Trails() {
             </span>
           </h2>
         </div>
-        <div className="bg-[#676767] h-[2px] w-full"></div>
+        <div className="bg-gray-800 h-[2px] w-full reveal" style={{ transitionDelay: "0.2s" }}></div>
+        <div className="bg-gray-500 h-[4px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.4s" }}></div>
+        <div className="bg-[#aadd49] h-[6px] w-full mt-[4px] mb-20 reveal" style={{ transitionDelay: "0.6s" }}></div>
       </div>
 
       {/* Conteúdo dos componentes Traveller e Traveller */}

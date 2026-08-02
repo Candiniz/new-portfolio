@@ -1,14 +1,12 @@
 'use client';
 
 import Image from "next/image";
-import fotoPerfil from "../../photos/portrait.jpg";
+import fotoPerfil from "../../photos/portrait.png";
 import Link from "next/link";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
-
-
 
 // Função de efeito de digitação
 const typingEffect = (text: string, callback: () => void) => {
@@ -31,7 +29,7 @@ const typingEffect = (text: string, callback: () => void) => {
                 callback();
             }
         }
-    }, 100);
+    }, 300);
 };
 
 const initialTechs = [
@@ -40,10 +38,9 @@ const initialTechs = [
     { id: 3, name: "react", bg: "#efd81d", text: "#000000" },
     { id: 4, name: "next.js", bg: "#353535", text: "#ffffff" },
     { id: 5, name: "python", bg: "#366297", text: "#efd81d" },
-    { id: 6, name: "python rpa", bg: "#2A39FF", text: "#efd81d" },
+    { id: 6, name: "ai agents", bg: "#2A39FF", text: "#efd81d" },
     { id: 7, name: "n8n", bg: "#F5276C", text: "#efd81d" },
 ];
-
 
 export default function AboutMe() {
     const [isTypingDone, setIsTypingDone] = useState(false);
@@ -120,20 +117,40 @@ export default function AboutMe() {
 
     return (
         <div
-            className="w-screen h-fit z-[-1] m-auto"
+            className="mb-20 lg:pt-10 lg:h-screen z-[-1]"
             style={{
-                background: 'radial-gradient(circle at center, #27292e 0%, #000 35%)', // Gradiente radial
+                background: 'radial-gradient(circle at center, #27292e 0%, #000 30%)', // Gradiente radial
             }}
         >
+            <div
+                className="absolute 
+                -top-[50%] -right-[80%] w-[1000px] h-[800px]
+                lg:-top-[50%] lg:-right-[50%] lg:w-[3000px] lg:h-[800px]"
+                style={{
+                    background: 'radial-gradient(closest-side at center, #4861a05d 0%, #4861a000 100%)',
+                }}
+            ></div>
+            <div
+                className="absolute 
+                top-[50%] -right-[80%] w-[1000px] h-[800px]
+                lg:top-[50%] lg:-right-[50%] lg:w-[3000px] lg:h-[800px]"
+                style={{
+                    background: 'radial-gradient(closest-side at center, #a048993a 0%, #4861a000 100%)',
+                }}
+            ></div>
             <main
-                className={`${roboto.className} z-[10] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 pt-10 pb-36 text-lg xl:flex-nowrap `}
+                className={`${roboto.className} relative z-[10] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 py-10 text-lg xl:flex-nowrap `}
             >
 
-                <div className="text-white mx-8 text-center xl:text-left md:text-center flex flex-col items-center xl:items-start gap-4 z-[10]">
+
+                <div
+                    className="relative text-white mx-8 text-center xl:text-left md:text-center 
+                flex flex-col items-center xl:items-start gap-4 z-[10]"
+                >
                     {/* Texto estático */}
-                    <div id="about-title-container">
-                        <h1 className="text-5xl md:text-[6vw] xl:text-[4vw]">
-                            Prazer, sou{" "}
+                    <div id="about-title-container reveal">
+                        <h1 className="text-5xl md:text-[6vw] xl:text-[4vw] reveal" style={{ transitionDelay: "0.3s" }}>
+                            Prazer, sou{" "}<br />
                             <span
                                 id="about-typing-title"
                                 className="font-bold text-[#aadd49]"> {/* Apenas "Anderson" será digitado */}
@@ -151,7 +168,7 @@ export default function AboutMe() {
                         </h1>
                     </div>
 
-                    <div className="mb-12 text-center xl:text-left">
+                    <div className="mb-12 text-center xl:text-left reveal" style={{ transitionDelay: "0.6s" }} >
                         <h2>Sou um desenvolvedor de sistemas e automações!</h2>
                     </div>
 
@@ -170,13 +187,11 @@ export default function AboutMe() {
                         >
                             {isCVVisible ? 'Fechar' : 'Baixe meu CV!'}
                         </motion.button>
-
-
                         {/* Animação dos botões com as bandeiras */}
                         <AnimatePresence>
                             {isCVVisible && (
                                 <motion.div
-                                    className="flex gap-10 mt-4"
+                                    className="flex gap-10 mt-4 reveal"
                                     initial={{ opacity: 0, scale: 0 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 1, scale: 0 }}
@@ -192,7 +207,6 @@ export default function AboutMe() {
                                         href="/CandinizCV_PT.pdf"
                                         download
                                     >
-
                                     </motion.a>
                                     <motion.a
                                         className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('/en.png')]"
@@ -212,7 +226,7 @@ export default function AboutMe() {
                     </motion.div>
 
                     <motion.div>
-                        <ul className="select-none flex flex-wrap gap-3 items-center justify-center lg:justify-start text-xl mt-20 transition-all max-w-md">
+                        <ul className="select-none flex flex-wrap gap-3 items-center justify-center lg:justify-start text-xl mt-20 transition-all max-w-xl">
                             {techs.map((tech) => (
                                 <motion.li
                                     key={tech.id}
@@ -229,7 +243,7 @@ export default function AboutMe() {
                         </ul>
                     </motion.div>
                 </div>
-                <div className="m-0 p-0 z-[10]">
+                <div className="m-0 p-0 z-[10] reveal" style={{ transitionDelay: "1s" }}>
                     <div className="relative m-auto w-4/5 md:w-[350px] xl:w-[500px]">
                         <Image
                             alt="Foto de Perfil"
@@ -242,10 +256,34 @@ export default function AboutMe() {
                         </p>
                     </div>
                 </div>
+                <div className="absolute pointer-events-none z-[-1] 
+                    top-[30%] w-[180vw] h-[180vw]
+                    sm:-top-[15%] left-1/2 -translate-x-1/2 sm:w-[1000px] sm:h-[1100px]
+                    xl:-top-[20%] lg:left-[50%] xl:left-[0%] min-[1537px]:-top-[35%] xl:-translate-x-0 
+                ">
+                    {/* Imagem de Fundo (Apenas a silhueta estática super fraca) */}
+                    <Image
+                        src='/favicon.png'
+                        fill
+                        alt="Candiniz Symbol Background"
+                        className="object-contain opacity-[3%] vignette-mask"
+                    />
+                    <Image
+                        src='/favicon.png'
+                        fill
+                        alt=""
+                        className="object-contain opacity-5 animate-light-sweep"
+                    />
+                    <Image
+                        src='/favicon-glow.png'
+                        fill
+                        alt=""
 
-                {StarsBackgroundMemoized}
-
+                        className="object-contain opacity-80 animate-light-sweep-delayed"
+                    />
+                </div>
             </main>
+            {StarsBackgroundMemoized}
         </div>
     );
 }

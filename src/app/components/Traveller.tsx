@@ -16,7 +16,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 import styles from './Traveller.module.css'
-import BaloonTooltip from "./BaloonTooltip";
+import BalloonTooltip from "./BalloonTooltip";
 
 
 const GlobalStyle = createGlobalStyle`
@@ -49,7 +49,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-
+const travellerText = "Esse é um componente que simula um feed do Instagram. Construí esse projeto para estudar APIs e ferramentas do Meta Graph, além de treinar lógica avançada com TypeScript e JavaScript."
 
 
 
@@ -177,8 +177,12 @@ export const Traveller: React.FC = () => {
                 ease: "easeInOut",    // Efeito de easing
               }}
             >
-              <FaRegQuestionCircle />
-              <BaloonTooltip />
+              <BalloonTooltip text={travellerText} position="top">
+                {/* O círculo verde agora é o "children" do tooltip */}
+                <div className="w-10 h-10 rounded-full bg-[#aadd49] flex items-center justify-center text-3xl text-black">
+                  <FaRegQuestionCircle />
+                </div>
+              </BalloonTooltip>
             </motion.div>
             <div className={styles.custom_scroll_container}>
               <div>

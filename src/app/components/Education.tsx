@@ -1,95 +1,21 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { roboto } from '../fonts/Fonts';
 import styles from './Education.module.css'
-
-interface Course {
-    image: string;
-    degree: string;
-    institution: string;
-    year: string;
-    description: string;
-}
-
-// Função de efeito de digitação
-const typingEffect = (text: string, callback: () => void) => {
-    let index = 0;
-    const element = document.getElementById("education-typing-title");
-    if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
-
-    const interval = setInterval(() => {
-        if (element) {
-            element.textContent = text.slice(0, index + 1);
-            index++;
-            if (index === text.length) {
-                clearInterval(interval);
-                if (element) element.classList.add("visible"); // Torna visível após digitar
-                callback();
-            }
-        }
-    }, 100);
-};
+import { useTypingEffect } from '../hooks/useTypingEffect';
+import { educationData } from '../consts/educationArray';
+import { Course } from "../types/Home";
 
 export default function Education() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-    const [isTypingDone, setIsTypingDone] = useState(false);
+    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Formação Acadêmica");
 
-    const educationData: Course[] = [
-        {
-            image: "/fatec.png",
-            degree: 'Graduação em Análise e Desenvolvimento de Sistemas',
-            institution: 'Fatec São Paulo',
-            year: '2025 - 2028npm',
-            description: 'Atualmente, estou cursando o terceiro semestre da graduação em Análise e Desenvolvimento de Sistemas na FATEC São Paulo, no período noturno. Com experiência prévia como desenvolvedor freelancer, busco essa formação para aprimorar meu nível técnico, aprofundar meus conhecimentos em engenharia de software e formalizar minha transição de carreira para a área de tecnologia. Meu objetivo é consolidar uma base acadêmica sólida, aliando teoria e prática para me tornar um profissional ainda mais capacitado no desenvolvimento de sistemas.',
-        },
-        {
-            image: "/udemy.png",
-            degree: 'Build Responsive Real-World Websites with HTML and CSS',
-            institution: 'Udemy - Jonas.IO',
-            year: '2023',
-            description: 'Durante esse curso, aprendi a criar sites responsivos do zero utilizando HTML e CSS. O curso é extremamente prático, com um projeto de site real como exemplo, permitindo aplicar os conhecimentos adquiridos para construir páginas que funcionam perfeitamente em dispositivos de diferentes tamanhos. Aprendi desde o básico, como estruturar páginas e formatar textos, até técnicas avançadas de design e layout. O curso também me ensinou a criar designs que se adaptam bem a computadores, tablets e smartphones, permitindo desenvolver sites profissionais e prontos para o lançamento.',
-        },
-        {
-            image: "/ztm.png",
-            degree: 'Udemy: Zero to Mastery Academy - Complete Web Developer',
-            institution: 'Udemy - Zero to Mastery Academy',
-            year: '2023',
-            description: 'Este curso foi um divisor de águas na minha jornada como desenvolvedor web. Aprendi desde a construção de sites simples até o desenvolvimento completo de aplicações full-stack. O curso abrange uma vasta gama de tecnologias e ferramentas, incluindo HTML, CSS, JavaScript, Node.js, React, e muito mais. Além disso, tive acesso a uma comunidade ativa de desenvolvedores e pude aprender diretamente com um instrutor com experiência prática em empresas como Google e Apple. Ao final do curso, me senti pronto para trabalhar em empresas de tecnologia de ponta, como Google e Facebook, aplicando tudo o que aprendi no desenvolvimento de soluções web complexas.',
-        },
-        {
-            image: "/udemy.png",
-            degree: 'Udemy: The Complete JavaScript Course 2024 - From Zero to Expert!',
-            institution: 'Udemy - Jonas.IO',
-            year: '2023',
-            description: 'Esse curso foi uma verdadeira imersão no JavaScript. Comecei com os conceitos básicos e rapidamente evoluí para tópicos avançados, como programação assíncrona, manipulação de DOM e desenvolvimento de aplicações completas. Aprendi a trabalhar com JavaScript moderno, com práticas de código que me ajudaram a consolidar meu entendimento da linguagem. Através de desafios práticos e projetos, ganhei confiança para aplicar o que aprendi e me preparei para trabalhar com frameworks front-end como React e Vue, expandindo minhas habilidades para o desenvolvimento de aplicativos completos.',
-        },
-        {
-            image: "/udemy.png",
-            degree: 'Udemy: All about NodeJS',
-            institution: 'Udemy - Ground Up & More',
-            year: '2023',
-            description: 'Neste curso, explorei o poder do NodeJS, que permite usar JavaScript para desenvolver aplicativos de servidor de alta performance. Com o Node, aprendi a criar aplicações em tempo real, como servidores de chat e ferramentas colaborativas, tudo com um código simples e eficiente. O curso me mostrou como o NodeJS pode substituir outras linguagens de servidor, permitindo escrever toda a aplicação, desde o front-end até o back-end, utilizando uma única linguagem, o que facilita o desenvolvimento de soluções integradas.',
-        },
-        {
-            image: "/pucrs.png",
-            degree: 'Pós-graduação em BIM',
-            institution: 'Pontifícia Universidade Católica do Rio Grande do Sul - PUC/RS',
-            year: '2023 - 2024',
-            description: 'Na pós-graduação em BIM pela PUC/RS, aprofundei meus conhecimentos sobre Building Information Modeling, que permite a criação de modelos digitais inteligentes para otimizar projetos de construção. Além disso, estudei o sistema LEAN, uma metodologia focada na eliminação de desperdícios e na melhoria contínua de processos. O LEAN é fundamental não só para a arquitetura, mas também para a área de desenvolvimento, pois ensina a criar soluções mais eficientes e ágeis, melhorando a produtividade e a colaboração entre equipes. Essa abordagem de gestão de processos e otimização de recursos é extremamente aplicável ao desenvolvimento de software, especialmente quando se busca melhorar a performance e reduzir custos em projetos complexos.',
-        },
-        {
-            image: "/uam.png",
-            degree: 'Graduação em Arquitetura e Urbanismo',
-            institution: 'Universidade Anhembi Morumbi',
-            year: '2016 - 2020',
-            description: 'Durante minha graduação em Arquitetura e Urbanismo na Universidade Anhembi Morumbi, fui imerso em diversos aspectos do design urbano, planejamento e construção. Aprendi a usar ferramentas digitais essenciais, como AutoCAD e Revit, que facilitaram a criação de projetos precisos e eficientes. Ao longo do curso, a importância da tecnologia na arquitetura ficou evidente, e comecei a perceber como a automação e o uso de dados poderiam otimizar o processo de criação e gestão de projetos, habilidades que hoje aplico diretamente no desenvolvimento de software, especialmente na construção de soluções digitais que exigem precisão e integração entre sistemas.',
-        },
-    ];
+    
 
     const openModal = (course: Course) => {
         setSelectedCourse(course);
@@ -105,43 +31,13 @@ export default function Education() {
         e.stopPropagation();
     };
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const element = document.getElementById("education-typing-title");
-
-                    if (entry.isIntersecting) {
-                        if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
-                        setIsTypingDone(false); // Reinicia o estado
-                        typingEffect("Formação Acadêmica", () => setIsTypingDone(true));
-                    } else {
-                        if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
-                        setIsTypingDone(false); // Desativa o estado
-                    }
-                });
-            },
-            { threshold: 0.5 } // Aciona quando 50% do título está visível
-        );
-
-        const target = document.getElementById("education-title-container");
-        if (target) observer.observe(target);
-
-        return () => observer.disconnect();
-    }, []);
-
-
     return (
         <div className="pt-10 w-full mx-auto mt-36">
-            <div className="w-full scroll-mt-24" id="education">
-                <div
-                    id="education-title-container"
-                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
-                >
+            <div ref={containerRef} className="w-full scroll-mt-24" id="education">
                     <h2
-                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start  min-[2000px]:pl-[calc(50vw-1000px)]`}
                     >
-                        <span id="education-typing-title"></span>
+                        <span id="education-typing-title">{displayedText}</span>
                         <span
                             className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
                                 }`}
@@ -153,24 +49,36 @@ export default function Education() {
                             _
                         </span>
                     </h2>
-                </div>
-                <div className="bg-[#676767] h-[2px] w-full"></div>
+                <div className="bg-gray-800 h-[2px] w-full reveal" style={{ transitionDelay: "0.2s" }}></div>
+                <div className="bg-gray-500 h-[4px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.4s" }}></div>
+                <div className="bg-[#aadd49] h-[6px] w-full mt-[4px] mb-20 reveal" style={{ transitionDelay: "0.6s" }}></div>
             </div>
 
-            <div className="relative">
+            <div className="relative max-w-[2000px] mx-auto">
                 {/* Linha do tempo */}
-                <div className="absolute left-1/4 transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
-                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
+
+                {/* Linha 1 */}
+                <div className="absolute left-1/4 transform -translate-x-1/2 h-full z-10">
+                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
+                </div>
+                {/* Linha 2 */}
+                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full z-10">
+                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
+                </div>
+
                 {/* Adicionando a bola verde no final */}
-                <div className="absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4">
-                    <div className={styles.sonarBall}></div>
+                <div className='absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4' style={{ transitionDelay: "0.6s" }}>
+                    <div className="reveal">
+                        <div className={styles.sonarBall}></div>
+                    </div>
                 </div>
                 <div>
                     {educationData.map((item, index) => (
                         <div
                             key={index}
-                            className="relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
+                            className="reveal relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
                             onClick={() => openModal(item)}
+                            style={{ transitionDelay: "0.4s" }}
                         >
                             {/* Imagem da instituição */}
                             <div className='absolute left-[5%] md:left-[10%] lg:left-[15%] top-1/2 -translate-y-1/2'>
@@ -211,7 +119,7 @@ export default function Education() {
                     >
                         <motion.div
                             onClick={stopPropagation}
-                            className="relative bg-white rounded-lg w-4/5 p-10"
+                            className="relative bg-white w-4/5 p-10"
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.8 }}
@@ -219,7 +127,7 @@ export default function Education() {
                         >
                             <button
                                 onClick={closeModal}
-                                className="absolute top-[2px] right-[2px] text-xl text-white bg-black rounded-full"
+                                className="absolute top-[2px] right-[2px] text-xl lg:text-3xl text-white bg-black hover:bg-red-500 transition-colors"
                             >
                                 <AiOutlineClose />
                             </button>

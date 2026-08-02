@@ -40,47 +40,61 @@ const StarBackground = () => {
 
   const draw = (p5) => {
     p5.clear();
-    p5.translate(window.innerWidth / 2, window.innerHeight / 2); // Centraliza as estrelas
+    const currentWidth = window.innerWidth;
 
-    for (const star of stars.current) {
-      // Desenha o brilho das estrelas
-      const sx = (star.x / star.z) * window.innerWidth;
-      const sy = (star.y / star.z) * window.innerHeight;
-      const r = p5.map(star.z, 0, window.innerWidth, 8, 0);
+    // Se for menor que 768px (Mobile/sm), usa 75% da tela (metade direita).
+    // Se for maior ou igual a 768px (md+), usa 50% da tela (centro absoluto).
+    const centerX = currentWidth < 768
+      ? currentWidth / 2
+      : (currentWidth / 4) * 3;
 
-      // Glow da estrela
-      const glow = p5.map(star.z, 0, window.innerWidth, 15, 0);
-      p5.noFill();
-      p5.stroke(255, 255, 255, glow); // Glow com opacidade
-      p5.strokeWeight(3);
-      p5.ellipse(sx, sy, r + glow, r + glow);
+p5.translate(centerX, window.innerHeight / 2); // Centraliza as estrelas
 
-      // Corpo da estrela
-      p5.noStroke();
-      p5.fill(255);
-      p5.ellipse(sx, sy, r, r);
+for (const star of stars.current) {
+  // Desenha o brilho das estrelas
+  const sx = (star.x / star.z) * window.innerWidth;
+  const sy = (star.y / star.z) * window.innerHeight;
+  const r = p5.map(star.z, 0, window.innerWidth, 4, 0);
+  const glowSize = p5.map(star.z, 0, window.innerWidth, 20, 0);
+  const glowAlpha = p5.map(star.z, 0, window.innerWidth, 180, 0);
 
-      // Atualiza a posição
-      star.z -= 10;
-      if (star.z < 1) {
-        star.z = window.innerWidth;
-        star.x = p5.random(-window.innerWidth, window.innerWidth);
-        star.y = p5.random(-window.innerHeight, window.innerHeight);
-      }
-    }
+  // Glow da estrela
+  const glow = p5.map(star.z, 0, window.innerWidth, 15, 0);
+  p5.noFill();
+  p5.stroke(255, 255, 255, glow); // Glow com opacidade
+  p5.strokeWeight(3);
+  p5.ellipse(sx, sy, r + glowSize, r + glowSize);
+
+  // Corpo da estrela
+  p5.noStroke();
+  p5.fill(255);
+  p5.ellipse(sx, sy, r, r);
+
+  // Atualiza a posição
+  star.z -= 10;
+  if (star.z < 1) {
+    star.z = window.innerWidth;
+    star.x = p5.random(-window.innerWidth, window.innerWidth);
+    star.y = p5.random(-window.innerHeight, window.innerHeight);
+  }
+}
   };
 
-  const windowResized = (p5) => {
-    p5.resizeCanvas(window.innerWidth, window.innerHeight);
-    // Ajusta as estrelas ao novo tamanho
-    stars.current = stars.current.map((star) => ({
-      ...star,
-      x: p5.random(-window.innerWidth, window.innerWidth),
-      y: p5.random(-window.innerHeight, window.innerHeight),
-    }));
-  };
+const windowResized = (p5) => {
+  p5.resizeCanvas(window.innerWidth, window.innerHeight);
+  // Ajusta as estrelas ao novo tamanho
+  stars.current = stars.current.map((star) => ({
+    ...star,
+    x: p5.random(-window.innerWidth, window.innerWidth),
+    y: p5.random(-window.innerHeight, window.innerHeight),
+  }));
+};
 
-  return <Sketch setup={setup} draw={draw} windowResized={windowResized} />;
+return (
+  <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-[1]">
+    <Sketch setup={setup} draw={draw} windowResized={windowResized} />
+  </div>
+)
 };
 
 export default StarBackground;

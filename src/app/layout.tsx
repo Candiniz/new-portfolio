@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Hydrate from "./components/Hydrate";
-import Header from "./components/Header";
+import Header from "./components/Header/Navbar";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-x-hidden">
         <Hydrate>
           {/* Cabeçalho do site */}
           <Header />

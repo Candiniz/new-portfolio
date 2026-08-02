@@ -1,8 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-'use client';  // Marca este componente como "Client Component"
-
-import Image from 'next/image';
-import logo from '../app/favicon.ico';
+'use client';
 
 export default function Loading() {
   return (

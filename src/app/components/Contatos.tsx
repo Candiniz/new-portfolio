@@ -20,19 +20,19 @@ export default function Contatos() {
                     <path fill="#ffffff" fillOpacity="1" d="M0,128L48,122.7C96,117,192,107,288,90.7C384,75,480,53,576,74.7C672,96,768,160,864,186.7C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
                 </svg>
             </div>
-            <div className="bg-black w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#fff" fillOpacity="1" d="M0,192L60,202.7C120,213,240,235,360,250.7C480,267,600,277,720,277.3C840,277,960,267,1080,234.7C1200,203,1320,149,1380,122.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+            <div className="bg-black w-full -mt-20">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#aadd49" fillOpacity="1" d="M0,192L60,202.7C120,213,240,235,360,250.7C480,267,600,277,720,277.3C840,277,960,267,1080,234.7C1200,203,1320,149,1380,122.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
             </div>
-            <div className="relative bg-white h-[200px] w-full text-black -my-3 flex items-center justify-center text-xl md:text-3xl border-t-2 border-b-2 border-white">
-                <p className={`${caveat.className}`}>vamos construir algo incrível juntos?</p>
-                <div className="w-full absolute left-0 -bottom-[2px] h-[2px] bg-white z-30"></div>
-                <div className="w-full absolute left-0 -top-[2px] h-1 bg-white z-30"></div>
+            <div className="relative bg-[#aadd49] h-[200px] w-full text-black -mt-3 flex items-center justify-center text-sm sm:text-lg md:text-2xl lg:text-4xl">
+                <p className={`${roboto.className}`}>vamos construir algo incrível juntos?</p>
+                <div className="w-full absolute left-0 -bottom-[2px] h-[2px] bg-aadd49 z-30"></div>
+                <div className="w-full absolute left-0 -top-[2px] h-1 bg-aadd49 z-30"></div>
 
             </div>
             <div className="z-20 bg-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#ffffff" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#aadd49" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
             </div>
-            <div className="w-full flex items-center justify-center md:gap-10 mb-7">
+            <div id="contatos" className="w-full flex items-center justify-center md:gap-10 mb-7">
                 <div>
                     <Image
                         src={contatosBG}
@@ -43,7 +43,7 @@ export default function Contatos() {
                     />
                 </div>
                 <div className="space-y-8 md:space-y-16">
-                    <h1 className={`${parisienne.className} -ml-32 md:ml-0 text-6xl md:text-8xl font-bold`}>Contatos:</h1>
+                    <h1 className={`${roboto.className} -ml-32 md:ml-0 text-4xl sm:text-5xl md:text-6xl font-bold`}>Contatos:</h1>
 
                     <ul className="flex md:hidden flex-col gap-7 text-[#aadd49] text-4xl items-center justify-center" id="contact">
                         <li className="ml-2">

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { AiOutlineClose } from "react-icons/ai";
 import { roboto } from '../fonts/Fonts';
 import styles from './Education.module.css'
+import { useTypingEffect } from '../hooks/useTypingEffect';
+import { experiencesData } from '../consts/experienceArray';
 
 interface Section {
     title: string;
@@ -22,75 +24,10 @@ interface Course {
     sections: Section[];
 }
 
-// Função de efeito de digitação
-const typingEffect = (text: string, callback: () => void) => {
-    let index = 0;
-    const element = document.getElementById("experience-typing-title");
-    if (element) element.classList.remove("visible"); // Garante invisibilidade inicial
-
-    const interval = setInterval(() => {
-        if (element) {
-            element.textContent = text.slice(0, index + 1);
-            index++;
-            if (index === text.length) {
-                clearInterval(interval);
-                if (element) element.classList.add("visible"); // Torna visível após digitar
-                callback();
-            }
-        }
-    }, 100);
-};
-
 export default function Experience() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-    const [isTypingDone, setIsTypingDone] = useState(false);
-
-    const educationData: Course[] = [
-        {
-            image: "/opiceLogo.png",
-            degree: 'Analista de Desenvolvimento',
-            institution: 'Opice Blum Advogados Associados',
-            year: '2025 - ATUAL',
-            sections: [
-                {
-                    title: "Atuação e Impacto em Legal Tech",
-                    content: "Desenvolvimento de soluções estratégicas no departamento de TI da Opice Blum, escritório referência em Direito Digital. Foco na transformação de gargalos operacionais jurídicos em fluxos digitais eficientes através de um stack híbrido entre Power Platform e desenvolvimento Full Stack (Python/React).",
-                    videoPath: "", // Slot para Next/Image
-                    list: []
-                },
-                {
-                    title: "DIGITALIZA FINANCEIRO | Automação de Fluxos",
-                    content: "Solução integrada para o setor financeiro que automatiza massivamente o lançamento de notas de débito e obrigações.",
-                    videoPath: "/experience/DF1.mp4",
-                    list: [
-                        "Integração: Power Apps, Power Automate, SharePoint e Legal One.",
-                        "Impacto: Redução drástica do erro humano e aceleração do ciclo de pagamentos.",
-                        "Conformidade: Garantia de integridade de dados em processos de alta volumetria."
-                    ]
-                },
-                {
-                    title: "Opice IPScraper | Inteligência em Contencioso",
-                    content: "Sistema de extração e planilhamento de dados telemáticos para suporte à área de Contencioso Massificado.",
-                    videoPath: "/experience/OIPS.mp4",
-                    list: [
-                        "Tecnologias: Backend em Python e Frontend em React.",
-                        "Performance: Extração automatizada de dados de documentos PDF fornecidos por operadoras.",
-                        "Resultado: Processos que levavam horas são executados em segundos com alta precisão."
-                    ]
-                },
-                {
-                    title: "Inovação com IA & Orquestração",
-                    content: "Implementação de Agentes de IA para auxílio na tomada de decisão e interpretação de contextos jurídicos complexos.",
-                    videoPath: "",
-                    list: [
-                        "Stack: N8N (Orquestração), Power Automate e Google Cloud (Vertex AI/Gemini).",
-                        "Destaque: Escalonamento de automações convencionais para o nível de computação cognitiva."
-                    ]
-                }
-            ]
-        },
-    ];
+    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Experiência Profissional");
 
     const openModal = (course: Course) => {
         setSelectedCourse(course);
@@ -107,31 +44,6 @@ export default function Experience() {
     };
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const element = document.getElementById("experience-typing-title");
-
-                    if (entry.isIntersecting) {
-                        if (element) element.textContent = ""; // Limpa texto ao entrar na viewport
-                        setIsTypingDone(false); // Reinicia o estado
-                        typingEffect("Experiência Profissional", () => setIsTypingDone(true));
-                    } else {
-                        if (element) element.textContent = ""; // Garante que o texto desapareça ao sair
-                        setIsTypingDone(false); // Desativa o estado
-                    }
-                });
-            },
-            { threshold: 0.5 } // Aciona quando 50% do título está visível
-        );
-
-        const target = document.getElementById("experience-title-container");
-        if (target) observer.observe(target);
-
-        return () => observer.disconnect();
-    }, []);
-
-    useEffect(() => {
         if (isModalOpen) {
             // Trava o scroll injetando direto no HTML, igual no Traveller
             document.documentElement.style.overflow = "hidden";
@@ -139,25 +51,23 @@ export default function Experience() {
             // Libera o scroll
             document.documentElement.style.overflow = "";
         }
-
         // Cleanup
         return () => {
             document.documentElement.style.overflow = "";
         };
     }, [isModalOpen]);
 
-
     return (
         <div className="pt-10 w-full mx-auto mt-36">
-            <div className="w-full scroll-mt-24" id="experience">
+            <div ref={containerRef} className="w-full scroll-mt-24" id="experience">
                 <div
                     id="experience-title-container"
-                    className="bg-gradient-to-t from-[#303446] to-[#30344600] h-fit w-full"
+                    className="h-fit w-full"
                 >
                     <h2
-                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start`}
+                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start min-[2000px]:pl-[calc(50vw-1000px)]`}
                     >
-                        <span id="experience-typing-title"></span>
+                        <span id="experience-typing-title">{displayedText}</span>
                         <span
                             className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
                                 }`}
@@ -170,23 +80,36 @@ export default function Experience() {
                         </span>
                     </h2>
                 </div>
-                <div className="bg-[#676767] h-[2px] w-full"></div>
+                <div className="bg-gray-800 h-[2px] w-full reveal" style={{ transitionDelay: "0.2s" }}></div>
+                <div className="bg-gray-500 h-[4px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.4s" }}></div>
+                <div className="bg-[#aadd49] h-[6px] w-full mt-[4px] mb-20 reveal" style={{ transitionDelay: "0.6s" }}></div>
             </div>
 
-            <div className="relative">
+            <div className="relative max-w-[2000px] mx-auto">
                 {/* Linha do tempo */}
-                <div className="absolute left-1/4 transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
-                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full border-l-4 border-[#aadd49] z-10"></div>
+
+                {/* Linha 1 */}
+                <div className="absolute left-1/4 transform -translate-x-1/2 h-full z-10">
+                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
+                </div>
+                {/* Linha 2 */}
+                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full z-10">
+                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
+                </div>
+
                 {/* Adicionando a bola verde no final */}
-                <div className="absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4">
-                    <div className={styles.sonarBall}></div>
+                <div className='absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4' style={{ transitionDelay: "0.6s" }}>
+                    <div className="reveal">
+                        <div className={styles.sonarBall}></div>
+                    </div>
                 </div>
                 <div>
-                    {educationData.map((item, index) => (
+                    {experiencesData.map((item, index) => (
                         <div
                             key={index}
-                            className="relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
+                            className="reveal relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
                             onClick={() => openModal(item)}
+                            style={{ transitionDelay: "0.6s" }}
                         >
                             {/* Imagem da instituição */}
                             <div className='absolute left-[35%] sm:left-[5%] md:left-[7%] lg:left-[10%] 
@@ -231,7 +154,7 @@ export default function Experience() {
                     >
                         <motion.div
                             onClick={stopPropagation}
-                            className="relative bg-white rounded-lg w-4/5 p-10 h-[90vh]"
+                            className="relative bg-white w-4/5 p-10 h-[90vh]"
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.8 }}
@@ -239,12 +162,12 @@ export default function Experience() {
                         >
                             <button
                                 onClick={closeModal}
-                                className="absolute top-[2px] right-[2px] text-xl text-white bg-black rounded-full"
+                                className="absolute top-[2px] right-[2px] text-xl lg:text-3xl text-white bg-black hover:bg-red-500 transition-colors"
                             >
                                 <AiOutlineClose />
                             </button>
 
-                            <div className="flex flex-col md:flex-row items-start md:items-center h-[80vh]">
+                            <div className="flex flex-col md:flex-row items-start md:items-center h-[80vh] lg:px-10">
                                 {/* Foto da instituição */}
                                 <div className="mr-6 min-w-[160px]">
                                     <Image
@@ -270,7 +193,7 @@ export default function Experience() {
                                     </div>
                                 </div>
 
-                                <div className='h-full mt-9 lg:mt-0 overflow-y-auto pl-8 border-l border-gray-500'>
+                                <div className='mt-9 lg:mt-0 overflow-y-auto pl-8 border-l border-gray-400'>
                                     {/* Texto com título e descrição */}
                                     {selectedCourse.sections.map((section, index) => (
                                         <div key={index} className="mb-6">

@@ -19,7 +19,7 @@ const FeedPlanningAnimation = () => {
             if (containerRef.current) {
                 const width = containerRef.current.offsetWidth; // Largura do container
                 const numberOfSquares = 3; // Quantidade de quadrados na linha
-                const gap = 8; // Gap entre os quadrados em pixels (ajuste conforme o seu layout)
+                const gap = 8; // Gap entre os quadrados em pixels
                 const height = (width - (numberOfSquares - 1) * gap) / numberOfSquares; // Cálculo da altura
                 setSquareHeight(height);
             }

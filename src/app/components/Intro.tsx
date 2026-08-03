@@ -224,7 +224,7 @@ export default function AboutMe() {
                         </p>
                     </div>
                 </div>
-                <div className="absolute pointer-events-none z-[-1] 
+                <div className="hidden md:block absolute pointer-events-none z-[-1] 
                     top-[30%] w-[180vw] h-[180vw]
                     sm:-top-[15%] left-1/2 -translate-x-1/2 sm:w-[1000px] sm:h-[1100px]
                     xl:-top-[20%] lg:left-[50%] xl:left-[0%] min-[1537px]:-top-[35%] xl:-translate-x-0 

@@ -96,30 +96,12 @@ export default function Skills() {
 
     const currentPillar = pillars[page];
 
-    // Substitua o useEffect atual por este:
     useEffect(() => {
         setMounted(true);
-        let lastWidth = window.innerWidth;
-        let timeoutId: NodeJS.Timeout;
-
-        const handleResize = () => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                const currentWidth = window.innerWidth;
-                // Atualiza o estado APENAS se a largura mudar (ignora o sobe/desce da barra de endereço)
-                if (currentWidth !== lastWidth) {
-                    setWindowWidth(currentWidth);
-                    lastWidth = currentWidth;
-                }
-            }, 150); // Debounce de 150ms
-        };
-
-        handleResize(); // Chamada inicial
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        handleResize();
         window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            clearTimeout(timeoutId);
-        };
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     // 3 Breakpoints definidos exatamente como você pediu
@@ -165,7 +147,7 @@ export default function Skills() {
                     // Adicionado um mt-8 no mobile para dar respiro natural em relação às linhas do título
                     className={`relative w-full overflow-hidden max-w-[2000px] mx-auto mt-4 min-[1135px]:mt-8 ${isMobile ? 'h-[850px]' : 'h-[600px]'}`}
                 >
-
+                    
 
                     <div className="absolute inset-0 z-[1] w-full h-full overflow-hidden">
                         <AnimatePresence mode="wait">

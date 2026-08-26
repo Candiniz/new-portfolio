@@ -86,7 +86,7 @@ export default function AboutMe() {
 
     return (
         <div
-            className="relative mb-20 lg:pt-10 lg:h-screen overflow-hidden"
+            className="relative mb-20 lg:pt-10 lg:h-content overflow-hidden"
             style={{
                 background: 'radial-gradient(circle at center, #27292e 0%, #000 30%)', // Gradiente radial
             }}

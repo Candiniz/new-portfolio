@@ -1,8 +1,9 @@
 /*
  * Draw Director — "robôs desenhistas"
  *
- * Todo elemento marcado com `data-draw` começa invisível (visibility: hidden,
- * sem deslocar o layout) e só aparece quando um cursor-robô o "desenha":
+ * Todo elemento marcado com `data-draw` começa invisível (opacity: 0 no draw.css: ocupa o
+ * espaço final, segue legível por leitor de tela e aparece se receber foco) e só aparece
+ * quando um cursor-robô o "desenha":
  *
  *   data-draw="box"  (padrão) → o cursor arrasta uma seleção (marching ants),
  *                     contorna o retângulo com a caneta e "renderiza" o elemento
@@ -31,10 +32,13 @@
  * (usa "left", não transform, para não quebrar background-attachment: fixed)
  * e sai quando some da tela, para entrar de novo na volta.
  * Cada alvo vira um "job"; os jobs são distribuídos para um pool de cursores
- * (até MAX_BOTS). Rolando rápido, vários robôs trabalham ao mesmo tempo.
+ * (até 8 no desktop, 5 no tablet, 3 no celular), em ordem de leitura e para o robô
+ * livre mais perto. A velocidade de todos (RATE) sai do quanto a tela se desloca:
+ * 1x lendo, até 4x rolando rápido, 6x num salto pelo menu (ver measureRush).
  *
- * O estado vive em `data-draw-state` (queued | active | done) e não em classes,
- * porque o React reescreve `className` dinâmico e apagaria as nossas.
+ * O estado vive em `data-draw-state` (idle | waiting | queued | active | done) e não em
+ * classes, porque o React reescreve `className` dinâmico e apagaria as nossas.
+ * "waiting" = espera o pai desenhável terminar (ex.: texto dentro de um card).
  */
 
 type Mode = "box" | "type" | "line" | "carry";

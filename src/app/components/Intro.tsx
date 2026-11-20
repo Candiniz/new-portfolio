@@ -1,257 +1,235 @@
 'use client';
 
 import Image from "next/image";
-import fotoPerfil from "../../photos/portrait.png";
-import Link from "next/link";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { RiDownloadLine } from "react-icons/ri";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
-import { useEffect, useState, useMemo } from "react";
-import { motion, AnimatePresence, Reorder } from "framer-motion";
-import { useTypingEffect } from '../hooks/useTypingEffect';
+import PortraitFace from "./Portrait/PortraitFace";
+import { useI18n } from "@/i18n/I18nProvider";
+import { getDirector } from "../draw/drawDirector";
 
 const initialTechs = [
-    { id: 1, name: "typescript", bg: "#2f74c0", text: "#ffffff" },
-    { id: 2, name: "power platform", bg: "#6bddfa", text: "#000000" },
-    { id: 3, name: "react", bg: "#efd81d", text: "#000000" },
-    { id: 4, name: "next.js", bg: "#353535", text: "#ffffff" },
-    { id: 5, name: "python", bg: "#366297", text: "#efd81d" },
-    { id: 6, name: "ai agents", bg: "#2A39FF", text: "#efd81d" },
-    { id: 7, name: "n8n", bg: "#F5276C", text: "#efd81d" },
+    { id: "python", name: "python", bg: "#366297", text: "#ffd43b" },
+    { id: "pa", name: "power automate", bg: "#0066ff", text: "#ffffff" },
+    { id: "n8n", name: "n8n", bg: "#ea4b71", text: "#ffffff" },
+    { id: "vertex", name: "vertex ai", bg: "#4285f4", text: "#ffffff" },
+    { id: "agents", name: "ai agents", bg: "#2a39ff", text: "#efd81d" },
+    { id: "ts", name: "typescript", bg: "#2f74c0", text: "#ffffff" },
+    { id: "next", name: "next.js", bg: "#353535", text: "#ffffff" },
 ];
 
-export default function AboutMe() {
+type Rect = { x: number; y: number; w: number; h: number };
+
+/** Embaralha garantindo que a ordem realmente mude. */
+function shuffle<T>(list: T[]): T[] {
+    const out = [...list];
+    for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out.every((v, i) => v === list[i]) ? shuffle(list) : out;
+}
+
+export default function Intro() {
+    const { t } = useI18n();
     const [isCVVisible, setIsCVVisible] = useState(false);
     const [techs, setTechs] = useState(initialTechs);
-    const [isVisible, setIsVisible] = useState(true);
-    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Anderson");
-    const StarsBackgroundMemoized = useMemo(() => <StarsBackground />, []);
+    const sectionRef = useRef<HTMLElement>(null);
+    const pills = useRef(new Map<string, HTMLLIElement>());
+    const before = useRef<Map<string, Rect> | null>(null);
+    const carrying = useRef<Promise<unknown> | null>(null);
 
-    const toggleCV = () => {
-        setIsCVVisible(!isCVVisible); // Alternar a visibilidade dos botões
-    };
+    // FLIP: depois que o React reordena, cada badge volta à posição antiga e um robô o leva até a nova.
+    useLayoutEffect(() => {
+        const old = before.current;
+        if (!old) return;
+        before.current = null;
+        const director = getDirector();
+        if (!director) return;
+        carrying.current = Promise.all(
+            [...pills.current.entries()].map(([id, el]) => {
+                const from = old.get(id);
+                return from ? director.carry(el, from) : Promise.resolve();
+            }),
+        );
+    }, [techs]);
 
-    const variants = {
-        hidden: {
-            opacity: 0,
-            scale: 0.8,
-            transition: { duration: 0.4 }
-        },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            transition: {
-                type: "spring",
-                stiffness: 200,
-                damping: 25
-            }
-        }
-    };
-
-    // Função para embaralhar o array
-    const shuffle = (array) => {
-        return [...array].sort(() => Math.random() - 0.5);
-    };
-
-    useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
-
-        const startLoop = () => {
-            const randomTime = 4000 + Math.random() * 2000;
-
-            timeoutId = setTimeout(() => {
-                // FASE 1: Esconder
-                setIsVisible(false);
-
-                // FASE 2: Trocar os dados enquanto está escondido
-                // Aumentamos levemente para 600ms para garantir que a transição 'hidden' terminou
-                setTimeout(() => {
-                    setTechs(prev => shuffle(prev));
-
-                    // FASE 3: Mostrar
-                    // Usamos um pequeno atraso de 50ms para garantir que o React 
-                    // processou o novo array antes de disparar a animação de entrada
-                    setTimeout(() => {
-                        setIsVisible(true);
-                    }, 50);
-                }, 500);
-
-                startLoop(); // Agenda a próxima execução
-            }, randomTime);
-        };
-
-        startLoop();
-
-        return () => clearTimeout(timeoutId);
+    const reshuffle = useCallback(() => {
+        const snap = new Map<string, Rect>();
+        pills.current.forEach((el, id) => {
+            const r = el.getBoundingClientRect();
+            snap.set(id, { x: r.left + window.scrollX, y: r.top + window.scrollY, w: r.width, h: r.height });
+        });
+        before.current = snap;
+        setTechs((prev) => shuffle(prev));
     }, []);
 
+    // Troca periódica, só com o hero na tela, a aba visível e todos os badges já desenhados.
+    useEffect(() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        let visible = false;
+        let timer: ReturnType<typeof setTimeout>;
+        const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.3 });
+        if (sectionRef.current) io.observe(sectionRef.current);
+
+        const tick = async () => {
+            const allDrawn = [...pills.current.values()].every((el) => el.getAttribute("data-draw-state") === "done");
+            if (visible && !document.hidden && allDrawn && getDirector()) {
+                reshuffle();
+                // espera os robôs terminarem de carregar antes de pensar na próxima troca
+                await new Promise((r) => setTimeout(r, 50));
+                await carrying.current;
+            }
+            timer = setTimeout(tick, 7000 + Math.random() * 3000);
+        };
+        timer = setTimeout(tick, 9000);
+        return () => {
+            clearTimeout(timer);
+            io.disconnect();
+        };
+    }, [reshuffle]);
+
     return (
-        <div
-            className="relative mb-20 lg:pt-10 lg:h-content overflow-hidden"
-            style={{
-                background: 'radial-gradient(circle at center, #27292e 0%, #000 30%)', // Gradiente radial
-            }}
+        <section
+            ref={sectionRef}
+            id="top"
+            // desktop: o hero ocupa sempre a tela inteira (no mínimo), com o conteúdo no meio da altura;
+            // a seção seguinte só aparece depois de rolar
+            className={`${roboto.className} relative overflow-hidden pt-28 pb-20 lg:pt-36 lg:pb-28 xl:min-h-[100svh] xl:flex xl:flex-col xl:justify-center xl:pt-28 xl:pb-16`}
+            style={{ background: "radial-gradient(circle at 70% 40%, rgb(var(--hero-glow)) 0%, rgb(var(--c-canvas)) 38%)" }}
         >
-            <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-b from-transparent to-black z-[1]"></div>
+            <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-b from-transparent to-canvas z-[2]" />
             <div
-                className="absolute 
-                -top-[50%] -right-[80%] w-[1000px] h-[800px]
-                lg:-top-[50%] lg:-right-[50%] lg:w-[3000px] lg:h-[800px]"
-                style={{
-                    background: 'radial-gradient(closest-side at center, #4861a05d 0%, #4861a000 100%)',
-                }}
-            ></div>
+                className="absolute -top-[50%] -right-[80%] w-[1000px] h-[800px] lg:-right-[50%] lg:w-[3000px]"
+                style={{ background: "radial-gradient(closest-side at center, #4861a05d 0%, #4861a000 100%)" }}
+            />
             <div
-                className="absolute 
-                top-[50%] -right-[80%] w-[1000px] h-[800px]
-                lg:top-[50%] lg:-right-[50%] lg:w-[3000px] lg:h-[800px]"
-                style={{
-                    background: 'radial-gradient(closest-side at center, #a048993a 0%, #4861a000 100%)',
-                }}
-            ></div>
-            <main
-                className={`${roboto.className} relative z-[10] mt-[100px] max-w-full flex flex-wrap-reverse justify-center items-start gap-10 lg:mx-36 xl:mx-44 md:px-20 py-10 text-lg xl:flex-nowrap `}
-            >
+                className="absolute top-[50%] -right-[80%] w-[1000px] h-[800px] lg:-right-[50%] lg:w-[3000px]"
+                style={{ background: "radial-gradient(closest-side at center, #a048993a 0%, #4861a000 100%)" }}
+            />
 
+            {/* desktop: texto com a largura que o conteúdo já usa (42rem) e a foto ocupando o espaço
+                que sobra (ver PortraitFace); o par fica centralizado, com a foto no meio da altura */}
+            <div className="wrap relative z-[10] flex flex-col-reverse xl:flex-row items-center justify-center gap-14 xl:gap-[clamp(3rem,5vw,6rem)]">
+                <div className="xl:relative flex-1 xl:flex-[0_1_42rem] flex flex-col items-center xl:items-start text-center xl:text-left gap-6 max-w-3xl">
+                    <h1 data-draw="type" className="text-5xl sm:text-6xl xl:text-[4.2vw] 2xl:text-7xl leading-[1.05] text-fg">
+                        {t.hero.greeting}{" "}
+                        <br />
+                        <span className="font-bold text-accent-fg">{t.hero.name}</span>
+                        <span data-draw-skip className="dd-underscore font-bold">_</span>
+                    </h1>
 
-                <div
-                    className="relative text-white mx-8 text-center xl:text-left md:text-center 
-                flex flex-col items-center xl:items-start gap-4 z-[10]"
-                >
-                    {/* Texto estático */}
-                    <div id="about-title-container reveal" ref={containerRef}>
-                        <h1 className="text-5xl md:text-[6vw] xl:text-[4vw] reveal" style={{ transitionDelay: "0.3s" }}>
-                            Prazer, sou{" "}<br />
-                            <span
-                                id="about-typing-title"
-                                className="font-bold text-[#aadd49]">{displayedText}{/* Apenas "Anderson" será digitado */}
-                            </span>
-                            <span
-                                className={`font-bold text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
-                                    }`}
-                                style={{
-                                    marginLeft: "5px",
-                                    animation: "blink 1s steps(1, end) infinite",
-                                }}
-                            >_
-                            </span>
-                        </h1>
-                    </div>
-
-                    <div className="mb-12 text-center xl:text-left reveal" style={{ transitionDelay: "0.6s" }} >
-                        <h2>Sou um desenvolvedor de sistemas e automações!</h2>
-                    </div>
-
-                    <motion.div
-                        layout
-                        className="flex flex-col lg:flex-row xl:flex-col 2xl:flex-row items-center justify-center gap-x-3 gap-y-3 transition-all">
-                        <Link
-                            href="#contact"
-                            className="rounded-full text-center w-[270px] h-15 p-1 bg-[#aadd49] text-[#21232b] text-lg transition-all px-10 hover:bg-[#30344600] hover:border border-[#aadd49] hover:text-[#aadd49]"
+                    {/* Símbolo de fundo (decorativo). Celular e tablet: começa na frase de efeito e é um pouco
+                        mais largo que a tela (as laterais ficam cortadas). Desktop: centralizado na coluna
+                        do texto, nos dois eixos. O wrapper só é referência fora do desktop. */}
+                    <div className="relative xl:static">
+                        <div
+                            aria-hidden="true"
+                            className="absolute pointer-events-none -z-10 top-0 left-1/2 -translate-x-1/2 w-[115vw] max-w-[1000px] aspect-[3500/3238] xl:top-1/2 xl:-translate-y-1/2 xl:w-[min(1000px,calc(92svh*3500/3238))] xl:max-w-none"
                         >
-                            Vamos conversar!
-                        </Link>
-                        <motion.button
-                            onClick={toggleCV}
-                            className="rounded-full text-center w-[270px] h-15 p-1 border border-[#aadd49] bg-[#30344600] text-[#aadd49] text-lg transition-all px-10 hover:bg-[#aadd49] hover:text-[#21232b] hover:border-none"
-                        >
-                            {isCVVisible ? 'Fechar' : 'Baixe meu CV!'}
-                        </motion.button>
-                        {/* Animação dos botões com as bandeiras */}
-                        <AnimatePresence>
-                            {isCVVisible && (
-                                <motion.div
-                                    className="flex gap-10 mt-4 reveal"
-                                    initial={{ opacity: 0, scale: 0 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 1, scale: 0 }}
-                                    transition={{ type: "spring", stiffness: 200 }}
-                                >
-                                    <motion.a
-                                        className="flex items-center w-[70px] h-[70px] rounded-full justify-center p-3 bg-center bg-cover bg-[url('/br.png')]"
-                                        initial={{ opacity: 0, y: -30 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -30 }}
-                                        transition={{ type: "spring", stiffness: 200 }}
-                                        whileHover={{ scale: 1.1 }}
-                                        href="/CandinizCV_PT.pdf"
-                                        download
-                                    >
-                                    </motion.a>
-                                    <motion.a
-                                        className="flex w-[70px] h-[70px] rounded-full items-center justify-center p-3 bg-center bg-cover bg-[url('/en.png')]"
-                                        initial={{ opacity: 0, y: -30 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -30 }}
-                                        transition={{ type: "spring", stiffness: 200 }}
-                                        whileHover={{ scale: 1.1 }}
-                                        href="/CandinizCV_EN.pdf"
-                                        download
-                                    >
-
-                                    </motion.a>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </motion.div>
-
-                    <motion.div>
-                        <ul className="select-none flex flex-wrap gap-3 items-center justify-center lg:justify-start text-xl mt-20 transition-all max-w-xl">
-                            {techs.map((tech) => (
-                                <motion.li
-                                    key={tech.id}
-                                    variants={variants}
-                                    initial="visible"
-                                    animate={isVisible ? "visible" : "hidden"}
-                                    style={{ backgroundColor: tech.bg, color: tech.text }}
-                                    className="p-2 rounded-md select-none"
-                                >
-                                    {tech.name}
-                                </motion.li>
-                            ))}
-                        </ul>
-                    </motion.div>
-                </div>
-                <div className="m-0 p-0 z-[10] reveal" style={{ transitionDelay: "1s" }}>
-                    <div className="relative m-auto w-4/5 md:w-[350px] xl:w-[500px]">
-                        <Image
-                            alt="Foto de Perfil"
-                            src={fotoPerfil}
-                            className="rounded-full"
-                        />
-                        <p className="p-4 w-fit text-base leading-tight bg-[#787d96] rounded-xl text-white absolute -bottom-[0.75rem]">
-                            <span className="text-4xl ">2+</span>
-                            <br /> anos de experiência
+                            <Image src="/favicon.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" loading="eager" className="hero-symbol object-contain opacity-[3%] vignette-mask" />
+                            <Image src="/favicon.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" loading="eager" className="hero-symbol object-contain opacity-5 animate-light-sweep" />
+                            <Image src="/favicon-glow.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" className="hero-symbol object-contain opacity-80 animate-light-sweep-delayed" />
+                        </div>
+                        <p data-draw="type" className="text-xl md:text-2xl font-bold text-fg max-w-2xl">
+                            {t.hero.headline}
                         </p>
                     </div>
-                </div>
-                <div className="hidden md:block absolute pointer-events-none z-[-1] 
-                    top-[30%] w-[180vw] h-[180vw]
-                    sm:-top-[15%] left-1/2 -translate-x-1/2 sm:w-[1000px] sm:h-[1100px]
-                    xl:-top-[20%] lg:left-[50%] xl:left-[0%] min-[1537px]:-top-[35%] xl:-translate-x-0 
-                ">
-                    {/* Imagem de Fundo (Apenas a silhueta estática super fraca) */}
-                    <Image
-                        src='/favicon.png'
-                        fill
-                        alt="Candiniz Symbol Background"
-                        className="object-contain opacity-[3%] vignette-mask"
-                    />
-                    <Image
-                        src='/favicon.png'
-                        fill
-                        alt=""
-                        className="object-contain opacity-5 animate-light-sweep"
-                    />
-                    <Image
-                        src='/favicon-glow.png'
-                        fill
-                        alt=""
+                    <p data-draw="type" className="text-base md:text-lg text-muted max-w-2xl leading-relaxed">
+                        {t.hero.subtitle}
+                    </p>
 
-                        className="object-contain opacity-80 animate-light-sweep-delayed"
-                    />
+                    <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+                        <a
+                            data-draw="box"
+                            href="#contact"
+                            className="text-center w-[250px] py-3 bg-accent text-ink font-bold border border-accent transition-colors duration-300 hover:bg-transparent hover:text-accent-fg"
+                        >
+                            {t.hero.ctaTalk}
+                        </a>
+                        <button
+                            data-draw="box"
+                            onClick={() => setIsCVVisible((v) => !v)}
+                            aria-expanded={isCVVisible}
+                            className="w-[250px] py-3 border border-accent text-accent-fg font-bold flex items-center justify-center gap-2 transition-colors duration-300 hover:bg-accent hover:text-ink"
+                        >
+                            {!isCVVisible && <RiDownloadLine aria-hidden="true" />}
+                            {isCVVisible ? t.hero.ctaClose : t.hero.ctaCv}
+                        </button>
+                    </div>
+
+                    <AnimatePresence>
+                        {isCVVisible && (
+                            <motion.div
+                                className="flex gap-8"
+                                initial={{ opacity: 0, scale: 0.6 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.6 }}
+                                transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                            >
+                                <a
+                                    href="/CandinizCV_PT.pdf"
+                                    download
+                                    aria-label={t.hero.cvPt}
+                                    title={t.hero.cvPt}
+                                    className="w-16 h-11 bg-center bg-cover bg-[url('/br.png')] ring-2 ring-line hover:ring-accent hover:scale-110 transition-transform"
+                                />
+                                <a
+                                    href="/CandinizCV_EN.pdf"
+                                    download
+                                    aria-label={t.hero.cvEn}
+                                    title={t.hero.cvEn}
+                                    className="w-16 h-11 bg-center bg-cover bg-[url('/en.png')] ring-2 ring-line hover:ring-accent hover:scale-110 transition-transform"
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Resultados: cada número é desenhado por um robô */}
+                    <dl aria-label={t.hero.statsLabel} className="grid grid-cols-3 gap-1 w-full max-w-2xl mt-6">
+                        {t.hero.stats.map((s) => (
+                            <div data-draw="box" key={s.value} className="border-l-4 border-accent bg-surface/80 backdrop-blur-sm p-3 sm:p-4 text-left">
+                                <dt className="sr-only">{s.label}</dt>
+                                <dd className="text-lg sm:text-2xl font-bold text-accent-fg leading-tight">{s.value}</dd>
+                                <dd className="text-[0.7rem] sm:text-xs text-muted mt-1 leading-snug">{s.label}</dd>
+                            </div>
+                        ))}
+                    </dl>
+
+                    {/* Badges: cada um desenhado individualmente; na troca, os robôs carregam cada um até o novo lugar */}
+                    <div className="w-full max-w-2xl mt-4">
+                        <p className="sr-only">{t.hero.techsLabel}</p>
+                        <ul className="select-none flex flex-wrap gap-2.5 items-center justify-center xl:justify-start text-base sm:text-lg">
+                            {techs.map((tech) => (
+                                <li
+                                    key={tech.id}
+                                    ref={(el) => {
+                                        if (el) pills.current.set(tech.id, el);
+                                        else pills.current.delete(tech.id);
+                                    }}
+                                    data-draw="box"
+                                    style={{ backgroundColor: tech.bg, color: tech.text }}
+                                    className="px-2.5 py-1.5 rounded-md shadow-sm"
+                                >
+                                    {tech.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
-            </main>
-            {StarsBackgroundMemoized}
-        </div>
+
+                <PortraitFace
+                    alt={t.hero.photoAlt}
+                    badgeValue={t.hero.badgeValue}
+                    badgeLabel={t.hero.badgeLabel}
+                    hint={t.hero.faceHint}
+                    actionLabel={t.hero.faceAction}
+                />
+            </div>
+
+            <StarsBackground />
+        </section>
     );
 }

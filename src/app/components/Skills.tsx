@@ -1,253 +1,238 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from 'framer-motion';
-import { ibmPlexMono, roboto } from "../fonts/Fonts";
-import { useTypingEffect } from '../hooks/useTypingEffect';
-
-// Icons
-import { IoLogoFirebase } from "react-icons/io5";
-import { SiMetabase } from "react-icons/si";
-import { FaReact, FaFigma, FaNodeJs, FaDocker, FaPython, FaMicrosoft } from "react-icons/fa";
-import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
-import { SiTypescript, SiGooglecloud } from "react-icons/si";
-import { DiPostgresql } from "react-icons/di";
-import { BiLogoAdobe } from "react-icons/bi";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+    SiPython, SiN8N, SiDocker, SiNodedotjs, SiGooglecloud, SiGooglegemini, SiClaude, SiNextdotjs, SiReact, SiTypescript,
+    SiTailwindcss, SiFigma, SiFirebase, SiPostgresql, SiMetabase, SiFramer, SiAutodesk,
+} from "react-icons/si";
+import { FaMicrosoft } from "react-icons/fa";
 import { GrOracle } from "react-icons/gr";
-import { BsArrowRightCircle } from "react-icons/bs";
+import { BiLogoAdobe } from "react-icons/bi";
+import { RiFlowChart, RiLayoutMasonryLine, RiBarChartBoxLine, RiRobot2Line } from "react-icons/ri";
+import { ibmPlexMono, roboto } from "../fonts/Fonts";
+import { useI18n } from "@/i18n/I18nProvider";
+import SectionTitle from "./SectionTitle";
 
-const SLANT_OFFSET = 150;
-const MOBILE_SLANT_OFFSET = 40;
+type Tech = { name: string; icon: ReactNode };
 
-const pillars = [
-    {
-        id: "concepcao",
-        title: "Concepção & Arquitetura",
-        subtitle: "Do levantamento de requisitos ao protótipo de alta fidelidade.",
-        description: "Minha base como projetista e arquiteto me deu uma vantagem única: a habilidade de escutar clientes, entender regras de negócio complexas e traduzi-las em soluções viáveis. Antes do código, garanto a viabilidade do projeto estruturando o design system e a arquitetura da informação.",
-        icons: [<FaFigma key="fg" />, <BiLogoAdobe key="ad" />],
-        videoSrc: "/skillVideos/Arch.mp4"
-    },
-    {
-        id: "frontend",
-        title: "Engenharia de Frontend",
-        subtitle: "Interfaces escaláveis, tipadas e focadas em performance.",
-        description: "Construo SPAs e aplicações modernas utilizando o ecossistema React. Mesclo a flexibilidade do Tailwind CSS com o poder de renderização do Next.js e a segurança do TypeScript para entregar produtos de alto impacto visual e técnico.",
-        icons: [<RiNextjsFill key="nx" />, <FaReact key="rc" />, <SiTypescript key="ts" />, <RiTailwindCssFill key="tw" />, <FaMicrosoft key="ms" />],
-        videoSrc: "/skillVideos/Coding.mp4"
-    },
-    {
-        id: "backend-infra",
-        title: "Backend, Cloud & Infraestrutura",
-        subtitle: "Autonomia completa do banco de dados ao deploy em produção.",
-        description: "Desenvolvo APIs robustas e orquestro automações complexas (n8n, Python). Além do código, possuo total autonomia em DevOps, gerenciando ambientes de produção containerizados via Docker em instâncias próprias (VPS Hostinger, Oracle Cloud) e Google Cloud Platform.",
-        icons: [<FaNodeJs key="nd" />, <FaPython key="py" />, <DiPostgresql key="pg" />, <FaDocker key="dk" />, <SiGooglecloud key="gc" />, <GrOracle key="or" />, <IoLogoFirebase key="fb" />, <SiMetabase key="mb" />],
-        videoSrc: "/skillVideos/Infra.mp4"
-    }
-];
+const PowerAutomate = () => <span className="icon-power-platform" aria-hidden="true" />;
 
-const layerVariants = {
-    enter: () => ({ x: "100vw" }),
-    center: (custom: number) => ({
-        x: 0,
-        transition: {
-            duration: 0.7,
-            delay: (custom * 0.1) + 0.2,
-            ease: [0.25, 1, 0.5, 1],
-        }
-    }),
-    exit: (custom: number) => ({
-        x: "-100vw",
-        transition: {
-            duration: 0.6,
-            delay: (3 - custom) * 0.1,
-            ease: [0.25, 1, 0.5, 1],
-        }
-    })
+const T: Record<string, Tech> = {
+    pa: { name: "Power Automate", icon: <PowerAutomate /> },
+    python: { name: "Python", icon: <SiPython /> },
+    n8n: { name: "n8n", icon: <SiN8N /> },
+    graph: { name: "Microsoft Graph", icon: <FaMicrosoft /> },
+    docker: { name: "Docker", icon: <SiDocker /> },
+    node: { name: "Node.js", icon: <SiNodedotjs /> },
+    vertex: { name: "Vertex AI", icon: <SiGooglecloud /> },
+    gemini: { name: "Gemini", icon: <SiGooglegemini /> },
+    claude: { name: "Claude Code", icon: <SiClaude /> },
+    agents: { name: "AI Agents", icon: <RiRobot2Line /> },
+    next: { name: "Next.js", icon: <SiNextdotjs /> },
+    react: { name: "React", icon: <SiReact /> },
+    ts: { name: "TypeScript", icon: <SiTypescript /> },
+    tailwind: { name: "Tailwind", icon: <SiTailwindcss /> },
+    framer: { name: "Framer Motion", icon: <SiFramer /> },
+    figma: { name: "Figma", icon: <SiFigma /> },
+    firebase: { name: "Firebase", icon: <SiFirebase /> },
+    postgres: { name: "PostgreSQL", icon: <SiPostgresql /> },
+    metabase: { name: "Metabase", icon: <SiMetabase /> },
+    gcp: { name: "Google Cloud", icon: <SiGooglecloud /> },
+    oracle: { name: "Oracle Cloud", icon: <GrOracle /> },
+    powerbi: { name: "Power BI", icon: <RiBarChartBoxLine /> },
+    adobe: { name: "Adobe", icon: <BiLogoAdobe /> },
+    autodesk: { name: "AutoCAD · Revit", icon: <SiAutodesk /> },
+    process: { name: "Mapeamento de processos", icon: <RiFlowChart /> },
+    ia: { name: "Arquitetura da informação", icon: <RiLayoutMasonryLine /> },
 };
 
-const videoVariants = {
-    enter: (isMobile: boolean) => ({
-        clipPath: isMobile
-            ? `polygon(100% 0, 100% 0, 100% 100%, 100% 100%)`
-            : `polygon(100% 0, 100% 0, calc(100% - ${SLANT_OFFSET}px) 100%, 100% 100%)`
-    }),
-    center: () => ({
-        clipPath: `polygon(0 0, 100% 0, 100% 100%, 0 100%)`,
-        transition: { duration: 0.7, ease: [0.25, 1, 0.5, 1] }
-    }),
-    exit: (isMobile: boolean) => ({
-        clipPath: isMobile
-            ? `polygon(0 0, 0 0, 0 100%, 0 100%)`
-            : `polygon(0 0, 0 0, -${SLANT_OFFSET}px 100%, 0 100%)`,
-        transition: { duration: 0.6, ease: [0.25, 1, 0.5, 1] }
-    })
+// Ferramentas e mídia de cada frente (os textos ficam nos dicionários)
+const PILLAR_META: Record<string, { techs: string[]; video?: string }> = {
+    automation: { techs: ["pa", "python", "n8n", "graph", "docker", "node"], video: "/skillVideos/Infra.mp4" },
+    ai: { techs: ["vertex", "gemini", "claude", "agents", "n8n", "python"], video: "/skillVideos/Coding.mp4" },
+    web: { techs: ["next", "react", "ts", "tailwind", "framer", "figma"] },
+    concept: { techs: ["process", "ia", "figma", "adobe", "autodesk"], video: "/skillVideos/Arch.mp4" },
 };
+
+const STACK: Record<string, string[]> = {
+    automation: ["pa", "python", "n8n", "graph", "node", "docker"],
+    ai: ["vertex", "gemini", "claude", "agents"],
+    web: ["next", "react", "ts", "tailwind", "framer"],
+    data: ["postgres", "firebase", "metabase", "powerbi", "gcp", "oracle"],
+    design: ["figma", "adobe", "autodesk"],
+};
+
+/** Vídeo de fundo que só baixa e toca quando o painel está na tela. */
+function PanelVideo({ src }: { src: string }) {
+    const ref = useRef<HTMLVideoElement>(null);
+    useEffect(() => {
+        const v = ref.current;
+        if (!v) return;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const io = new IntersectionObserver(([e]) => {
+            if (e.isIntersecting && !reduce) v.play().catch(() => undefined);
+            else v.pause();
+        });
+        io.observe(v);
+        return () => io.disconnect();
+    }, [src]);
+    return (
+        <video
+            ref={ref}
+            src={src}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover opacity-40 [mask-image:linear-gradient(to_left,black_30%,transparent_85%)]"
+        />
+    );
+}
 
 export default function Skills() {
-    const [windowWidth, setWindowWidth] = useState(1200); // Iniciado com valor padrão
-    const [mounted, setMounted] = useState(false);
-    const [page, setPage] = useState(0);
-    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Minhas Habilidades");
+    const { t } = useI18n();
+    const [active, setActive] = useState(0);
+    const pillars = t.skills.pillars;
+    const pillar = pillars[active];
+    const meta = PILLAR_META[pillar.id];
+    const techName = (key: string) =>
+        key === "process" ? t.skills.toolNames.process : key === "ia" ? t.skills.toolNames.infoArch : T[key].name;
 
-    const nextSlide = () => {
-        setPage((prevPage) => (prevPage + 1) % pillars.length);
+    // Setas do teclado entre as abas (padrão ARIA de tabs)
+    const onKey = (e: React.KeyboardEvent) => {
+        if (!["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft"].includes(e.key)) return;
+        e.preventDefault();
+        const dir = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
+        const next = (active + dir + pillars.length) % pillars.length;
+        setActive(next);
+        document.getElementById(`skill-tab-${next}`)?.focus();
     };
 
-    const currentPillar = pillars[page];
-
-    useEffect(() => {
-        setMounted(true);
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    // 3 Breakpoints definidos exatamente como você pediu
-    const isMobile = windowWidth < 1135;
-    const isTablet = windowWidth >= 1135 && windowWidth < 1500; // Entre 1135 e XL
-
-    const layers = [
-        { id: "tail-green", bg: "bg-[#aadd49]", z: 10, delayIndex: 0, staticLeft: '-125px' },
-        { id: "tail-white", bg: "bg-white", z: 20, delayIndex: 1, staticLeft: '-130px' },
-        { id: "tail-gray", bg: "bg-[#676767]", z: 30, delayIndex: 2, staticLeft: '-135px' },
-        { id: "tail-main", bg: "bg-black", z: 40, delayIndex: 3, isMain: true, staticLeft: `-${SLANT_OFFSET}px` },
-    ];
-
     return (
-        <main className="pb-36">
-            <div ref={containerRef} className="w-full scroll-mt-24" id="skills">
-                <div id="title-container" className="h-fit w-full reveal" style={{ transitionDelay: "0.2s" }}>
-                    <h2 className={`${roboto.className} lg:pl-9 text-3xl lg:ml-20 z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start min-[2000px]:pl-[calc(50vw-1000px)]`}>
-                        <span id="skills-typing-title">{displayedText}</span>
-                        <span
-                            className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"}`}
-                            style={{ marginLeft: "5px", animation: "blink 1s steps(1, end) infinite" }}
-                        >
-                            _
-                        </span>
-                    </h2>
-                </div>
-                <div className="bg-gray-800 h-[2px] w-full reveal" style={{ transitionDelay: "0.2s" }}></div>
-                <div className="bg-gray-500 h-[4px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.4s" }}></div>
-                <div className="bg-[#aadd49] h-[6px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.6s" }}></div>
+        <section id="skills" className="pb-28">
+            <SectionTitle title={t.skills.title} intro={t.skills.intro} />
+
+            {/* Abas: faixa colada de borda a borda; a ativa em verde */}
+            <div
+                role="tablist"
+                aria-label={t.skills.tabsLabel}
+                onKeyDown={onKey}
+                className="grid grid-cols-2 lg:grid-cols-4 gap-1"
+            >
+                {pillars.map((p, i) => (
+                    <button
+                        key={p.id}
+                        id={`skill-tab-${i}`}
+                        role="tab"
+                        data-draw="box"
+                        aria-selected={i === active}
+                        aria-controls="skill-panel"
+                        tabIndex={i === active ? 0 : -1}
+                        onClick={() => setActive(i)}
+                        className={`text-left px-5 py-4 lg:px-8 lg:py-6 transition-colors duration-300 ${
+                            i === active ? "bg-accent text-ink" : "bg-surface text-fg hover:bg-surface-2"
+                        }`}
+                    >
+                        <span className={`${roboto.className} text-xs font-bold ${i === active ? "text-ink/70" : "text-accent-fg"}`}>0{i + 1}</span>
+                        <span className={`${roboto.className} block text-base sm:text-xl font-bold mt-1`}>{p.title}</span>
+                    </button>
+                ))}
             </div>
 
-            {/* 
-                SUBSTITUIÇÃO DA CLASSE 'reveal' PELO MOTION.DIV NATIVO DO FRAMER 
-                Isso resolve definitivamente o sumiço do container ao redimensionar a tela 
-            */}
-            {mounted && (
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.1 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    // Adicionado um mt-8 no mobile para dar respiro natural em relação às linhas do título
-                    className={`relative w-full overflow-hidden max-w-[2000px] mx-auto mt-4 min-[1135px]:mt-8 ${isMobile ? 'h-[850px]' : 'h-[600px]'}`}
+            <div
+                id="skill-panel"
+                role="tabpanel"
+                aria-labelledby={`skill-tab-${active}`}
+                data-draw="box"
+                className="relative overflow-hidden bg-surface mt-1 lg:min-h-[560px]"
+            >
+                {/* mídia à direita com corte diagonal, como as camadas inclinadas do design original */}
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-y-0 right-0 w-full lg:w-1/2 [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
                 >
-                    
+                    {meta.video ? (
+                        <PanelVideo key={meta.video} src={meta.video} />
+                    ) : (
+                        <div
+                            className="absolute inset-0 opacity-60"
+                            style={{
+                                backgroundImage: "radial-gradient(rgb(var(--c-accent) / 0.4) 1px, transparent 1px)",
+                                backgroundSize: "22px 22px",
+                            }}
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-transparent lg:via-surface/30" />
+                </div>
+                <div aria-hidden="true" className="hidden lg:block absolute inset-y-0 left-1/2 w-[9%] bg-accent [clip-path:polygon(0_100%,8%_100%,100%_0,92%_0)] opacity-80" />
 
-                    <div className="absolute inset-0 z-[1] w-full h-full overflow-hidden">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={page}
-                                custom={isMobile}
-                                variants={videoVariants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                                className={isMobile ? "absolute bottom-0 w-full h-[45%]" : "absolute inset-0 w-full h-full"}
-                            >
-                                <video
-                                    src={currentPillar.videoSrc}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className={`w-full h-full ${isMobile ? 'object-cover object-center h-[65%]' : 'object-contain object-right'}`}
-                                />
-                            </motion.div>
-                        </AnimatePresence>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={pillar.id}
+                        initial={{ opacity: 0, x: -16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 16 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className={`${ibmPlexMono.className} relative z-[1] px-5 py-10 sm:px-10 lg:pl-16 xl:pl-20 lg:pr-10 lg:py-16 lg:max-w-[50%]`}
+                    >
+                        <h3 className="text-3xl sm:text-5xl font-bold text-accent-fg">{pillar.title}</h3>
+                        <p className="text-lg sm:text-2xl text-fg font-bold mt-5 leading-snug">{pillar.impact}</p>
+
+                        <p className={`${roboto.className} text-xs uppercase tracking-widest text-muted mt-10 mb-4`}>{t.skills.deliverLabel}</p>
+                        <ul className="space-y-3 border-l-4 border-accent pl-5">
+                            {pillar.bullets.map((b) => (
+                                <li key={b} className="text-sm sm:text-base text-fg/90 leading-relaxed">
+                                    {b}
+                                </li>
+                            ))}
+                        </ul>
+
+                        <p className={`${roboto.className} text-xs uppercase tracking-widest text-muted mt-10 mb-4`}>{t.skills.toolsLabel}</p>
+                        <ul className="flex flex-wrap gap-1">
+                            {meta.techs.map((key) => (
+                                <li
+                                    key={`${pillar.id}-${key}`}
+                                    data-draw="box"
+                                    className="flex items-center gap-2 bg-canvas px-3 py-2 text-sm text-fg"
+                                >
+                                    <span className="text-lg text-accent-fg" aria-hidden="true">
+                                        {T[key].icon}
+                                    </span>
+                                    {techName(key)}
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+
+            {/* Stack completa: blocos colados por grupo. Uma coluna só abaixo de 460 px; duas até o
+                desktop (o último grupo, se sobrar sozinho, ocupa a linha inteira com a lista em duas
+                colunas); cinco lado a lado a partir de 1280 px. */}
+            <div className="grid min-[460px]:grid-cols-2 xl:grid-cols-5 gap-1 mt-1">
+                {Object.entries(STACK).map(([group, keys], i, all) => {
+                    const wide = i === all.length - 1 && all.length % 2 === 1;
+                    return (
+                    <div key={group} data-draw="box" className={`bg-surface px-5 py-6 lg:px-8 ${wide ? "min-[460px]:col-span-2 xl:col-span-1" : ""}`}>
+                        <p className={`${roboto.className} text-sm font-bold text-accent-fg mb-4 uppercase tracking-wide`}>
+                            {t.skills.groups[group as keyof typeof t.skills.groups]}
+                        </p>
+                        <ul className={`text-sm text-fg/90 [&>li]:mb-2 ${wide ? "min-[460px]:columns-2 xl:columns-1 gap-x-8" : ""}`}>
+                            {keys.map((k) => (
+                                <li key={k} className="flex items-center gap-2 break-inside-avoid">
+                                    <span className="text-base text-muted" aria-hidden="true">
+                                        {T[k].icon}
+                                    </span>
+                                    {techName(k)}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-
-                    {/* Removido o max-[1135px]:mt-10 que estava quebrando o posicionamento absoluto */}
-                    <div className="relative z-[2] w-full h-full pointer-events-none">
-                        <AnimatePresence mode="popLayout">
-                            <div key={page} className="absolute inset-0 w-full h-full">
-
-                                {layers.map((layer) => (
-                                    <motion.div
-                                        key={layer.id}
-                                        custom={layer.delayIndex}
-                                        variants={layerVariants}
-                                        initial="enter"
-                                        animate="center"
-                                        exit="exit"
-                                        className={`absolute top-0 ${layer.bg} shadow-[10px_0_30px_rgba(0,0,0,0.5)] flex flex-col justify-center pointer-events-auto ${isMobile ? 'h-[60%]' : 'h-full'}`}
-                                        style={{
-                                            width: isMobile
-                                                ? '100%'
-                                                : (isTablet ? `calc(65% + ${SLANT_OFFSET}px)` : `calc(50% + ${SLANT_OFFSET}px)`),
-                                            left: isMobile ? '0' : layer.staticLeft,
-                                            clipPath: isMobile
-                                                ? `polygon(0 0, 100% 0, 100% calc(100% - ${MOBILE_SLANT_OFFSET}px), 0 100%)`
-                                                : `polygon(${SLANT_OFFSET}px 0, 100% 0, calc(100% - ${SLANT_OFFSET}px) 100%, 0 100%)`,
-                                            zIndex: layer.z
-                                        }}
-                                    >
-                                        {layer.isMain && (
-                                            <div
-                                                // Alterado flex de justify-center (que espreme) para justify-start no mobile
-                                                className={`${ibmPlexMono.className} w-full h-full flex flex-col relative ${isMobile ? 'justify-start' : 'justify-center'}`}
-                                                style={{
-                                                    paddingLeft: isMobile ? '1.5rem' : `calc(${SLANT_OFFSET}px + 4rem)`,
-                                                    paddingRight: isMobile ? '1.5rem' : '2rem',
-                                                    // paddingTop fixo no mobile para alinhar perfeitamente com a borda
-                                                    paddingTop: isMobile ? '2.5rem' : '0',
-                                                    paddingBottom: isMobile ? `${MOBILE_SLANT_OFFSET}px` : '0',
-                                                }}
-                                            >
-                                                <div className="max-w-full min-[1135px]:max-w-[90%]">
-                                                    <h3 className="text-3xl min-[1135px]:text-4xl font-bold text-[#aadd49] mb-4">
-                                                        {currentPillar.title}
-                                                    </h3>
-                                                    <p className="text-base min-[1135px]:text-lg text-[#676767] font-medium mb-4 min-[1135px]:mb-6">
-                                                        {currentPillar.subtitle}
-                                                    </p>
-                                                    <p className="text-white leading-relaxed text-sm min-[1135px]:text-base mb-6 min-[1135px]:mb-10">
-                                                        {currentPillar.description}
-                                                    </p>
-
-                                                    <div className="flex flex-wrap justify-between items-center border-t border-[#676767] pt-6">
-                                                        <div className="flex flex-wrap gap-4 min-[1135px]:gap-5">
-                                                            {currentPillar.icons.map((icon, idx) => (
-                                                                <div key={idx} className="text-xl md:text-3xl min-[1135px]:text-4xl text-white hover:text-[#aadd49] hover:scale-110 transition-all">
-                                                                    {icon}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                        <button
-                                                            onClick={nextSlide}
-                                                            className={` cursor-pointer transition-colors text-[#676767] hover:text-[#aadd49] 
-                                                                ${isMobile ? 'text-4xl' : 'text-5xl -translate-x-[50px]'}`
-                                                            }
-                                                            aria-label="Próximo Pilar"
-                                                        >
-                                                            <BsArrowRightCircle />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
-            )}
-        </main>
+                    );
+                })}
+            </div>
+        </section>
     );
 }

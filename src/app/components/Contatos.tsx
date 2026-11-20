@@ -1,203 +1,192 @@
+'use client';
+
+import { useRef, useState } from "react";
+import { RiGithubFill, RiInstagramLine, RiLinkedinBoxFill, RiMailLine, RiWhatsappLine, RiArrowRightLine } from "react-icons/ri";
+import { roboto } from "../fonts/Fonts";
+import { useI18n } from "@/i18n/I18nProvider";
 import CopyButton from "./CopyButton";
-import Image from "next/image";
-import contatosBG from "../../../public/contactBG.png"
-import { caveat, parisienne, roboto } from "../fonts/Fonts";
 
-import { AiOutlineMail } from "react-icons/ai";
-import { FaWhatsapp, FaLinkedin, FaGithubSquare, FaInstagram } from "react-icons/fa";
+const EMAIL = "andersoncd123@gmail.com";
+const WHATSAPP = "https://wa.me/5511952488345";
 
+// Canais, na ordem do terminal (o "flag" vira o comando digitado)
+const CONTACTS = [
+    { flag: "whatsapp", value: "+55 (11) 95248-8345", href: WHATSAPP, icon: <RiWhatsappLine /> },
+    { flag: "email", value: EMAIL, href: `mailto:${EMAIL}`, icon: <RiMailLine /> },
+    { flag: "linkedin", value: "linkedin.com/in/candiniz", href: "https://www.linkedin.com/in/candiniz/", icon: <RiLinkedinBoxFill /> },
+    { flag: "github", value: "github.com/Candiniz", href: "https://github.com/Candiniz", icon: <RiGithubFill /> },
+    { flag: "instagram", value: "instagram.com/candiniz.dev", href: "https://www.instagram.com/candiniz.dev", icon: <RiInstagramLine /> },
+];
 
-export const metadata = {
-    title: 'Contatos | Candiniz',
-    description: 'Entre em contato.',
-};
+// Webhook opcional (ex.: n8n). Sem ele, o formulário abre o e-mail com a mensagem pronta.
+const WEBHOOK = process.env.NEXT_PUBLIC_CONTACT_WEBHOOK;
 
-export default function Contatos() {
+function ProcessForm() {
+    const { t, locale } = useI18n();
+    const formRef = useRef<HTMLFormElement>(null);
+    const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        if (data.get("site")) return; // armadilha para robôs de spam
+        const processo = String(data.get("process") ?? "").trim();
+        const contato = String(data.get("contact") ?? "").trim();
+        const openMail = () => {
+            const body = `${processo}\n\n— ${contato}`;
+            window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(t.contact.mailSubject)}&body=${encodeURIComponent(body)}`;
+        };
+        if (!WEBHOOK) return openMail();
+        setState("sending");
+        try {
+            const res = await fetch(WEBHOOK, {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ process: processo, contact: contato, lang: locale, page: window.location.href }),
+            });
+            if (!res.ok) throw new Error(String(res.status));
+            setState("sent");
+            formRef.current?.reset();
+        } catch {
+            setState("error");
+            openMail();
+        }
+    };
+
+    const field = "w-full bg-ink/10 text-ink placeholder:text-ink/55 border-b-2 border-ink px-3 py-2.5 outline-none focus:bg-ink/15 transition-colors";
+
     return (
-        <>
-            <div className="w-full h-[100px] bg-black mt-3">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}>
-                    <path fill="#ffffff" fillOpacity="1" d="M0,128L48,122.7C96,117,192,107,288,90.7C384,75,480,53,576,74.7C672,96,768,160,864,186.7C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-                </svg>
+        <form ref={formRef} onSubmit={onSubmit} data-draw="box" className="mt-10 max-w-xl">
+            <p className={`${roboto.className} font-bold text-lg`}>{t.contact.formTitle}</p>
+            <label className="block mt-3">
+                <span className="sr-only">{t.contact.formProcess}</span>
+                <textarea
+                    name="process"
+                    required
+                    minLength={10}
+                    rows={3}
+                    placeholder={t.contact.formProcessPlaceholder}
+                    aria-label={t.contact.formProcess}
+                    className={`${field} resize-none`}
+                />
+            </label>
+            <div className="flex flex-col sm:flex-row gap-1 mt-1">
+                <label className="flex-1">
+                    <span className="sr-only">{t.contact.formContact}</span>
+                    <input name="contact" required placeholder={t.contact.formContact} className={field} />
+                </label>
+                <input name="site" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+                <button
+                    type="submit"
+                    disabled={state === "sending"}
+                    className={`${roboto.className} group shrink-0 flex items-center justify-center gap-2 bg-ink text-accent font-bold px-6 py-3 hover:bg-ink/85 disabled:opacity-60 transition-colors`}
+                >
+                    {state === "sending" ? t.contact.formSending : WEBHOOK ? t.contact.formSend : t.contact.formSendMail}
+                    <RiArrowRightLine className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </button>
             </div>
-            <div className="bg-black w-full -mt-20">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#aadd49" fillOpacity="1" d="M0,192L60,202.7C120,213,240,235,360,250.7C480,267,600,277,720,277.3C840,277,960,267,1080,234.7C1200,203,1320,149,1380,122.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
-            </div>
-            <div className="relative bg-[#aadd49] h-[200px] w-full text-black -mt-3 flex items-center justify-center text-sm sm:text-lg md:text-2xl lg:text-4xl">
-                <p className={`${roboto.className}`}>vamos construir algo incrível juntos?</p>
-                <div className="w-full absolute left-0 -bottom-[2px] h-[2px] bg-aadd49 z-30"></div>
-                <div className="w-full absolute left-0 -top-[2px] h-1 bg-aadd49 z-30"></div>
+            <p role="status" className="text-sm mt-2 min-h-5 font-medium">
+                {state === "sent" ? t.contact.formSent : state === "error" ? t.contact.formError : ""}
+            </p>
+        </form>
+    );
+}
 
-            </div>
-            <div className="z-20 bg-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: "block" }}><path fill="#aadd49" fillOpacity="1" d="M0,32L60,64C120,96,240,160,360,170.7C480,181,600,139,720,101.3C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
-            </div>
-            <div className="w-full flex items-center justify-center md:gap-10 mb-7">
-                <div>
-                    <Image
-                        src={contatosBG}
-                        alt="Plano de fundo da tela de contatos"
-                        width={300}
-                        height={800}
-                        className="max-w-[50vw] md:max-w-none"
-                    />
+/**
+ * Contato em faixa de ponta a ponta, com corte diagonal no topo:
+ * à esquerda o bloco verde (chamada, botões diretos e o formulário curto);
+ * à direita um terminal, em que os robôs "digitam" cada canal como um comando.
+ */
+export default function Contatos() {
+    const { t } = useI18n();
+    const year = new Date().getFullYear();
+
+    return (
+        <section id="contact" className="pt-16">
+            <div className="grid lg:grid-cols-[1.15fr_1fr] [clip-path:polygon(0_2.5rem,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(0_6rem,100%_0,100%_100%,0_100%)]">
+                {/* bloco verde */}
+                <div className="bg-accent text-ink px-6 sm:px-10 lg:px-16 xl:px-24 pt-20 lg:pt-36 pb-12 flex flex-col">
+                    <p className={`${roboto.className} text-sm font-bold tracking-widest uppercase`}>_{t.contact.eyebrow}</p>
+                    <h2 data-draw="type" className={`${roboto.className} text-5xl sm:text-6xl xl:text-7xl font-bold leading-[1.05] mt-3`}>
+                        {t.contact.title}
+                    </h2>
+                    <p data-draw="type" className="text-lg lg:text-2xl font-medium leading-snug mt-5 max-w-xl">
+                        {t.contact.cta}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-1 mt-8">
+                        <a
+                            data-draw="box"
+                            href={WHATSAPP}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${roboto.className} flex items-center justify-center gap-2 bg-ink text-accent font-bold px-6 py-3.5 hover:bg-ink/85 transition-colors`}
+                        >
+                            <RiWhatsappLine className="text-xl" aria-hidden="true" />
+                            {t.contact.whatsapp}
+                        </a>
+                        <a
+                            data-draw="box"
+                            href={`mailto:${EMAIL}?subject=${encodeURIComponent(t.contact.mailSubject)}`}
+                            className={`${roboto.className} flex items-center justify-center gap-2 border-2 border-ink font-bold px-6 py-3 hover:bg-ink hover:text-accent transition-colors`}
+                        >
+                            <RiMailLine className="text-xl" aria-hidden="true" />
+                            {t.contact.email}
+                        </a>
+                    </div>
+
+                    <ProcessForm />
+
+                    <p className="mt-auto pt-10 flex items-center gap-2.5 text-sm font-medium">
+                        <span className="relative flex w-2.5 h-2.5" aria-hidden="true">
+                            <span className="absolute inset-0 bg-ink animate-ping opacity-60" />
+                            <span className="relative w-2.5 h-2.5 bg-ink" />
+                        </span>
+                        {t.contact.available} · {t.contact.location}
+                    </p>
                 </div>
-                <div className="space-y-8 md:space-y-16" id="contatos">
-                    <h1 className={`${roboto.className} -ml-32 md:ml-0 text-4xl sm:text-5xl md:text-6xl font-bold`}>Contatos:</h1>
 
-                    <ul className="flex md:hidden flex-col gap-7 text-[#aadd49] text-4xl items-center justify-center" id="contact">
-                        <li className="ml-2">
-                            <a
-                                href="https://wa.me/5511952488345" target="blank"
-                                className="hover:text-white transition-all duration-150 hover:scale-110"
-                            >
-                                <FaWhatsapp />
-                            </a>
-                        </li>
-                        <li className="ml-4">
-                            <a
-                                href="mailto:andersoncd123@gmail.com" target="blank"
-                                className="hover:text-white transition-all duration-150 hover:scale-110"
-                            >
-                                <AiOutlineMail />
-                            </a>
-                        </li>
-                        <li className="ml-6">
-                            <a
-                                href="https://www.linkedin.com/in/candiniz/" target="blank"
-                                className="hover:text-white transition-all duration-150 hover:scale-110"
-                            >
-                                <FaLinkedin />
-                            </a>
-                        </li>
-                        <li className="ml-8">
-                            <a
-                                href="https://github.com/Candiniz" target="blank"
-                                className="hover:text-white transition-all duration-150 hover:scale-110"
-                            >
-                                <FaGithubSquare />
-                            </a>
-                        </li>
-                        <li className="ml-10">
-                            <a
-                                href="" target="blank"
-                                className="hover:text-white transition-all duration-150 hover:scale-110"
-                            >
-                                <FaInstagram />
-                            </a>
-                        </li>
+                {/* terminal: escuro nos dois temas */}
+                <div className="bg-[#121311] text-[#eef1ea] px-6 sm:px-10 lg:px-14 pt-12 lg:pt-36 pb-12 font-mono flex flex-col">
+                    <div className="flex items-center gap-2 border-b border-white/10 pb-3 text-xs text-[#8a8f86]">
+                        <span className="w-2.5 h-2.5 bg-[#ff5f56]" aria-hidden="true" />
+                        <span className="w-2.5 h-2.5 bg-[#ffbd2e]" aria-hidden="true" />
+                        <span className="w-2.5 h-2.5 bg-[#aadd49]" aria-hidden="true" />
+                        <span className="ml-2">{t.contact.terminalTitle}</span>
+                        <span className="ml-auto hidden sm:inline">{t.contact.terminalHint}</span>
+                    </div>
+                    <p className="text-sm text-[#8a8f86] mt-5">{t.contact.subtitle}</p>
+                    <ul className="mt-6 space-y-5">
+                        {CONTACTS.map((c) => (
+                            <li key={c.flag} data-draw="type">
+                                <p className="text-sm text-[#8a8f86]">
+                                    <span className="text-[#aadd49]">$</span> {t.contact.eyebrow} --{c.flag}
+                                </p>
+                                <div className="flex items-center gap-3 mt-1">
+                                    <span className="text-xl text-[#aadd49]" aria-hidden="true">
+                                        {c.icon}
+                                    </span>
+                                    <a
+                                        href={c.href}
+                                        target={c.href.startsWith("http") ? "_blank" : undefined}
+                                        rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                                        className="flex-1 min-w-0 truncate text-base lg:text-lg hover:text-[#aadd49] underline-offset-4 hover:underline"
+                                    >
+                                        {c.value}
+                                    </a>
+                                    <CopyButton textToCopy={c.value} className="text-[#aadd49] hover:bg-white/10" />
+                                </div>
+                            </li>
+                        ))}
                     </ul>
-
-                    <ul className="hidden md:block mx-auto space-y-6 md:space-y-8 text-xs md:text-lg">
-                        <li className="md:text-xl">
-                            <span className={`${roboto.className} font-bold`}>Whatsapp</span>
-                            <div className="flex gap-1 md:gap-3 items-center">
-                                <CopyButton textToCopy='+55 (11) 95248-8345' />
-                                <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                    href="https://wa.me/5511952488345" target="blank">
-                                    <code>+55 (11) 95248-8345</code>
-                                </a>
-                            </div>
-
-                        </li>
-                        <li className="md:text-xl">
-                            <span className={`${roboto.className} font-bold`}>E-mail</span>
-                            <div className="flex gap-1 md:gap-3 items-center">
-                                <CopyButton textToCopy='andersoncd123@gmail.com' />
-                                <a className="text-xs md:text-lg text-slate-300 underline truncate" href="mailto:andersoncd123@gmail.com" target="blank">
-                                    <code>andersoncd123@gmail.com</code>
-                                </a>
-                            </div>
-
-                        </li>
-                        <li>
-                            <span className={`${roboto.className} font-bold`}>LinkedIn</span>
-                            <div className="flex gap-1 md:gap-3 items-center">
-                                <CopyButton textToCopy='https://www.linkedin.com/in/candiniz/' />
-                                <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                    href="https://www.linkedin.com/in/candiniz/" target="blank">
-                                    <code>https://www.linkedin.com/in/candiniz</code>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <span className={`${roboto.className} font-bold`}>GitHub</span>
-                            <div className="flex gap-1 md:gap-3 items-center">
-                                <CopyButton textToCopy='https://github.com/Candiniz' />
-                                <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                    href="https://github.com/Candiniz">
-                                    <code>https://github.com/Candiniz</code>
-                                </a>
-                            </div>
-                        </li>
-                        <li>
-                            <span className={`${roboto.className} font-bold`}>Instagram</span>
-                            <div className="flex gap-1 md:gap-3 items-center">
-                                <CopyButton textToCopy='www.instagram.com/candiniz.dev' />
-                                <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                    href="" target="blank">
-                                    <code>https://www.instagram.com/candiniz.dev</code>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
+                    <p className="mt-6 text-[#aadd49]" aria-hidden="true">
+                        $ <span className="inline-block w-2.5 h-5 align-middle bg-[#aadd49] animate-blink" />
+                    </p>
                 </div>
             </div>
-            <div className="w-full flex items-start justify-center mb-20 border-l-2 border-[#aadd49] pl-5">
-                <ul className="block md:hidden mx-auto space-y-6 md:space-y-8">
-                    <li className="md:text-xl">
-                        <span className={`${roboto.className} font-bold`}>Whatsapp</span>
-                        <div className="flex gap-1 md:gap-3 items-center">
-                            <CopyButton textToCopy='+55 (11) 95248-8345' />
-                            <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                href="https://wa.me/5511952488345" target="blank">
-                                <code>+55 (11) 95248-8345</code>
-                            </a>
-                        </div>
 
-                    </li>
-                    <li className="md:text-xl">
-                        <span className={`${roboto.className} font-bold`}>E-mail</span>
-                        <div className="flex gap-1 md:gap-3 items-center">
-                            <CopyButton textToCopy='andersoncd123@gmail.com' />
-                            <a className="text-xs md:text-lg text-slate-300 underline truncate" href="mailto:andersoncd123@gmail.com" target="blank">
-                                <code>andersoncd123@gmail.com</code>
-                            </a>
-                        </div>
-
-                    </li>
-                    <li>
-                        <span className={`${roboto.className} font-bold`}>LinkedIn</span>
-                        <div className="flex gap-1 md:gap-3 items-center">
-                            <CopyButton textToCopy='https://www.linkedin.com/in/candiniz/' />
-                            <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                href="https://www.linkedin.com/in/candiniz/" target="blank">
-                                <code>https://www.linkedin.com/in/candiniz</code>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <span className={`${roboto.className} font-bold`}>GitHub</span>
-                        <div className="flex gap-1 md:gap-3 items-center">
-                            <CopyButton textToCopy='https://github.com/Candiniz' />
-                            <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                href="https://github.com/Candiniz" target="blank">
-                                <code>https://github.com/Candiniz</code>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <span className={`${roboto.className} font-bold`}>Instagram</span>
-                        <div className="flex gap-1 md:gap-3 items-center">
-                            <CopyButton textToCopy='www.instagram.com/candiniz.dev' />
-                            <a className="text-xs md:text-lg text-slate-300 underline truncate"
-                                href="" target="blank">
-                                <code>https://www.instagram.com/candiniz.dev</code>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </>
-    )
+            <footer suppressHydrationWarning className={`${roboto.className} border-t border-line py-6 text-center text-xs text-muted`}>
+                © {year} Anderson Diniz · Candiniz
+            </footer>
+        </section>
+    );
 }

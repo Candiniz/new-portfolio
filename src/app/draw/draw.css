@@ -1,0 +1,249 @@
+/* ==========================================================================
+   Robôs desenhistas (src/app/draw/drawDirector.ts)
+   ========================================================================== */
+
+/* Alvo ainda não desenhado: transparente e sem clique, mas ocupando o espaço (sem salto
+   de layout) e ainda legível por leitor de tela e pelo Ctrl+F — por isso opacity, e não
+   visibility. Se receber foco pelo teclado, aparece na hora. */
+html:not(.dd-off) [data-draw]:not([data-draw-state="active"]):not([data-draw-state="done"]):not(:focus-within) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-draw] {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* "_" piscante dos títulos: só aparece quando a digitação termina. */
+.dd-underscore {
+  margin-left: 5px;
+  color: rgb(var(--c-accent-fg));
+  animation: blink 1s steps(1, end) infinite;
+}
+
+html:not(.dd-off) [data-draw]:not([data-draw-state="done"]) .dd-underscore {
+  visibility: hidden;
+}
+
+/* ---------------------------------------------------------------- camada */
+
+.dd-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0;
+  overflow-x: clip; /* etiqueta de robô na borda direita não cria rolagem lateral */
+  overflow-y: visible;
+  pointer-events: none;
+  z-index: 45; /* abaixo da navbar e dos modais (z-50) */
+}
+
+/* ---------------------------------------------------------------- cursor */
+
+.dd-bot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  will-change: transform;
+}
+
+.dd-bot.dd-on {
+  opacity: 1;
+}
+
+.dd-ico {
+  position: absolute;
+  display: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
+  transition: transform 0.12s ease;
+}
+
+.dd-bot[data-tool="arrow"] .dd-ico-arrow,
+.dd-bot[data-tool="pen"] .dd-ico-pen,
+.dd-bot[data-tool="ibeam"] .dd-ico-ibeam {
+  display: block;
+}
+
+/* o "ponto quente" de cada ícone fica em (0,0) do robô */
+.dd-ico-arrow,
+.dd-ico-pen {
+  left: -1px;
+  top: -1px;
+  transform-origin: 1px 1px;
+}
+
+.dd-ico-ibeam {
+  left: -7px;
+  top: -11px;
+  transform-origin: 7px 11px;
+}
+
+.dd-bot.dd-down .dd-ico {
+  transform: scale(0.85);
+}
+
+.dd-tag {
+  position: absolute;
+  left: 15px;
+  top: 19px;
+  padding: 3px 6px;
+  border-radius: 0 6px 6px 6px;
+  background: var(--c);
+  color: #0b0b0b;
+  font: 600 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dd-bot[data-tool="ibeam"] .dd-tag {
+  left: 10px;
+  top: 12px;
+}
+
+.dd-click {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--c);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+/* ---------------------------------------------------- seleção e desenho */
+
+.dd-marquee {
+  position: absolute;
+  width: 0;
+  height: 0;
+  background-color: rgba(170, 221, 73, 0.06);
+  background-color: color-mix(in srgb, var(--c) 9%, transparent);
+  background-image:
+    linear-gradient(90deg, var(--c) 50%, transparent 50%),
+    linear-gradient(90deg, var(--c) 50%, transparent 50%),
+    linear-gradient(0deg, var(--c) 50%, transparent 50%),
+    linear-gradient(0deg, var(--c) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 8px 1px, 8px 1px, 1px 8px, 1px 8px;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  animation: dd-ants 0.5s linear infinite;
+}
+
+@keyframes dd-ants {
+  to {
+    background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px;
+  }
+}
+
+.dd-size {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: #0b0b0b;
+  color: var(--c);
+  border: 1px solid var(--c);
+  font: 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+  transition: opacity 0.3s ease 0.25s;
+}
+
+.dd-bbox {
+  animation: none;
+  background-image: none;
+  background-color: color-mix(in srgb, var(--c) 5%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+}
+
+.dd-bbox .dd-size {
+  opacity: 0;
+}
+
+.dd-h {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border: 1px solid var(--c);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.dd-h-nw { left: 0; top: 0; }
+.dd-h-n { left: 50%; top: 0; }
+.dd-h-ne { left: 100%; top: 0; }
+.dd-h-e { left: 100%; top: 50%; }
+.dd-h-se { left: 100%; top: 100%; }
+.dd-h-s { left: 50%; top: 100%; }
+.dd-h-sw { left: 0; top: 100%; }
+.dd-h-w { left: 0; top: 50%; }
+
+.dd-outline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+
+.dd-outline rect {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.dd-scan {
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 0;
+  height: 2px;
+  background: var(--c);
+  box-shadow: 0 0 14px 2px var(--c);
+}
+
+/* ---------------------------------------------------------------- texto */
+
+/* Cursor de texto: fica na camada dos robôs (absoluto), então não ocupa espaço no texto. */
+.dd-caret {
+  position: absolute;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--c);
+  box-shadow: 0 0 8px var(--c);
+}
+
+.dd-caret-idle {
+  animation: blink 1s steps(1, end) infinite;
+}
+
+/* ------------------------------------------------- faixas deslizantes */
+
+/* Sem robô: a faixa entra pela lateral. Usa "left" (não transform) para o
+   background-attachment: fixed continuar valendo durante o movimento. */
+[data-slide] {
+  position: relative;
+  transition: left 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+html:not(.dd-off) [data-slide="left"]:not([data-slide-in]) {
+  left: -105%;
+  opacity: 0;
+}
+
+html:not(.dd-off) [data-slide="right"]:not([data-slide-in]) {
+  left: 105%;
+  opacity: 0;
+}

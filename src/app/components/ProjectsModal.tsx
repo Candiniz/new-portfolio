@@ -1,209 +1,165 @@
-/* eslint-disable @next/next/no-img-element */
-import { motion, AnimatePresence } from "framer-motion";
-import { AiOutlineClose } from "react-icons/ai";
-import { roboto } from "../fonts/Fonts";
-import styles from './ProjectsModal.module.css'
-import { useEffect, useState } from "react";
-import { Project } from "../types/Home";
+'use client';
+
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import { RiCloseLine, RiExternalLinkLine, RiGithubFill, RiLinkedinBoxFill, RiCheckLine } from "react-icons/ri";
 import { BsStars } from "react-icons/bs";
+import { roboto } from "../fonts/Fonts";
+import { useI18n } from "@/i18n/I18nProvider";
+import { useDialog } from "../hooks/useDialog";
+import type { Project } from "../types/Home";
+import ProjectMedia from "./Projects/ProjectMedia";
+import CaseDiagram from "./Projects/CaseDiagram";
 import BalloonTooltip from "./BalloonTooltip";
 
-interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    project: Project | null;
-    position: { top: number; left: number; width: number; height: number } | null;
-}
+/** Detalhe do projeto: case (Problema → Solução → Resultado) ou descrição, com mídia e links. */
+export default function ProjectsModal({ project, onClose }: { project: Project; onClose: () => void }) {
+    const { t } = useI18n();
+    const closeRef = useRef<HTMLButtonElement>(null);
+    useDialog(true, onClose, closeRef);
 
-const NDAtext = "Visando a segurança da informação e o estrito cumprimento de acordos de confidencialidade (NDA), a identidade visual e os dados sensíveis desta interface foram higienizados e recriados utilizando inteligência artificial generativa (Gemini). A estrutura arquitetural, usabilidade (UX) e design de interface (UI) permanecem fiéis ao ecossistema original desenvolvido."
+    const text = t.projects.items[project.slug as keyof typeof t.projects.items];
+    const isCase = "problem" in text;
+    const titleId = `project-title-${project.slug}`;
 
-export default function Modal({ isOpen, onClose, project, position }: ModalProps) {
-    const [exitComplete, setExitComplete] = useState(false);
-
-    useEffect(() => {
-        if (isOpen) {
-            document.documentElement.style.overflow = "hidden";
-        } else {
-            document.documentElement.style.overflow = "";
-        }
-        return () => {
-            document.documentElement.style.overflow = ""; // Reseta ao desmontar
-        };
-    }, [isOpen]);
-
-    if (!project || !position) return null;
-
-    const renderDescription = (text: string) => {
-        return text.split("\n").map((line, index) => (
-            <p key={index} className="mb-2">{line}</p>
-        ));
-    };
-
-    const handleExitComplete = () => {
-        setExitComplete(true);  // Marca que a animação de saída foi completada
-    };
+    const links = [
+        project.projectLink && { href: project.projectLink, label: t.projects.open, icon: <RiExternalLinkLine /> },
+        project.repositoryLink && { href: project.repositoryLink, label: t.projects.repo, icon: <RiGithubFill /> },
+        project.linkedIn && { href: project.linkedIn, label: t.projects.linkedin, icon: <RiLinkedinBoxFill /> },
+    ].filter(Boolean) as { href: string; label: string; icon: React.ReactNode }[];
 
     return (
-        <AnimatePresence mode='wait'>
-            {isOpen && (
-                <>
-                    {/* Background Overlay */}
-                    <motion.div
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onClose();
-                        }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md z-50"
-                        onAnimationComplete={handleExitComplete}
-                    />
-
-                    {/* Barra Verde Animada */}
-                    <motion.div
-                        initial={{
-                            top: position.top + position.height - 4,
-                            left: position.left,
-                            width: position.width,
-                            height: 4,
-                        }}
-                        animate={{
-                            top: "calc(100% - 4px)",
-                            left: "50%",
-                            transform: "translate(-50%)",
-                            width: "80%",
-                            height: 4,
-                            transition: { duration: 0.5, ease: "easeInOut" },
-                        }}
-                        exit={{
-                            top: position.top + position.height - 4,
-                            left: position.left,
-                            width: position.width,
-                            height: 4,
-                            transition: { duration: 0.5, ease: "easeInOut" },
-                        }}
-                        className="fixed bg-[#aadd49] z-50"
-                    />
-
-                    {/* Modal Principal Animado */}
-                    <motion.div
-                        key="modal"
-                        initial={{
-                            top: "100vh",
-                            opacity: 0,
-                            transform: "translateX(-50%)",
-                        }}
-                        animate={{
-                            top: "0",
-                            opacity: 1,
-                            transform: "translateX(-50%)",
-                            transition: {
-                                delay: 0.5,
-                                duration: 0.5,
-                                ease: "easeInOut",
-                            },
-                        }}
-                        exit={{
-                            top: "100vh",
-                            opacity: 0,
-                            transform: "translateX(-50%)",
-                            transition: { duration: 0.5, ease: "easeInOut" },
-                        }}
-                        className={`${roboto.className} fixed inset-0 left-1/2 transform -translate-x-1/2 w-[80%] bg-[#25252565] rounded-t-lg shadow-lg z-50 h-[100dvh] max-h-[100dvh] flex flex-col`}
+        <motion.div
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={onClose}
+        >
+            <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
+                onClick={(e) => e.stopPropagation()}
+                initial={{ y: 60, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 60, opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className={`${roboto.className} relative w-full sm:w-[92vw] max-w-5xl max-h-[92dvh] flex flex-col bg-canvas text-fg border-t-4 border-accent overflow-hidden shadow-2xl`}
+            >
+                <header className="flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-line">
+                    <div>
+                        <h3 id={titleId} className="text-xl sm:text-3xl font-bold">
+                            {text.name}
+                        </h3>
+                        {"role" in text && (
+                            <p className="text-sm text-muted mt-1">
+                                {text.role} · {text.status}
+                            </p>
+                        )}
+                    </div>
+                    <button
+                        ref={closeRef}
+                        onClick={onClose}
+                        aria-label={t.projects.close}
+                        className="shrink-0 w-10 h-10 border border-line flex items-center justify-center text-2xl hover:border-accent hover:text-accent-fg transition-colors"
                     >
-                        {/* Título no topo */}
-                        <div className="flex w-full !bg-[#353535b7] justify-between items-center p-4">
-                            <h3 className="text-1xl sm:text-3xl font-bold ml-10">{project.name}</h3>
-                            <button onClick={onClose} className="text-white hover:text-gray-500 pr-4">
-                                <AiOutlineClose size={24} />
-                            </button>
-                        </div>
+                        <RiCloseLine />
+                    </button>
+                </header>
 
-                        {/* Conteúdo no centro com scroll automático */}
-                        <div className={styles.container}>
-                            <div className="relative flex flex-col justify-center items-center">
-                                <div className="imageWrapper flex justify-center mt-4">
-                                    {project.image.url.endsWith('.mp4') ? (
-                                        <video
-                                            src={project.image.url}
-                                            autoPlay
-                                            loop
-                                            muted
-                                            playsInline
-                                            className="object-contain w-[90%] lg:w-[750px] aspect-video"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={project.image.url}
-                                            alt={project.image.alt}
-                                            className="object-cover w-[90%] lg:w-[750px]"
-                                        />
-                                    )}
-                                </div>
-                                {["digitalizafinanceiro", "ipscraper", "rpa-python-architecture", "opicedesk", "chatopice"].includes(project.slug) && (
-                                    <div className="absolute top-3 left-10 z-40">
-                                        <div className="relative w-full h-full">
-                                            <BalloonTooltip text={NDAtext} position="bottom">
-                                            <div className="bg-black/60 backdrop-blur-md text-white text-[10px] lg:text-xs px-3 py-1.5 rounded-full flex items-center gap-2 border border-white/10 hover:bg-gray-700/80 hover:scale-105 transition-all cursor-pointer">
-                                                <BsStars className="text-[#aadd49]" />
-                                                <span>NDA Compliant</span>
-                                            </div>
-                                        </BalloonTooltip>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="mt-4 max-w-[750px] lg:w-[750px] m-auto text-justify text-xs lg:text-base px-5 sm:px-8 lg:px-0">
-                                    {project.description && renderDescription(project.description)}
-                                </div>
-                                <div className="flex gap-3 my-10 text-[#aadd49] m-auto text-[1.7rem] ">
-                                    {project.icons}
-                                </div>
+                <div className="overflow-y-auto overscroll-contain">
+                    <div className="relative bg-surface-2">
+                        {project.diagram && "diagram" in text ? (
+                            <div className="pt-12 bg-[#121311]">
+                                <CaseDiagram data={text.diagram} />
                             </div>
+                        ) : (
+                            <ProjectMedia
+                                detail
+                                src={project.media}
+                                alt={text.alt}
+                                icons={project.icons}
+                                fallbackLabel={t.projects.mediaUnavailable}
+                                sizes="(min-width: 1024px) 1000px, 100vw"
+                                className="max-h-[55dvh] aspect-video"
+                            />
+                        )}
+                        {project.nda && (
+                            <div className="absolute top-3 left-3">
+                                <BalloonTooltip text={project.diagram ? t.projects.ndaDiagram : t.projects.ndaText} position="bottom">
+                                    <span className="bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1.5 flex items-center gap-2 border-l-2 border-[#aadd49] hover:bg-black/80">
+                                        <BsStars className="text-[#aadd49]" aria-hidden="true" />
+                                        {t.projects.nda}
+                                    </span>
+                                </BalloonTooltip>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="p-5 sm:p-8 space-y-8">
+                        {isCase ? (
+                            <>
+                                {"badge" in text && (
+                                    <span className="inline-block bg-accent text-ink text-xs font-bold px-3 py-1.5">{text.badge}</span>
+                                )}
+                                <div className="grid md:grid-cols-3 gap-1">
+                                    {(
+                                        [
+                                            [t.projects.problem, text.problem],
+                                            [t.projects.solution, text.solution],
+                                            [t.projects.result, text.result],
+                                        ] as const
+                                    ).map(([label, body], i) => (
+                                        <div key={label} className={`p-5 ${i === 2 ? "bg-accent text-ink" : "bg-surface"}`}>
+                                            <p className={`text-xs uppercase tracking-widest font-bold mb-2 ${i === 2 ? "text-ink/70" : "text-accent-fg"}`}>{label}</p>
+                                            <p className={`text-sm leading-relaxed ${i === 2 ? "text-ink" : "text-fg/90"}`}>{body}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div>
+                                    <p className="text-xs uppercase tracking-widest text-muted mb-3">{t.projects.highlights}</p>
+                                    <ul className="space-y-2">
+                                        {text.highlights.map((h) => (
+                                            <li key={h} className="flex gap-2 text-sm">
+                                                <RiCheckLine className="shrink-0 mt-0.5 text-accent-fg" aria-hidden="true" />
+                                                {h}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="max-w-3xl text-sm sm:text-base leading-relaxed text-fg/90 space-y-3">
+                                {"description" in text &&
+                                    text.description.split("\n").filter(Boolean).map((line, i) => <p key={i}>{line}</p>)}
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 text-[1.7rem] text-accent-fg" aria-hidden="true">
+                            {project.icons}
                         </div>
+                    </div>
+                </div>
 
-                        {/* Botões fixados na base */}
-                        <div className="p-4 flex items-center justify-center gap-3 text-[0.5rem] text-center sm:text-xs w-full !bg-[#353535b7]">
-
-                            {project.projectLink && (
-                                <a
-                                    href={project.projectLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-[#aadd49] text-black rounded-md hover:bg-[#89b537] transition-colors"
-                                >
-                                    Acessar Projeto
-                                </a>
-                            )}
-
-                            {project.repositoryLink && (
-                                <a
-                                    href={project.repositoryLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-[#aadd49] text-black rounded-md hover:bg-[#89b537] transition-colors"
-                                >
-                                    Acessar Repositório
-                                </a>
-                            )}
-
-                            {project.linkedIn && (
-                                <a
-                                    href={project.linkedIn}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-[#aadd49] text-black rounded-md hover:bg-[#89b537] transition-colors"
-                                >
-                                    Ver Post no LinkedIn
-                                </a>
-                            )}
-
-                        </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
-
+                {links.length > 0 && (
+                    <footer className="p-4 flex flex-wrap items-center justify-center gap-3 border-t border-line bg-surface">
+                        {links.map((l) => (
+                            <a
+                                key={l.href}
+                                href={l.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 px-4 py-2 bg-accent text-ink text-sm font-bold hover:opacity-90 transition-opacity"
+                            >
+                                {l.icon}
+                                {l.label}
+                            </a>
+                        ))}
+                    </footer>
+                )}
+            </motion.div>
+        </motion.div>
     );
 }

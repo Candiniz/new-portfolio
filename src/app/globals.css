@@ -1,46 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Tokens de cor (tema escuro é o padrão; o claro troca só as variáveis).
+   Formato "R G B" para o Tailwind aplicar opacidade: bg-canvas/80 etc.
+   ========================================================================== */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --c-canvas: 0 0 0;
+  --c-surface: 17 17 19;
+  --c-surface-2: 29 29 33;
+  --c-fg: 255 255 255;
+  --c-muted: 160 165 175;
+  --c-line: 44 46 52;
+  --c-accent: 170 221 73;
+  --c-accent-fg: 170 221 73;
+  --c-ink: 11 11 11;
+  --hero-glow: 39 41 46;
+}
 
+:root[data-theme="light"] {
+  color-scheme: light;
+  --c-canvas: 246 247 242;
+  --c-surface: 255 255 255;
+  --c-surface-2: 234 237 226;
+  --c-fg: 17 19 15;
+  --c-muted: 84 90 80;
+  --c-line: 214 219 203;
+  --c-accent: 170 221 73;
+  --c-accent-fg: 74 112 16;
+  --c-ink: 11 11 11;
+  --hero-glow: 226 232 212;
+}
 
 html {
   overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 html::-webkit-scrollbar {
-  width: 18px !important;
+  width: 14px;
 }
 
 html::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: rgb(var(--c-surface));
 }
 
 html::-webkit-scrollbar-thumb {
-  background-color: #d3d3d3;
+  background-color: rgb(var(--c-muted) / 0.6);
   border-radius: 10px;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   background-clip: content-box;
 }
 
 html::-webkit-scrollbar-thumb:hover {
-  background-color: #aadd49;
+  background-color: rgb(var(--c-accent));
 }
-
 
 html,
 body {
-
   margin: 0;
   padding: 0;
   width: 100%;
   -webkit-font-smoothing: antialiased;
-  background: #000000;
-  color: #ffffff;
-  scroll-behavior: smooth;
+  background: rgb(var(--c-canvas));
+  color: rgb(var(--c-fg));
   overflow-x: hidden;
+}
+
+body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Seções: o título não fica escondido atrás da navbar fixa ao navegar por âncora. */
+section[id],
+[id].scroll-anchor {
+  scroll-margin-top: 88px;
 }
 
 /* Texto com efeito de máscara */
@@ -127,12 +170,6 @@ body {
   /* A altura será ajustada automaticamente para manter a proporção */
 }
 
-.skill.visible {
-  opacity: 1 !important;
-  /* Altera a opacidade para visível */
-  transform: translateY(0) !important;
-  /* Faz o item aparecer com o efeito de subida */
-}
 
 @keyframes blink {
   50% {
@@ -261,19 +298,16 @@ body {
 
 
 
-.transition-all {
-  transition: all 0.3s ease-in-out;
-}
 
 @layer utilities {
   .text-glow {
-    @apply text-white;
+    @apply text-fg;
     /* Cor do texto */
     transition: text-shadow 0.3s ease-in-out;
   }
 
   .text-glow:hover {
-    text-shadow: 0 0 5px #aad49e, 0 0 10px #aad49e, 0 0 15px #aad49e;
+    text-shadow: 0 0 5px rgb(var(--c-accent)), 0 0 10px rgb(var(--c-accent)), 0 0 15px rgb(var(--c-accent));
   }
 }
 
@@ -291,38 +325,10 @@ body {
   animation: spin-slow 5s linear infinite;
 }
 
-#skillsText {
-  opacity: 0;
-  transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-  transition-duration: 500ms;
-}
 
-#skillsText.visible {
-  opacity: 1 !important;
-}
 
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: none; 
-  will-change: opacity, transform;
-}
 
-.reveal_up {
-  opacity: 0;
-  transform: translateY(-40px);
-  transition: all; 
-  will-change: opacity, transform;
-}
 
-.reveal.is-visible, .reveal_up.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--delay, 0ms);
-}
 
 .animate-light-sweep {
   /* Cria um gradiente diagonal: transparente nas pontas, sólido no meio */
@@ -331,7 +337,7 @@ body {
   /* Triplica o tamanho da máscara para termos espaço para ela deslizar */
   -webkit-mask-size: 300% 100%;
   mask-size: 300% 100%;
-  animation: sweep 4s infinite;
+  animation: sweep 4.8s infinite;
   /* Força a GPU a assumir a renderização desse elemento */
   will-change: mask-position;
   transform: translateZ(0);
@@ -344,50 +350,131 @@ body {
   /* Triplica o tamanho da máscara para termos espaço para ela deslizar */
   -webkit-mask-size: 300% 100%;
   mask-size: 300% 100%;
-  animation: sweepDelayed 4s infinite;
+  animation: sweepDelayed 4.8s infinite;
   /* Força a GPU a assumir a renderização desse elemento */
   will-change: mask-position;
   transform: translateZ(0);
 }
 
 @keyframes sweepDelayed {
-  0% {
+  /* ciclo de 4,8 s: espera 0,4 s, a onda cruza em 3,6 s e para 0,8 s (pausa total entre passadas: 1,2 s) */
+  0%,
+  8.33% {
     -webkit-mask-position: 150% 0;
     mask-position: 150% 0;
   }
-  10% {
-    -webkit-mask-position: 150% 0;
-    mask-position: 150% 0;
-  }
-  80% { 
-    /* A onda cruza a imagem em 1.8 segundos (30% de 6s) */
-    -webkit-mask-position: -50% 0;
-    mask-position: -50% 0;
-  }
-  100% { 
-    /* Pausa por 4.2 segundos antes de repetir */
+  83.33%,
+  100% {
     -webkit-mask-position: -50% 0;
     mask-position: -50% 0;
   }
 }
 
 @keyframes sweep {
+  /* ciclo de 4,8 s: a onda cruza em 3,6 s (antes 2,8 s) e para 1,2 s, a mesma pausa de antes */
   0% {
     -webkit-mask-position: 150% 0;
     mask-position: 150% 0;
   }
-  70% {
-    -webkit-mask-position: -50% 0;
-    mask-position: -50% 0;
-  }
-  100% { 
-    /* A onda cruza a imagem em 1.8 segundos (30% de 6s) */
+  75%,
+  100% {
     -webkit-mask-position: -50% 0;
     mask-position: -50% 0;
   }
 }
 
 .vignette-mask {
-  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle, black 20%, transparent 70%);
   mask-image: radial-gradient(circle, black 20%, transparent 70%);
+}
+
+/* Selo "2+" do hero: começa só com a barra verde e cresce para a direita quando o robô termina
+   de desenhar a foto (o pai vira data-draw-state="done"); sem digitação. */
+.badge-grow {
+  clip-path: inset(0 calc(100% - 0.5rem) 0 0);
+}
+[data-draw-state="done"] > .badge-grow {
+  animation: badgeGrow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+@keyframes badgeGrow {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+html.dd-off .badge-grow {
+  clip-path: none;
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .badge-grow {
+    clip-path: none;
+    animation: none;
+  }
+}
+
+/* No tema claro o símbolo de fundo do hero vira tinta escura. */
+:root[data-theme="light"] .hero-symbol,
+:root[data-theme="light"] .invert-on-light {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Ícone do Power Platform (SVG em /public) pintado com a cor atual do texto. */
+.icon-power-platform {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: url("/powerPlataformSVG.svg") center / contain no-repeat;
+  mask: url("/powerPlataformSVG.svg") center / contain no-repeat;
+}
+
+/* Rolagem horizontal sem barra (chips, abas no celular). */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Troca de tema com revelação circular a partir do botão (View Transitions API). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: theme-reveal 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+}
+
+@layer components {
+  /* Largura e respiro lateral únicos para todas as seções (alinhamento consistente). */
+  .wrap {
+    @apply w-full max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-16;
+  }
+}
+
+/* Foto do hero: "buraco" que segue o mouse e revela o rosto 3D por trás (PortraitFace). */
+@property --hole {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 1px;
+}
+
+.face-wrap {
+  transition: --hole 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.face-photo {
+  -webkit-mask-image: radial-gradient(circle var(--hole) at var(--mx, 50%) var(--my, 50%), transparent 70%, #000 100%);
+  mask-image: radial-gradient(circle var(--hole) at var(--mx, 50%) var(--my, 50%), transparent 70%, #000 100%);
 }

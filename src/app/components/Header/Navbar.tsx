@@ -1,288 +1,140 @@
-'use client'
+'use client';
 
-import { RiUserLine, RiCodeLine, RiBriefcaseLine, RiGraduationCapLine, RiMailLine } from 'react-icons/ri';
+import { RiUserLine, RiCodeLine, RiBriefcaseLine, RiGraduationCapLine, RiMailLine, RiFlowChart } from "react-icons/ri";
 import { HiOutlineCog8Tooth } from "react-icons/hi2";
-
 import Image from "next/image";
 import Link from "next/link";
-import zLogo from "../../../photos/cd-logo2.png";
-import { useState, useCallback, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import zLogo from "../../../photos/cd-logo2.png";
 import { roboto } from "@/app/fonts/Fonts";
+import { useI18n } from "@/i18n/I18nProvider";
+import LanguageSwitch from "./LanguageSwitch";
+import ThemeToggle from "./ThemeToggle";
 
-// Função para rolar até o elemento
-const scrollToAnchor = (e: React.MouseEvent, target: string) => {
-    e.preventDefault(); // Impede que a URL seja alterada com a âncora
-    const element = document.getElementById(target);
-    const navbarHeight = 60; // Ajuste para a altura da navbar
+// Ids das seções da página, na ordem em que aparecem
+export const SECTIONS = ["how", "skills", "projects", "experience", "education", "about", "contact"] as const;
+type SectionId = (typeof SECTIONS)[number];
 
-    if (element) {
-        window.scrollTo({
-            top: element.offsetTop - navbarHeight, // Ajusta para não ser coberto pela navbar
-            behavior: "smooth", // Rolagem suave
-        });
-    }
+const ICONS: Record<SectionId, React.ReactNode> = {
+    how: <RiFlowChart />,
+    skills: <RiCodeLine />,
+    projects: <HiOutlineCog8Tooth />,
+    experience: <RiBriefcaseLine />,
+    education: <RiGraduationCapLine />,
+    about: <RiUserLine />,
+    contact: <RiMailLine />,
 };
 
-// Componente de ícone personalizado
-const BurgerIcon = ({ isOpen, onClick }: { isOpen: boolean, onClick: () => void }) => {
-    return (
-        <button onClick={onClick} className="z-50 lg:hidden">
-            <div className="mr-1 relative w-9 h-9 flex flex-col justify-between items-center">
-                {/* Linha superior */}
-                <div
-                    className={`bg-white h-[2px] w-[36px] transition-all duration-300 ease-in-out ${isOpen ? 'rotate-45' : ''}`}
-                    style={{
-                        position: 'absolute',
-                        top: isOpen ? '4px' : '7px',  // Ajuste para as barras ficarem mais próximas
-                        left: 0,  // Mantém alinhado à esquerda
-                        transformOrigin: 'top left',  // Ponto de rotação no canto superior esquerdo
-                    }}
-                />
-                {/* Linha do meio */}
-                <div
-                    className={`bg-white h-[2px] w-[36px] transition-all duration-300 ease-in-out ${isOpen ? 'opacity-0' : ''}`}
-                    style={{
-                        position: 'absolute',
-                        top: '50%',  // Centraliza verticalmente
-                        left: 0,
-                        transform: 'translateY(-50%)',  // Alinha no meio
-                    }}
-                />
-                {/* Linha inferior */}
-                <div
-                    className={`bg-white h-[2px] w-[36px] transition-all duration-300 ease-in-out ${isOpen ? '-rotate-45' : ''}`}
-                    style={{
-                        position: 'absolute',
-                        bottom: isOpen ? '4px' : '7px',  // Ajuste para as barras ficarem mais próximas
-                        left: isOpen ? '0' : '0',
-                        transformOrigin: 'bottom left',  // Ponto de rotação no canto inferior esquerdo
-                    }}
-                />
-            </div>
-        </button>
-    );
-};
+/** Seção visível agora (para destacar o link e manter a posição ao trocar de idioma). */
+function useActiveSection() {
+    const [active, setActive] = useState<SectionId | null>(null);
+    useEffect(() => {
+        const els = SECTIONS.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+        if (!els.length) return;
+        const inBand = new Set<string>();
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) => (e.isIntersecting ? inBand.add(e.target.id) : inBand.delete(e.target.id)));
+                // a primeira seção (na ordem da página) que cruza a faixa; nenhuma = nada destacado
+                setActive((SECTIONS.find((id) => inBand.has(id)) as SectionId | undefined) ?? null);
+            },
+            { rootMargin: "-40% 0px -55% 0px" },
+        );
+        els.forEach((el) => io.observe(el));
+        return () => io.disconnect();
+    }, []);
+    return active;
+}
 
 export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // Controle do menu
-    const [isFadeVisible, setIsFadeVisible] = useState(false); // Controle do fade das seções
-    const [hoveredIcon, setHoveredIcon] = useState<string | null>(null); // Estado para controlar qual ícone está em hover
+    const { t, locale } = useI18n();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const active = useActiveSection();
 
-    // Função para alternar o menu
-    const toggleMenu = useCallback(() => {
-        setIsMenuOpen(prev => !prev); // Alterna o estado de isMenuOpen
-    }, []);
-
-    // Controlar a visibilidade do fade após a animação do menu
+    // Esc fecha o menu do celular
     useEffect(() => {
-        if (isMenuOpen) {
-            const timer = setTimeout(() => setIsFadeVisible(true), 500); // Espera o menu terminar de abrir
-            return () => clearTimeout(timer); // Limpa o timeout ao fechar
-        } else {
-            setIsFadeVisible(false); // Oculta imediatamente ao fechar
-        }
+        if (!isMenuOpen) return;
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setIsMenuOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
     }, [isMenuOpen]);
 
-    // Função para definir o ícone em hover
-    const handleIconHover = (icon: string | null) => {
-        setHoveredIcon(icon);
-    };
+    const linkClass = (id: SectionId) =>
+        `whitespace-nowrap px-2 xl:px-2.5 py-2 transition-colors duration-300 ease-out hover:bg-accent hover:text-ink ${
+            active === id ? "text-accent-fg" : "text-fg"
+        }`;
 
     return (
         <>
-            <header className={`${roboto.className} bg-black fixed z-50 w-full text-sm flex flex-col items-center top-0`}>
-                <div className="flex justify-between py-2 px-8 w-full min-[2000px]:py-4">
-                    <Link href="/">
-                        <Image alt="Logotipo" src={zLogo} className='h-[50px] min-[2000px]:h-[80px] w-auto' />
+            <header className={`${roboto.className} fixed top-0 z-50 w-full text-sm bg-canvas/85 backdrop-blur-md`}>
+                <div className="flex items-center justify-between gap-4 py-2 px-4 sm:px-8 w-full max-w-[2000px] mx-auto">
+                    <Link href={`/${locale}`} aria-label={t.nav.home} className="shrink-0">
+                        <Image alt="Candiniz" src={zLogo} priority className="h-[42px] sm:h-[50px] w-auto invert-on-light" />
                     </Link>
 
-                    {/* Ícone de menu hamburguer */}
-                    <BurgerIcon isOpen={isMenuOpen} onClick={toggleMenu} />
-
-                    {/* Navbar principal */}
-                    <nav className="hidden lg:flex items-center gap-1 text-md min-[2000px]:text-xl z-50">
-                        <Link onClick={(e) => scrollToAnchor(e, "skills")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#skills">Habilidades</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "projects")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#projects">Projetos</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "experience")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Experiência</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "education")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#education">Formação</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "aboutMe")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#aboutMe">Sobre Mim</Link>
-                        <Link onClick={(e) => scrollToAnchor(e, "contatos")} className="hover:bg-[#aadd49] hover:text-black hover:scale-105 transition-all duration-500 p-2" href="#contatos">Contatos</Link>
+                    <nav aria-label="Principal" className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[0.8rem] xl:text-[0.95rem] min-[2000px]:text-xl">
+                        {SECTIONS.map((id) => (
+                            <a key={id} href={`#${id}`} className={linkClass(id)} aria-current={active === id ? "true" : undefined}>
+                                {t.nav[id]}
+                            </a>
+                        ))}
                     </nav>
-                </div>
-                {/* Linha de separação após a navbar */}
-                <div className={`bg-[#aadd49] h-[2px] w-full transition-shadow duration-300 ${isMenuOpen ? 'shadow-[0_0_15px_2px_#aadd49]' : ''}`}></div>
 
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <LanguageSwitch activeSection={active} />
+                        <ThemeToggle />
+                        <button
+                            onClick={() => setIsMenuOpen((v) => !v)}
+                            className="lg:hidden relative w-10 h-10 flex items-center justify-center"
+                            aria-label={isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
+                            aria-expanded={isMenuOpen}
+                            aria-controls="mobile-menu"
+                        >
+                            <span className={`absolute h-[2px] w-7 bg-fg transition-transform duration-300 ${isMenuOpen ? "rotate-45" : "-translate-y-2"}`} />
+                            <span className={`absolute h-[2px] w-7 bg-fg transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
+                            <span className={`absolute h-[2px] w-7 bg-fg transition-transform duration-300 ${isMenuOpen ? "-rotate-45" : "translate-y-2"}`} />
+                        </button>
+                    </div>
+                </div>
+                <div className={`bg-accent h-[2px] w-full transition-shadow duration-300 ${isMenuOpen ? "shadow-[0_0_15px_2px_rgb(var(--c-accent))]" : ""}`} />
             </header>
 
-            {/* Menu Lateral */}
+            {/* Menu do celular: ícone + texto sempre visíveis (sem depender de hover) */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5, ease: 'easeInOut' }}
-                        className="fixed lg:hidden inset-0 z-40 bg-black bg-opacity-40 backdrop-blur-sm"
-                        onClick={toggleMenu}>
-                        <motion.div
-                            className="fixed right-5 w-[80px] h-full bg-black border-l-2 rounded-none border-[#aadd49] shadow-md py-4 px-2 z-20"
-                            initial={{ x: '200%', opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: '200%', opacity: 0 }}
-                            transition={{ duration: 0.5, ease: 'easeInOut' }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed lg:hidden inset-0 z-40 bg-canvas/50 backdrop-blur-sm"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        <motion.nav
+                            id="mobile-menu"
+                            aria-label="Principal"
+                            className={`${roboto.className} fixed right-0 top-0 h-full w-[min(78vw,320px)] bg-canvas border-l-2 border-accent pt-28 px-6 flex flex-col gap-2`}
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <nav className="flex flex-col text-4xl gap-8 pt-[100px] items-center relative">
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "skills")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'skills' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('skills')}
-                                    onMouseLeave={() => handleIconHover(null)}
+                            {SECTIONS.map((id) => (
+                                <a
+                                    key={id}
+                                    href={`#${id}`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`flex items-center gap-4 text-xl py-3 px-3 transition-colors hover:bg-surface-2 ${
+                                        active === id ? "text-accent-fg" : "text-fg"
+                                    }`}
                                 >
-                                    <RiCodeLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "projects")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'projects' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('projects')}
-                                    onMouseLeave={() => handleIconHover(null)}
-                                >
-                                    <HiOutlineCog8Tooth className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "experience")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'experience' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('experience')}
-                                    onMouseLeave={() => handleIconHover(null)}
-                                >
-                                    <RiBriefcaseLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "education")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'education' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('education')}
-                                    onMouseLeave={() => handleIconHover(null)}
-                                >
-                                    <RiGraduationCapLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "aboutMe")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'aboutMe' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('aboutMe')}
-                                    onMouseLeave={() => handleIconHover(null)}
-                                >
-                                    <RiUserLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        scrollToAnchor(e, "contatos")
-                                        toggleMenu();
-                                    }}
-                                    className={`hover:text-[#aadd49] hover:scale-110 transition-all duration-300 group ${hoveredIcon === 'contacts' ? 'text-[#aadd49]' : ''}`}
-                                    onMouseEnter={() => handleIconHover('contacts')}
-                                    onMouseLeave={() => handleIconHover(null)}
-                                >
-                                    <RiMailLine className="group-hover:filter group-hover:drop-shadow-[0_0_15px_2px_#aadd49]" />
-                                </button>
-
-                                {/* Seção de textos que recebem o efeito de hover ao passar sobre os ícones */}
-                                <AnimatePresence>
-                                    {isFadeVisible && (
-                                        <motion.div
-                                            className={`${roboto.className} pt-[100px] z-50 absolute top-0 right-24 flex flex-col gap-9 items-end text-2xl`}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.5 }}
-                                        >
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "skills")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'skills' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('skills')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Habilidades
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "projects")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'projects' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('projects')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Projetos
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "experience")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'experience' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('experience')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Experiência
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "education")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'education' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('education')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Formação
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "aboutMe")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'aboutMe' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('aboutMe')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Sobre Mim
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    scrollToAnchor(e, "contatos")
-                                                    toggleMenu();
-                                                }}
-                                                className={`transition-all duration-300 group ${hoveredIcon === 'contacts' ? 'text-[#aadd49]' : ''}`}
-                                                onMouseEnter={() => handleIconHover('contacts')}
-                                                onMouseLeave={() => handleIconHover(null)}
-                                            >
-                                                Contatos
-                                            </button>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </nav>
-                        </motion.div>
-
+                                    <span className="text-2xl">{ICONS[id]}</span>
+                                    {t.nav[id]}
+                                </a>
+                            ))}
+                        </motion.nav>
                     </motion.div>
                 )}
             </AnimatePresence>

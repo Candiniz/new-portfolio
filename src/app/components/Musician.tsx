@@ -1,115 +1,99 @@
-import "../globals.css";
+'use client';
+
+import { useState } from "react";
+import { RiArrowDownSLine, RiArrowUpSLine, RiPlayFill } from "react-icons/ri";
 import { oswald, roboto } from "../fonts/Fonts";
-import { useState, useEffect } from "react";
-import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { useI18n } from "@/i18n/I18nProvider";
 
+const VIDEOS = ["RG8hZwLe-Qo", "ZdAqeWi1V-o", "dZQvr1dZ1XU", "OlyoeHMPwn4", "fVNZ8wJJk4w", "VK1OKgkkVi0"];
 
-// Função para rolar suavemente para o próximo vídeo
-const scrollToAnchor = (e) => {
-  e.preventDefault(); // Impede a alteração da URL
-  const element = document.getElementById("hide-button"); // Alvo da rolagem suave
-  const navbarHeight = 60; // Ajuste para a altura da navbar
-
-  if (element) {
-    window.scrollTo({
-      top: element.offsetTop - navbarHeight, // Ajusta para não ser coberto pela navbar
-      behavior: "smooth", // Rolagem suave
-    });
-  }
-};
+/**
+ * Capa do YouTube no lugar do iframe: o player (centenas de KB de JavaScript cada)
+ * só carrega quando a pessoa clica em assistir.
+ */
+function YouTubeFacade({ id, title, playLabel }: { id: string; title: string; playLabel: string }) {
+    const [play, setPlay] = useState(false);
+    if (play) {
+        return (
+            <iframe
+                src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1`}
+                title={title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+            />
+        );
+    }
+    return (
+        <button onClick={() => setPlay(true)} aria-label={`${playLabel}: ${title}`} className="group absolute inset-0 w-full h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+                src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+                alt=""
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <span className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-11 rounded-xl bg-[#ff0033] text-white text-3xl flex items-center justify-center shadow-lg">
+                <RiPlayFill />
+            </span>
+        </button>
+    );
+}
 
 export default function Musician() {
-  const [showAllVideos, setShowAllVideos] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+    const { t } = useI18n();
+    const m = t.about.musician;
+    const [showAllVideos, setShowAllVideos] = useState(false);
 
-  const videos = [
-    { src: "https://www.youtube.com/embed/RG8hZwLe-Qo?si=m_mse0I2PpNkFYE_", title: "Vídeo 1" },
-    { src: "https://www.youtube.com/embed/ZdAqeWi1V-o?si=CKOWg-yn089sHkIB", title: "Vídeo 2" },
-    { src: "https://www.youtube.com/embed/dZQvr1dZ1XU?si=9XXmJ_BZ0AbR_Qzn", title: "Vídeo 3" },
-    { src: "https://www.youtube.com/embed/OlyoeHMPwn4?si=7RGIP0bjoXNizw7O", title: "Vídeo 4" },
-    { src: "https://www.youtube.com/embed/fVNZ8wJJk4w?si=Lk3oaaVOhhKGYztV", title: "Vídeo 5" },
-    { src: "https://www.youtube.com/embed/VK1OKgkkVi0?si=whKmhnuNjHWQjzbN", title: "Vídeo 6" },
-  ];
+    return (
+        <div className="w-full h-fit mt-20">
+            <div className="relative w-full h-72 mb-3 lg:mb-0">
+                <div className="absolute inset-0 bg-gradient-to-b from-canvas to-transparent z-[11]" />
+                <div data-slide="left" className="bg-clip-text-bar-musician w-full h-full relative z-10" />
+            </div>
+            <div className="flex justify-center items-center bg-canvas/80">
+                <div className="w-full">
+                    <div data-slide="right" style={{ transitionDelay: "120ms" }} className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mb-1 lg:hidden 2xl:h-28" />
+                    <h3
+                        className={`${oswald.className} text-transparent text-right lg:text-left font-bold pr-4 bg-clip-text-musician text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4 ml-3`}
+                    >
+                        {m.title}
+                    </h3>
+                    <div data-slide="left" style={{ transitionDelay: "200ms" }} className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mt-2 lg:block 2xl:block 2xl:h-10 2xl:mt-4" />
+                </div>
+                <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 mr-3`}>
+                    {m.p1}
+                    <br />
+                    {m.p2}
+                </p>
+            </div>
+            <div data-slide="right" className="bg-clip-text-bar-musician h-20 w-full 2xl:block mt-3 mb-4 lg:mb-0" />
 
-  useEffect(() => {
-    const updateIsMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    updateIsMobile();
-    window.addEventListener('resize', updateIsMobile);
+            <div id="music-videos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                {VIDEOS.map((id, index) => (
+                    <div className={`video-container ${index >= 2 && !showAllVideos ? "hidden sm:block" : ""}`} key={id}>
+                        <YouTubeFacade id={id} title={`${m.videoLabel} ${index + 1}`} playLabel={m.play} />
+                    </div>
+                ))}
+            </div>
 
-    return () => window.removeEventListener('resize', updateIsMobile);
-  }, []);
-
-  const visibleVideos = isMobile ? (showAllVideos ? videos : videos.slice(0, 2)) : videos;
-
-  return (
-    <div className="w-full h-fit aspect-video mt-20">
-      <div className="relative w-full h-72 mb-3 lg:mb-0">
-        <div className="absolute top-0 right-0 inset-0 bg-gradient-to-b from-black to-transparent z-[11] "></div>
-        <div className="bg-clip-text-bar-musician w-full h-full relative z-10">
+            {(
+                <div className={`${roboto.className} sm:hidden text-center w-full flex items-center justify-center mt-4`}>
+                    <button
+                        onClick={() => {
+                            setShowAllVideos((v) => !v);
+                            document.getElementById("music-videos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                        aria-expanded={showAllVideos}
+                        className="py-2 px-4 rounded flex flex-col items-center text-fg hover:text-accent-fg transition-colors duration-300"
+                    >
+                        {showAllVideos ? <RiArrowUpSLine size={30} /> : <RiArrowDownSLine size={30} />}
+                        <span className="text-xs mt-1">{showAllVideos ? m.hide : m.showMore}</span>
+                    </button>
+                </div>
+            )}
         </div>
-      </div>
-      <div className="inset-0  flex justify-center items-center bg-black/80">
-        <div className="w-full">
-          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mb-1 lg:hidden  2xl:h-28"></div>
-          <h1 className={`${oswald.className} text-transparent text-right lg:text-left font-bold pr-4 bg-clip-text-musician text-4xl md:text-6xl lg:text-7xl xl:text-[6.6vw] 2xl:text-[11rem] 2xl:px-4 ml-3`}>
-            MUSICO & PRODUTOR MUSICAL
-          </h1>
-          <div className="bg-clip-text-bar-musician bg-musician-h w-auto mr-3 mt-2 lg:block 2xl:block 2xl:h-10 2xl:mt-4"></div>
-        </div>
-        <p className={`${oswald.className} bg-clip-text-musician text-justify lg:px-20 2xl:text-[1.5rem] 2xl:px-5 mr-3`}>
-          Sou um músico e cantor autodidata, tendo iniciado meus estudos aos 11 anos, e esse primeiro contato com o mundo da música me ajudou imensamente a abrir os horizontes e expandir minhas habilidades criativas, o que contribuiu para eu chegar até aqui e me tornar o profissional que sou hoje. Com mais de 30 músicas compostas e vários vídeos no meu canal do YouTube, sou grato a todos que me apoiaram e continuam me apoiando a fazer o que amo.
-          <br />
-          Além disso, possuo amplos conhecimentos em produção audiovisual e produção musical, o que me permite criar conteúdos completos e de alta qualidade, desde a concepção de uma ideia até sua realização final. Essa versatilidade me possibilita transmitir emoções e histórias de maneira autêntica e profissional.
-        </p>
-      </div>
-      <div className="bg-clip-text-bar-musician h-20 w-full 2xl:block mt-3 mb-4 lg:mb-0">
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {visibleVideos.map((video, index) => (
-          <div id="hide-button" className="video-container" key={index}>
-            <iframe
-              src={video.src}
-              title={video.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        ))}
-      </div>
-
-      {isMobile && (
-  <div className={`${roboto.className} text-center w-full flex items-center justify-center mt-4`}>
-    {!showAllVideos ? (
-      <button
-        onClick={(e) => {
-          setShowAllVideos(true);
-          scrollToAnchor(e); // Chama a rolagem suave quando clica em "Ver Mais"
-        }}
-        className="transition-all duration-300 text-white py-2 px-4 rounded flex flex-col items-center hover:text-[#aadd49]"
-      >
-        <RiArrowDownSLine size={30} className="hover:scale-150 transition-all duration-300" />
-        <span className="text-xs mt-1">Mostrar mais</span>
-      </button>
-    ) : (
-      <button
-        onClick={(e) => {
-          setShowAllVideos(false);
-          scrollToAnchor(e); // Chama a rolagem suave quando clica em "Esconder"
-        }}
-        className="transition-all duration-300 text-white py-2 px-4 rounded flex flex-col items-center hover:text-red-500"
-      >
-        <RiArrowUpSLine size={30} className="hover:scale-150 transition-all " />
-        <span className="text-xs mt-1">Esconder</span>
-      </button>
-    )}
-  </div>
-)}
-    </div>
-  );
+    );
 }

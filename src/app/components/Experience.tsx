@@ -1,234 +1,296 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import { AiOutlineClose } from "react-icons/ai";
-import { roboto } from '../fonts/Fonts';
-import styles from './Education.module.css'
-import { useTypingEffect } from '../hooks/useTypingEffect';
-import { experiencesData } from '../consts/experienceArray';
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { RiArrowLeftSLine, RiArrowRightSLine, RiAddLine, RiCloseLine, RiCheckLine, RiArrowRightUpLine } from "react-icons/ri";
+import { roboto } from "../fonts/Fonts";
+import { useI18n } from "@/i18n/I18nProvider";
+import SectionTitle from "./SectionTitle";
 
-interface Section {
-    title: string;
-    content: string;
-    videoPath?: string;
-    list: string[];
+// Símbolo de cada empresa, solto (sem caixa em volta)
+const MARKS: Record<string, { src: string; w: number; h: number; className: string }> = {
+    pg: { src: "/brand/pg-simbolo.svg", w: 900, h: 1112, className: "h-36 sm:h-44 w-auto" },
+    opice: { src: "/opiceLogo.png", w: 1200, h: 432, className: "h-16 sm:h-20 w-auto invert-on-light" },
+};
+
+type Item = ReturnType<typeof useI18n>["t"]["experience"]["items"][number];
+
+function useWide() {
+    const [wide, setWide] = useState(false);
+    useEffect(() => {
+        const mq = window.matchMedia("(min-width: 1024px)");
+        const update = () => setWide(mq.matches);
+        update();
+        mq.addEventListener("change", update);
+        return () => mq.removeEventListener("change", update);
+    }, []);
+    return wide;
 }
 
-interface Course {
-    image: string;
-    degree: string;
-    institution: string;
-    year: string;
-    sections: Section[];
+/** Balão de borda reta, com rabicho apontando para o símbolo (à esquerda no desktop, para cima no celular). */
+function Balloon({ children, wide, delay = 0 }: { children: React.ReactNode; wide: boolean; delay?: number }) {
+    return (
+        <motion.div
+            data-draw="box"
+            initial={{ opacity: 0, x: wide ? 16 : 0, y: wide ? 0 : 10 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, delay, ease: [0.16, 1, 0.3, 1] }}
+            className="relative bg-surface border border-line"
+        >
+            <span
+                aria-hidden="true"
+                className={`absolute w-3 h-3 rotate-45 bg-surface border-line ${
+                    wide ? "-left-[7px] top-5 border-l border-b" : "-top-[7px] left-8 border-l border-t"
+                }`}
+            />
+            {children}
+        </motion.div>
+    );
 }
 
+function Details({ item, wide, onClose }: { item: Item; wide: boolean; onClose: () => void }) {
+    const { t } = useI18n();
+    const [open, setOpen] = useState(-1);
+    return (
+        <div className="flex flex-col gap-3">
+            <Balloon wide={wide}>
+                <div className="p-5 flex items-start gap-4">
+                    <div className="flex-1">
+                        <p className={`${roboto.className} text-sm font-bold text-accent-fg`}>{item.role}</p>
+                        <p className="text-base text-fg leading-relaxed mt-2">{item.summary}</p>
+                        {"cases" in item && item.cases && (
+                            <div className="flex flex-wrap items-center gap-1 mt-4">
+                                <span className={`${roboto.className} text-xs uppercase tracking-widest text-muted mr-2`}>{t.experience.cases}</span>
+                                {item.cases.map((c) => (
+                                    <a
+                                        key={c.slug}
+                                        href={`#case-${c.slug}`}
+                                        className={`${roboto.className} flex items-center gap-1.5 bg-accent text-ink text-xs font-bold px-3 py-1.5 hover:opacity-90 transition-opacity`}
+                                    >
+                                        {c.label}
+                                        <RiArrowRightUpLine aria-hidden="true" />
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <button
+                        onClick={onClose}
+                        aria-label={t.experience.hideDetails}
+                        className="shrink-0 w-8 h-8 flex items-center justify-center bg-surface-2 text-fg hover:bg-accent hover:text-ink transition-colors"
+                    >
+                        <RiCloseLine />
+                    </button>
+                </div>
+            </Balloon>
+            {item.balloons.map((front, i) => (
+                <Balloon key={front.title} wide={wide} delay={0.06 * (i + 1)}>
+                    <button
+                        onClick={() => setOpen(open === i ? -1 : i)}
+                        aria-expanded={open === i}
+                        className="w-full text-left p-4 flex items-start gap-3 hover:bg-surface-2 transition-colors"
+                    >
+                        <span className={`${roboto.className} text-xs font-bold text-accent-fg mt-1`}>0{i + 1}</span>
+                        <span className="flex-1">
+                            <span className={`${roboto.className} block font-bold text-fg`}>{front.title}</span>
+                            <span className="block text-sm text-muted leading-relaxed mt-1">{front.text}</span>
+                        </span>
+                        <span
+                            className={`shrink-0 w-7 h-7 flex items-center justify-center ${open === i ? "bg-accent text-ink" : "bg-surface-2 text-fg"}`}
+                            aria-hidden="true"
+                        >
+                            {open === i ? <RiCloseLine /> : <RiAddLine />}
+                        </span>
+                    </button>
+                    <AnimatePresence initial={false}>
+                        {open === i && (
+                            <motion.ul
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25 }}
+                                className="overflow-hidden px-4 pb-4 pl-11 space-y-1.5 text-sm text-fg/90"
+                            >
+                                {front.list.map((line) => (
+                                    <li key={line} className="flex gap-2">
+                                        <RiCheckLine className="shrink-0 mt-0.5 text-accent-fg" aria-hidden="true" />
+                                        {line}
+                                    </li>
+                                ))}
+                            </motion.ul>
+                        )}
+                    </AnimatePresence>
+                </Balloon>
+            ))}
+        </div>
+    );
+}
+
+/**
+ * Experiência: o símbolo da empresa no centro, solto (sem caixa), com o nome abaixo;
+ * a outra empresa aparece menor e apagada ao lado. Clicar no conjunto abre os balões.
+ */
 export default function Experience() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-    const { displayedText, isTypingDone, containerRef } = useTypingEffect("Experiência Profissional");
+    const { t } = useI18n();
+    const items = t.experience.items;
+    const [index, setIndex] = useState(items.length - 1); // a experiência atual começa no centro
+    const [open, setOpen] = useState(false);
+    const wide = useWide();
+    const active = items[index];
+    const isCurrent = (i: number) => i === items.length - 1;
 
-    const openModal = (course: Course) => {
-        setSelectedCourse(course);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedCourse(null);
-    };
-
-    const stopPropagation = (e) => {
-        e.stopPropagation();
+    const go = (i: number) => {
+        const next = Math.max(0, Math.min(items.length - 1, i));
+        if (next !== index) setOpen(false);
+        setIndex(next);
     };
 
     useEffect(() => {
-        if (isModalOpen) {
-            // Trava o scroll injetando direto no HTML, igual no Traveller
-            document.documentElement.style.overflow = "hidden";
-        } else {
-            // Libera o scroll
-            document.documentElement.style.overflow = "";
-        }
-        // Cleanup
-        return () => {
-            document.documentElement.style.overflow = "";
-        };
-    }, [isModalOpen]);
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [open]);
 
     return (
-        <div className="pt-10 w-full mx-auto mt-36">
-            <div ref={containerRef} className="w-full scroll-mt-24" id="experience">
+        <section id="experience" className="pb-28 overflow-x-clip">
+            <SectionTitle title={t.experience.title} intro={t.experience.intro} />
+
+            <div className="wrap">
                 <div
-                    id="experience-title-container"
-                    className="h-fit w-full"
+                    role="region"
+                    aria-roledescription="carousel"
+                    aria-label={t.experience.title}
+                    onKeyDown={(e) => {
+                        if (e.key === "ArrowLeft") go(index - 1);
+                        if (e.key === "ArrowRight") go(index + 1);
+                    }}
+                    className="relative h-[340px] sm:h-[380px] lg:h-[560px]"
                 >
-                    <h2
-                        className={`${roboto.className} lg:pl-9 lg:ml-20 text-3xl z-[1] md:text-5xl font-bold lg:text-7xl py-4 text-center lg:text-left text-[#fff] flex items-center justify-center lg:justify-start min-[2000px]:pl-[calc(50vw-1000px)]`}
+                    <motion.div
+                        drag={open ? false : "x"}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.2}
+                        onDragEnd={(_, info) => {
+                            if (info.offset.x > 80 || info.velocity.x > 600) go(index - 1);
+                            else if (info.offset.x < -80 || info.velocity.x < -600) go(index + 1);
+                        }}
+                        className={`absolute inset-0 ${open ? "" : "cursor-grab active:cursor-grabbing"}`}
                     >
-                        <span id="experience-typing-title">{displayedText}</span>
-                        <span
-                            className={`text-[#aadd49] ${isTypingDone ? "visible" : "invisible"
-                                }`}
-                            style={{
-                                marginLeft: "5px",
-                                animation: "blink 1s steps(1, end) infinite",
-                            }}
-                        >
-                            _
-                        </span>
-                    </h2>
-                </div>
-                <div className="bg-gray-800 h-[2px] w-full reveal" style={{ transitionDelay: "0.2s" }}></div>
-                <div className="bg-gray-500 h-[4px] w-full mt-[4px] reveal" style={{ transitionDelay: "0.4s" }}></div>
-                <div className="bg-[#aadd49] h-[6px] w-full mt-[4px] mb-20 reveal" style={{ transitionDelay: "0.6s" }}></div>
-            </div>
+                        {items.map((item, i) => {
+                            const offset = i - index;
+                            const on = offset === 0;
+                            const mark = MARKS[item.id];
+                            return (
+                                <motion.div
+                                    key={item.id}
+                                    initial={false}
+                                    animate={{
+                                        x: on ? (open && wide ? "calc(-50% - min(25vw, 340px))" : "-50%") : `calc(-50% + ${offset * (wide ? 34 : 70)}vw)`,
+                                        y: "-50%",
+                                        scale: on ? 1 : 0.55,
+                                        opacity: on ? 1 : open ? 0 : 0.28,
+                                        filter: on ? "grayscale(0)" : "grayscale(1)",
+                                    }}
+                                    transition={{ type: "spring", stiffness: 150, damping: 24 }}
+                                    style={{ zIndex: on ? 3 : 1 }}
+                                    className="absolute left-1/2 top-1/2"
+                                >
+                                    <button
+                                        data-draw="box"
+                                        onClick={() => (on ? setOpen((v) => !v) : go(i))}
+                                        aria-expanded={on ? open : undefined}
+                                        aria-label={on ? `${item.company}: ${open ? t.experience.hideDetails : t.experience.details}` : `${t.experience.goTo} ${item.company}`}
+                                        className="group flex flex-col items-center text-center px-6 py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+                                    >
+                                        <Image
+                                            src={mark.src}
+                                            alt=""
+                                            width={mark.w}
+                                            height={mark.h}
+                                            className={`${mark.className} transition-transform duration-500 ease-out group-hover:scale-105`}
+                                        />
+                                        <span className={`${roboto.className} text-2xl sm:text-4xl font-bold text-fg mt-6 whitespace-nowrap`}>{item.company}</span>
+                                        <span className={`${roboto.className} text-sm text-muted mt-2 flex items-center gap-2`}>
+                                            {item.period}
+                                            {isCurrent(i) && <span className="px-2 py-0.5 bg-accent text-ink text-xs font-bold">{t.experience.current}</span>}
+                                        </span>
+                                        {on && (
+                                            <span
+                                                className={`${roboto.className} mt-5 text-xs uppercase tracking-widest flex items-center gap-2 transition-colors ${
+                                                    open ? "text-accent-fg" : "text-muted group-hover:text-accent-fg"
+                                                }`}
+                                            >
+                                                {open ? <RiCloseLine /> : <RiAddLine />}
+                                                {open ? t.experience.hideDetails : t.experience.details}
+                                            </span>
+                                        )}
+                                    </button>
+                                </motion.div>
+                            );
+                        })}
+                    </motion.div>
 
-            <div className="relative max-w-[2000px] mx-auto">
-                {/* Linha do tempo */}
-
-                {/* Linha 1 */}
-                <div className="absolute left-1/4 transform -translate-x-1/2 h-full z-10">
-                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
-                </div>
-                {/* Linha 2 */}
-                <div className="absolute left-1/4 -top-[80px] transform -translate-x-1/2 h-full z-10">
-                    <div className="h-full border-l-4 border-[#aadd49] reveal" style={{ transitionDelay: "0.6s" }}></div>
-                </div>
-
-                {/* Adicionando a bola verde no final */}
-                <div className='absolute left-1/4 transform -translate-x-1/2 z-10 -bottom-10 mb-4' style={{ transitionDelay: "0.6s" }}>
-                    <div className="reveal">
-                        <div className={styles.sonarBall}></div>
-                    </div>
-                </div>
-                <div>
-                    {experiencesData.map((item, index) => (
-                        <div
-                            key={index}
-                            className="reveal relative min-h-32 w-full h-32 hover:bg-[#222] my-20 transition-all duration-300 cursor-pointer"
-                            onClick={() => openModal(item)}
-                            style={{ transitionDelay: "0.6s" }}
-                        >
-                            {/* Imagem da instituição */}
-                            <div className='absolute left-[35%] sm:left-[5%] md:left-[7%] lg:left-[10%] 
-                            w-[70px] md:w-[80px] lg:w-[120px]
-                            -top-3 sm:top-1/2 sm:-translate-y-1/2'>
-                                <Image
-                                    alt={item.institution}
-                                    src={item.image}
-                                    width={0}
-                                    height={0}
-                                    sizes="100vw"
-                                    className="w-full h-auto object-contain"
-                                />
-                            </div>
-
-                            {/* Ponto na linha do tempo */}
-                            <div className="absolute w-8 h-8 bg-[#aadd49] rounded-full border-4 border-white left-1/4 transform -translate-x-1/2 z-10  top-1/2 -translate-y-1/2 hover:scale-110 transition-all duration-150">
-                                <span className="sr-only">Ponto na linha do tempo</span>
-                            </div>
-
-                            {/* Texto posicionado ao lado direito */}
-                            <div className="absolute left-[30%] text-left top-1/2 -translate-y-1/2 px-5 select-none">
-                                <div className="text-xs sm:text-lg font-semibold">{item.degree}</div>
-                                <div className="text-xs sm:text-sm text-gray-600">{item.institution}</div>
-                                <div className="text-sm text-[#aadd49] font-bold">{item.year}</div>
-                            </div>
+                    {/* Balões à direita do símbolo (desktop) */}
+                    {wide && (
+                        <div className="absolute top-1/2 -translate-y-1/2 left-[46%] w-[min(52%,600px)] z-[4]">
+                            <AnimatePresence mode="wait">
+                                {open && (
+                                    <motion.div key={active.id} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                                        <Details item={active} wide onClose={() => setOpen(false)} />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
+                    )}
+
+                    {/* Setas laterais */}
+                    {index > 0 && !open && (
+                        <button
+                            onClick={() => go(index - 1)}
+                            aria-label={t.experience.prev}
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-14 z-[5] flex items-center justify-center text-3xl text-fg hover:text-ink hover:bg-accent transition-colors"
+                        >
+                            <RiArrowLeftSLine />
+                        </button>
+                    )}
+                    {index < items.length - 1 && !open && (
+                        <button
+                            onClick={() => go(index + 1)}
+                            aria-label={t.experience.next}
+                            className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-14 z-[5] flex items-center justify-center text-3xl text-fg hover:text-ink hover:bg-accent transition-colors"
+                        >
+                            <RiArrowRightSLine />
+                        </button>
+                    )}
+                </div>
+
+                {/* Balões abaixo do símbolo (celular e tablet) */}
+                {!wide && (
+                    <AnimatePresence>
+                        {open && (
+                            <motion.div key={active.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-xl mx-auto mt-6">
+                                <Details item={active} wide={false} onClose={() => setOpen(false)} />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                )}
+
+                {/* Marcadores retangulares */}
+                <div className="flex justify-center gap-1 mt-6">
+                    {items.map((item, i) => (
+                        <button
+                            key={item.id}
+                            onClick={() => go(i)}
+                            aria-label={item.company}
+                            aria-current={i === index}
+                            className={`h-1.5 transition-all duration-300 ${i === index ? "w-12 bg-accent" : "w-6 bg-line hover:bg-muted"}`}
+                        />
                     ))}
                 </div>
             </div>
-
-            {/* Modal */}
-            <AnimatePresence>
-                {isModalOpen && selectedCourse && (
-                    <motion.div
-                        onClick={closeModal}
-                        className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <motion.div
-                            onClick={stopPropagation}
-                            className="relative bg-white w-4/5 p-10 h-[90vh]"
-                            initial={{ scale: 0.8 }}
-                            animate={{ scale: 1 }}
-                            exit={{ scale: 0.8 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <button
-                                onClick={closeModal}
-                                className="absolute top-[2px] right-[2px] text-xl lg:text-3xl text-white bg-black hover:bg-red-500 transition-colors"
-                            >
-                                <AiOutlineClose />
-                            </button>
-
-                            <div className="flex flex-col md:flex-row items-start md:items-center h-[80vh] lg:px-10">
-                                {/* Foto da instituição */}
-                                <div className="mr-6 min-w-[160px]">
-                                    <Image
-                                        alt={selectedCourse.institution}
-                                        src="/opiceLogoWh.jpg"
-                                        layout="intrinsic"
-                                        width={160}
-                                        height={100}
-                                        className='object-cover min-w-[160px]'
-                                    />
-                                    <div className="w-[160px]">
-                                        <div className="w-full overflow-hidden">
-                                            <Image
-                                                src="/experience/AnalistaDeDesenvolvimento.png"
-                                                alt="Cargo"
-                                                width={0}
-                                                height={0}
-                                                sizes="100vw"
-                                                className="w-full h-auto object-contain" // h-auto é a chave aqui
-                                            />
-                                        </div>
-                                        <p className="mt-2 pl-2 text-xs text-gray-400">{selectedCourse.institution}</p>
-                                    </div>
-                                </div>
-
-                                <div className='mt-9 lg:mt-0 overflow-y-auto pl-8 border-l border-gray-400'>
-                                    {/* Texto com título e descrição */}
-                                    {selectedCourse.sections.map((section, index) => (
-                                        <div key={index} className="mb-6">
-
-                                            <h3 className="text-md lg:text-xl font-bold text-gray-800">{section.title}</h3>
-                                            <p className="text-sm lg:text-md text-gray-500">{section.content}</p>
-                                            {section.list.length > 0 && (
-                                                <ul className="list-disc ml-5 mb-4">
-                                                    {section.list.map((item, i) => (
-                                                        <li key={i} className="text-sm text-gray-500">{item}</li>
-                                                    ))}
-                                                </ul>
-                                            )}
-
-                                            {section.videoPath && (
-                                                <div className="w-full mt-6 shadow-md rounded-lg overflow-hidden">
-                                                    <video
-                                                        src={section.videoPath}
-                                                        autoPlay
-                                                        loop
-                                                        muted
-                                                        playsInline // Crucial para rodar no iOS sem abrir o player em tela cheia
-                                                        className="w-full h-auto object-contain"
-                                                    />
-                                                </div>
-                                            )}
-                                            <hr className="mt-6 border-gray-100" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+        </section>
     );
 }

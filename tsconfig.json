@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -34,10 +34,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/api/instagram/instagram.js",
-    "src/app/api/instagram/route.ts",
-    "src/app/components/Skills/SkillsCarousel.tsx",
-    "src/app/loading.js",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

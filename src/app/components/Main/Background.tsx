@@ -1,100 +1,127 @@
 'use client';
 
-import React, { useRef } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useRef } from "react";
 
-// Carrega o componente p5 de forma dinâmica
-const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), { ssr: false });
-
-const StarBackground = () => {
-  const stars = useRef<{ x: number; y: number; z: number }[]>([]);
-
-  const setup = (p5, canvasParentRef) => {
-    // Configura o canvas
-    const canvas = p5.createCanvas(window.innerWidth, window.innerHeight).parent(canvasParentRef);
-
-    // Adiciona classes do Tailwind ao canvas para o fade-in
-    canvas.addClass('opacity-0 transition-opacity duration-1000');
-    setTimeout(() => {
-      canvas.addClass('opacity-100'); // Ativa a animação
-    }, 0);
-
-    // Adiciona estilo para garantir que o canvas fique no fundo
-    canvas.style('position', 'absolute');
-    canvas.style('top', '0');
-    canvas.style('left', '0');
-    canvas.style('z-index', '1'); // Garante que o canvas fique atrás de outros elementos
-    canvas.style('pointer-events', 'none'); // Não interfere nas interações com outros elementos
-
-    // Inicializa as estrelas apenas uma vez
-    if (stars.current.length === 0) {
-      for (let i = 0; i < 500; i++) {
-        stars.current.push({
-          x: p5.random(-window.innerWidth, window.innerWidth), // Coordenadas centradas
-          y: p5.random(-window.innerHeight, window.innerHeight),
-          z: p5.random(window.innerWidth),
-        });
-      }
-    }
-  };
-
-  const draw = (p5) => {
-    p5.clear();
-    const currentWidth = window.innerWidth;
-
-    // Se for menor que 768px (Mobile/sm), usa 75% da tela (metade direita).
-    // Se for maior ou igual a 768px (md+), usa 50% da tela (centro absoluto).
-    const centerX = currentWidth < 768
-      ? currentWidth / 2
-      : (currentWidth / 4) * 3;
-
-p5.translate(centerX, window.innerHeight / 2); // Centraliza as estrelas
-
-for (const star of stars.current) {
-  // Desenha o brilho das estrelas
-  const sx = (star.x / star.z) * window.innerWidth;
-  const sy = (star.y / star.z) * window.innerHeight;
-  const r = p5.map(star.z, 0, window.innerWidth, 4, 0);
-  const glowSize = p5.map(star.z, 0, window.innerWidth, 20, 0);
-  const glowAlpha = p5.map(star.z, 0, window.innerWidth, 180, 0);
-
-  // Glow da estrela
-  const glow = p5.map(star.z, 0, window.innerWidth, 15, 0);
-  p5.noFill();
-  p5.stroke(255, 255, 255, glow); // Glow com opacidade
-  p5.strokeWeight(3);
-  p5.ellipse(sx, sy, r + glowSize, r + glowSize);
-
-  // Corpo da estrela
-  p5.noStroke();
-  p5.fill(255);
-  p5.ellipse(sx, sy, r, r);
-
-  // Atualiza a posição
-  star.z -= 10;
-  if (star.z < 1) {
-    star.z = window.innerWidth;
-    star.x = p5.random(-window.innerWidth, window.innerWidth);
-    star.y = p5.random(-window.innerHeight, window.innerHeight);
-  }
+/*
+ * Campo de estrelas do hero em canvas 2D puro (substitui o p5, que custava
+ * ~970 KB de JavaScript só para isto). Pausa fora da tela e com a aba oculta,
+ * respeita "reduzir movimento" e muda a cor das estrelas com o tema.
+ */
+interface Star {
+    x: number;
+    y: number;
+    z: number;
 }
-  };
 
-const windowResized = (p5) => {
-  p5.resizeCanvas(window.innerWidth, window.innerHeight);
-  // Ajusta as estrelas ao novo tamanho
-  stars.current = stars.current.map((star) => ({
-    ...star,
-    x: p5.random(-window.innerWidth, window.innerWidth),
-    y: p5.random(-window.innerHeight, window.innerHeight),
-  }));
-};
+export default function StarsBackground() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-return (
-  <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-[1]">
-    <Sketch setup={setup} draw={draw} windowResized={windowResized} />
-  </div>
-)
-};
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+        if (!canvas || !ctx) return;
 
-export default StarBackground;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let w = 0;
+        let h = 0;
+        let stars: Star[] = [];
+        let raf = 0;
+        let visible = true;
+        let rgb = "255,255,255";
+
+        const readTheme = () => {
+            rgb = document.documentElement.dataset.theme === "light" ? "40,48,30" : "255,255,255";
+        };
+
+        const seed = () => {
+            const n = w < 640 ? 160 : 320;
+            stars = Array.from({ length: n }, () => ({
+                x: (Math.random() * 2 - 1) * w,
+                y: (Math.random() * 2 - 1) * h,
+                z: Math.random() * w,
+            }));
+        };
+
+        const resize = () => {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            w = canvas.clientWidth;
+            h = canvas.clientHeight;
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(h * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            seed();
+        };
+
+        const frame = (move: boolean) => {
+            ctx.clearRect(0, 0, w, h);
+            const cx = w < 768 ? w / 2 : (w / 4) * 3;
+            const cy = h / 2;
+            for (const s of stars) {
+                if (move) {
+                    s.z -= 6;
+                    if (s.z < 1) {
+                        s.z = w;
+                        s.x = (Math.random() * 2 - 1) * w;
+                        s.y = (Math.random() * 2 - 1) * h;
+                    }
+                }
+                const k = 1 - s.z / w; // 0 longe → 1 perto
+                const sx = cx + (s.x / s.z) * w * 0.5;
+                const sy = cy + (s.y / s.z) * h * 0.5;
+                if (sx < -10 || sx > w + 10 || sy < -10 || sy > h + 10) continue;
+                const r = 0.3 + k * 1.9;
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(${rgb},${0.08 * k})`;
+                ctx.arc(sx, sy, r * 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(${rgb},${0.25 + 0.75 * k})`;
+                ctx.arc(sx, sy, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        };
+
+        const loop = () => {
+            frame(true);
+            raf = requestAnimationFrame(loop);
+        };
+        const start = () => {
+            cancelAnimationFrame(raf);
+            if (reduce) frame(false);
+            else if (visible && !document.hidden) raf = requestAnimationFrame(loop);
+        };
+
+        readTheme();
+        resize();
+        start();
+
+        const ro = new ResizeObserver(() => {
+            resize();
+            start();
+        });
+        ro.observe(canvas);
+        const io = new IntersectionObserver(([e]) => {
+            visible = e.isIntersecting;
+            if (visible) start();
+            else cancelAnimationFrame(raf);
+        });
+        io.observe(canvas);
+        const mo = new MutationObserver(() => {
+            readTheme();
+            if (reduce) frame(false);
+        });
+        mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+        const onVis = () => start();
+        document.addEventListener("visibilitychange", onVis);
+
+        return () => {
+            cancelAnimationFrame(raf);
+            ro.disconnect();
+            io.disconnect();
+            mo.disconnect();
+            document.removeEventListener("visibilitychange", onVis);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none z-[1] animate-fade-in" />;
+}

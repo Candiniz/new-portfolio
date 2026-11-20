@@ -1,33 +1,8 @@
-import { Caveat, Oswald, Parisienne } from 'next/font/google';
-import { IBM_Plex_Mono } from 'next/font/google';
-import { Roboto_Mono } from 'next/font/google';
+import { IBM_Plex_Mono, Oswald, Roboto_Mono } from "next/font/google";
 
-export const oswald = Oswald({
-  subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
-  weight: ['400', '700'], // Pesos desejados
-  style: 'normal', // Ou 'italic' se for o caso
-})
+// Só as famílias realmente usadas (Caveat e Parisienne saíram: não apareciam na tela).
+export const oswald = Oswald({ subsets: ["latin"], weight: ["400", "700"], display: "swap" });
 
-export const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'], // Adicione outros subsets se necessário
-  weight: ['400', '700'], // Adicione os pesos que você quer usar, se necessário
-  style: 'normal', // Ou 'italic' se for o caso
-});
+export const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "700"], display: "swap" });
 
-export const roboto = Roboto_Mono({
-  subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
-  weight: ['400', '700'], // Pesos desejados
-  style: 'normal', // Ou 'italic' se for o caso
-})
-
-export const caveat = Caveat({
-  subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
-  weight: ['400', '700'], // Pesos desejados
-  style: 'normal', // Ou 'italic' se for o caso
-})
-
-export const parisienne = Parisienne({
-  subsets: ['latin'], // Escolha os subconjuntos desejados (ex.: 'latin', 'cyrillic')
-  weight: ['400'], // Pesos desejados
-  style: 'normal', // Ou 'italic' se for o caso
-})
+export const roboto = Roboto_Mono({ subsets: ["latin"], weight: ["400", "700"], display: "swap" });

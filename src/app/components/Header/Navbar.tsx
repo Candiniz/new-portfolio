@@ -67,7 +67,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className={`${roboto.className} fixed top-0 z-50 w-full text-sm bg-canvas/85 backdrop-blur-md`}>
+            <header className={`${roboto.className} fixed top-0 z-50 w-full text-sm bg-canvas/95 md:bg-canvas/85 md:backdrop-blur-md`}>
                 <div className="flex items-center justify-between gap-4 py-2 px-4 sm:px-8 w-full max-w-[2000px] mx-auto">
                     <Link href={`/${locale}`} aria-label={t.nav.home} className="shrink-0">
                         <Image alt="Candiniz" src={zLogo} priority className="h-[42px] sm:h-[50px] w-auto invert-on-light" />

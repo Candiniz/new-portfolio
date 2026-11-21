@@ -330,56 +330,61 @@ section[id],
 
 
 
-.animate-light-sweep {
-  /* Cria um gradiente diagonal: transparente nas pontas, sólido no meio */
-  -webkit-mask-image: linear-gradient(60deg, transparent 35%, black 50%, transparent 65%);
-  mask-image: linear-gradient(60deg, transparent 35%, black 50%, transparent 65%);
-  /* Triplica o tamanho da máscara para termos espaço para ela deslizar */
-  -webkit-mask-size: 300% 100%;
-  mask-size: 300% 100%;
+/* Brilho do símbolo do hero, todo na GPU. A máscara (o próprio desenho do logo) fica parada e a
+   faixa de luz desliza por baixo com transform. Antes a animação era de mask-position, que obriga
+   o navegador a repintar as duas imagens a cada quadro, e o hero travava no celular.
+   Mesma geometria e mesmo tempo de antes: faixa diagonal em 60°, 3,6 s de passada e 1,2 s de pausa. */
+.hero-sweep {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+}
+.hero-sweep-band {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(60deg, transparent 35%, var(--band) 50%, transparent 65%);
+  transform: translate3d(-100%, 0, 0);
+  will-change: transform;
   animation: sweep 4.8s infinite;
-  /* Força a GPU a assumir a renderização desse elemento */
-  will-change: mask-position;
-  transform: translateZ(0);
 }
-
-.animate-light-sweep-delayed {
-  /* Cria um gradiente diagonal: transparente nas pontas, sólido no meio */
-  -webkit-mask-image: linear-gradient(60deg, transparent 35%, black 50%, transparent 65%);
-  mask-image: linear-gradient(60deg, transparent 35%, black 50%, transparent 65%);
-  /* Triplica o tamanho da máscara para termos espaço para ela deslizar */
-  -webkit-mask-size: 300% 100%;
-  mask-size: 300% 100%;
-  animation: sweepDelayed 4.8s infinite;
-  /* Força a GPU a assumir a renderização desse elemento */
-  will-change: mask-position;
-  transform: translateZ(0);
+.hero-sweep-band.is-delayed {
+  animation-name: sweepDelayed;
 }
-
-@keyframes sweepDelayed {
-  /* ciclo de 4,8 s: espera 0,4 s, a onda cruza em 3,6 s e para 0,8 s (pausa total entre passadas: 1,2 s) */
-  0%,
-  8.33% {
-    -webkit-mask-position: 150% 0;
-    mask-position: 150% 0;
-  }
-  83.33%,
-  100% {
-    -webkit-mask-position: -50% 0;
-    mask-position: -50% 0;
+/* hero fora da tela: a faixa para (data-hero-off é posto pelo Intro) */
+[data-hero-off] .hero-sweep-band {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-sweep-band {
+    animation: none;
   }
 }
 
 @keyframes sweep {
-  /* ciclo de 4,8 s: a onda cruza em 3,6 s (antes 2,8 s) e para 1,2 s, a mesma pausa de antes */
+  /* ciclo de 4,8 s: a faixa cruza em 3,6 s e para 1,2 s */
   0% {
-    -webkit-mask-position: 150% 0;
-    mask-position: 150% 0;
+    transform: translate3d(-100%, 0, 0);
   }
   75%,
   100% {
-    -webkit-mask-position: -50% 0;
-    mask-position: -50% 0;
+    transform: translate3d(33.333%, 0, 0);
+  }
+}
+
+@keyframes sweepDelayed {
+  /* ciclo de 4,8 s: espera 0,4 s, cruza em 3,6 s e para 0,8 s (pausa total entre passadas: 1,2 s) */
+  0%,
+  8.33% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  83.33%,
+  100% {
+    transform: translate3d(33.333%, 0, 0);
   }
 }
 

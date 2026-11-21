@@ -68,6 +68,15 @@ export default function Intro() {
         setTechs((prev) => shuffle(prev));
     }, []);
 
+    // Brilho do logo parado com o hero fora da tela (CSS: [data-hero-off] .hero-sweep-band)
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const io = new IntersectionObserver(([e]) => el.toggleAttribute("data-hero-off", !e.isIntersecting));
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
     // Troca periódica, só com o hero na tela, a aba visível e todos os badges já desenhados.
     useEffect(() => {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -132,8 +141,19 @@ export default function Intro() {
                             className="absolute pointer-events-none -z-10 top-0 left-1/2 -translate-x-1/2 w-[115vw] max-w-[1000px] aspect-[3500/3238] xl:top-1/2 xl:-translate-y-1/2 xl:w-[min(1000px,calc(92svh*3500/3238))] xl:max-w-none"
                         >
                             <Image src="/favicon.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" loading="eager" className="hero-symbol object-contain opacity-[3%] vignette-mask" />
-                            <Image src="/favicon.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" loading="eager" className="hero-symbol object-contain opacity-5 animate-light-sweep" />
-                            <Image src="/favicon-glow.png" fill alt="" sizes="(min-width: 1280px) 1000px, 115vw" className="hero-symbol object-contain opacity-80 animate-light-sweep-delayed" />
+                            {/* brilho que passa pelo logo: a máscara é o desenho e a faixa desliza na GPU (globals.css) */}
+                            <div
+                                className="hero-sweep hero-symbol opacity-5"
+                                style={{ ["--logo" as string]: "url(/brand/hero-logo-mask.png)", ["--band" as string]: "rgb(209 237 157)" }}
+                            >
+                                <div className="hero-sweep-band" />
+                            </div>
+                            <div
+                                className="hero-sweep hero-symbol opacity-80"
+                                style={{ ["--logo" as string]: "url(/brand/hero-glow-mask.png)", ["--band" as string]: "rgb(249 252 243)" }}
+                            >
+                                <div className="hero-sweep-band is-delayed" />
+                            </div>
                         </div>
                         <p data-draw="type" className="text-xl md:text-2xl font-bold text-fg max-w-2xl">
                             {t.hero.headline}

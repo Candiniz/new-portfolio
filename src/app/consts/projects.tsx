@@ -1,7 +1,8 @@
 import { FaMicrosoft } from "react-icons/fa";
 import {
-    SiClaude, SiCss, SiDocker, SiFigma, SiFirebase, SiFramer, SiGooglecloud, SiGooglegemini, SiHtml5, SiJavascript, SiMetabase,
-    SiN8N, SiNextdotjs, SiNodedotjs, SiPostgresql, SiPrisma, SiPython, SiReact, SiSass, SiTailwindcss, SiThreedotjs, SiTypescript,
+    SiClaude, SiCss, SiDocker, SiFastapi, SiFigma, SiFirebase, SiFramer, SiGooglecloud, SiGooglegemini, SiHtml5, SiJavascript,
+    SiLua, SiMetabase, SiN8N, SiNextdotjs, SiNodedotjs, SiPostgresql, SiPrisma, SiPython, SiReact, SiSass, SiTailwindcss,
+    SiThreedotjs, SiTypescript,
 } from "react-icons/si";
 import type { Project } from "../types/Home";
 
@@ -165,6 +166,24 @@ export const projects: Project[] = [
     },
 
     // ------------------------------------------------------------------- pessoais
+    {
+        slug: "aurestella-pyxis",
+        kind: "personal",
+        tags: ["ai", "automation"],
+        repositoryLink: "https://github.com/Candiniz/AurestellaPixis",
+        // imagem no próprio projeto (public/projects), não no imgur
+        media: "/projects/aurestella-pyxis.jpg",
+        icons: (
+            <>
+                <SiPython />
+                <SiFastapi />
+                <SiGooglegemini />
+                <SiPostgresql />
+                <SiDocker />
+                <SiLua />
+            </>
+        ),
+    },
     {
         slug: "new-portfolio",
         kind: "personal",

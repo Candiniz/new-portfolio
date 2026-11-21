@@ -380,6 +380,13 @@ const pt = {
                 description:
                     "Loja virtual em Next.js feita para a artesã Lourdes Maria Candida Sobrinha, com experiência de compra simples e segura.\n\nAutenticação com Clerk, banco PostgreSQL via Prisma e pagamentos com Stripe. O catálogo é organizado por categorias e o carrinho foi construído em TypeScript, sempre com foco em performance e experiência do usuário, da navegação ao checkout.",
             },
+            "aurestella-pyxis": {
+                name: "Aurestella Pyxis | Agente de IA",
+                badge: "Agente de IA · RAG",
+                alt: "Capa do Aurestella Pyxis: o painel do agente dentro de uma base de Minecraft.",
+                description:
+                    "Um agente de IA que mora dentro do Minecraft (modpack ATM10). O jogador conversa com o Pyxis pelo chat, e ele entende a intenção: aciona a base de verdade, acendendo luzes e abrindo portas por redstone, ou responde dúvidas consultando a wiki do jogo.\n\nPor trás, um computador do ComputerCraft em Lua, com um rosto animado enquanto pensa, chama uma API em FastAPI que roda em Docker numa VPS, com Nginx e HTTPS na frente. Um roteador com Gemini classifica o pedido em JSON Schema; as dúvidas seguem para um RAG híbrido, com busca vetorial no PostgreSQL (pgvector) e fuzzy matching nas árvores de receitas, antes de o modelo sintetizar a resposta.\n\nCada chamada registra tokens e latência em segundo plano, exibidos em monitores dentro do jogo. É o mesmo desenho de um agente corporativo (roteamento, recuperação de contexto e telemetria), num laboratório divertido.",
+            },
             "new-portfolio": {
                 name: "Este Portfólio | Candiniz",
                 alt: "Interface do portfólio atual de Anderson Diniz.",

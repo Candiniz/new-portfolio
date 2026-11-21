@@ -369,6 +369,13 @@ const en: Dictionary = {
                 description:
                     "A Next.js online store built for the artisan Lourdes Maria Candida Sobrinha, with a simple and secure shopping experience.\n\nAuthentication with Clerk, a PostgreSQL database through Prisma and payments with Stripe. The catalog is organized by category and the cart was built in TypeScript, always focused on performance and user experience, from browsing to checkout.",
             },
+            "aurestella-pyxis": {
+                name: "Aurestella Pyxis | AI Agent",
+                badge: "AI agent · RAG",
+                alt: "Aurestella Pyxis cover: the agent's panel inside a Minecraft base.",
+                description:
+                    "An AI agent that lives inside Minecraft (the ATM10 modpack). The player talks to Pyxis in the chat and it works out the intent: it drives the actual base, turning on lights and opening doors through redstone, or answers questions by searching the game's wiki.\n\nUnder the hood, a ComputerCraft computer running Lua, with an animated face while it thinks, calls a FastAPI service running in Docker on a VPS, behind Nginx and HTTPS. A Gemini router classifies the request with a JSON Schema; questions go to a hybrid RAG, with vector search in PostgreSQL (pgvector) and fuzzy matching over the recipe trees, before the model writes the answer.\n\nEvery call logs tokens and latency in the background, shown on in-game monitors. It is the same design as a corporate agent (routing, context retrieval and telemetry), in a fun lab.",
+            },
             "new-portfolio": {
                 name: "This Portfolio | Candiniz",
                 alt: "Interface of Anderson Diniz's current portfolio.",

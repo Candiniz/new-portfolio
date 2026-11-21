@@ -7,6 +7,8 @@ function switchTo(next: Locale, section: string | null) {
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
     // Carga completa, não router.push: trocar /pt ↔ /en remonta o layout raiz no cliente, e o
     // React recria o <script> de tema do <head> (erro "Encountered a script tag" no Next).
+    // Conferido de novo no Next 16.4.6: o router.push ainda dispara o erro.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.assign(`/${next}${section ? `#${section}` : ""}`);
 }
 

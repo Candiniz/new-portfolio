@@ -208,40 +208,47 @@ export default function PortraitFace({ alt, badgeValue, badgeLabel, hint, action
                 onClick={play}
                 onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), play())}
                 style={{ ["--hole" as string]: hole }}
-                className="face-wrap group relative aspect-square rounded-full overflow-hidden cursor-pointer focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                className="face-wrap group relative aspect-square rounded-full cursor-pointer focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-accent"
             >
-                {/* palco do 3D: fundo escuro liso, como o de um escaneamento */}
-                <div
-                    aria-hidden="true"
-                    className="absolute inset-0"
-                    style={{ background: "radial-gradient(circle at 50% 42%, #262824, #1b1c1a 60%, #121311)" }}
-                />
-                <canvas ref={glRef} aria-hidden="true" className="absolute inset-0 w-full h-full" />
+                {/* recorte redondo das camadas. Só o arredondado (overflow + border-radius) falha no
+                    celular: quando o canvas do 3D ou o da dissolução entram e saem, ou enquanto o robô
+                    revela a foto, o navegador do aparelho desenha a camada sem o arredondado e a foto
+                    aparece quadrada por um instante. O clip-path em círculo recorta sempre. Fica num
+                    div de dentro para não cortar o contorno de foco do botão. */}
+                <div className="absolute inset-0 rounded-full overflow-hidden isolate [clip-path:circle(50%)]">
+                    {/* palco do 3D: fundo escuro liso, como o de um escaneamento */}
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-0"
+                        style={{ background: "radial-gradient(circle at 50% 42%, #262824, #1b1c1a 60%, #121311)" }}
+                    />
+                    <canvas ref={glRef} aria-hidden="true" className="absolute inset-0 w-full h-full" />
 
-                <Image
-                    ref={imgRef}
-                    alt={alt}
-                    src={fotoPerfil}
-                    priority
-                    sizes="(min-width: 1280px) 620px, (min-width: 640px) 320px, 94vw"
-                    // sem transição: a foto volta no mesmo quadro em que o canvas do efeito some
-                    // (com fade, o 3D aparecia por um instante entre os dois)
-                    className={`face-photo relative w-full h-full object-cover ${playing ? "opacity-0" : "opacity-100"}`}
-                />
-                <canvas
-                    ref={fxRef}
-                    aria-hidden="true"
-                    className={`absolute inset-0 w-full h-full pointer-events-none ${playing ? "opacity-100" : "opacity-0"}`}
-                />
+                    <Image
+                        ref={imgRef}
+                        alt={alt}
+                        src={fotoPerfil}
+                        priority
+                        sizes="(min-width: 1280px) 620px, (min-width: 640px) 320px, 94vw"
+                        // sem transição: a foto volta no mesmo quadro em que o canvas do efeito some
+                        // (com fade, o 3D aparecia por um instante entre os dois)
+                        className={`face-photo relative w-full h-full object-cover ${playing ? "opacity-0" : "opacity-100"}`}
+                    />
+                    <canvas
+                        ref={fxRef}
+                        aria-hidden="true"
+                        className={`absolute inset-0 w-full h-full pointer-events-none ${playing ? "opacity-100" : "opacity-0"}`}
+                    />
 
-                <span
-                    aria-hidden="true"
-                    className={`absolute top-[34%] right-[6%] bg-black/70 backdrop-blur text-[#aadd49] text-[11px] font-bold px-2.5 py-1 border border-[#aadd49]/40 transition-opacity duration-300 ${
-                        playing ? "opacity-0" : "opacity-100 group-hover:opacity-0"
-                    }`}
-                >
-                    {hint}
-                </span>
+                    <span
+                        aria-hidden="true"
+                        className={`absolute top-[34%] right-[6%] bg-black/70 backdrop-blur text-[#aadd49] text-[11px] font-bold px-2.5 py-1 border border-[#aadd49]/40 transition-opacity duration-300 ${
+                            playing ? "opacity-0" : "opacity-100 group-hover:opacity-0"
+                        }`}
+                    >
+                        {hint}
+                    </span>
+                </div>
             </div>
 
             {/* celular: etiqueta numa linha, pendurada embaixo do círculo (só encosta na borda, no terno);

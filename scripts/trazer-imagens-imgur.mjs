@@ -16,7 +16,7 @@
  * endereço só é trocado no código quando o arquivo local existe e é uma imagem de verdade.
  * Depois de rodar:  npm run build  →  git add public src  →  git commit
  */
-import { copyFile, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const args = process.argv.slice(2);

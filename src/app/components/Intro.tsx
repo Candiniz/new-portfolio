@@ -34,6 +34,9 @@ function shuffle<T>(list: T[]): T[] {
 export default function Intro() {
     const { t } = useI18n();
     const [isCVVisible, setIsCVVisible] = useState(false);
+    // a moldura só solta as bordas depois que as bandeiras terminam de abrir (o brilho do clique
+    // sai da bandeira); ao fechar, volta a recortar na hora, para elas sumirem atrás do botão
+    const [flagsSettled, setFlagsSettled] = useState(false);
     const [techs, setTechs] = useState(initialTechs);
     const sectionRef = useRef<HTMLElement>(null);
     const pills = useRef(new Map<string, HTMLLIElement>());
@@ -157,7 +160,10 @@ export default function Intro() {
                         <div className="w-[250px]">
                             <button
                                 data-draw="box"
-                                onClick={() => setIsCVVisible((v) => !v)}
+                                onClick={() => {
+                                    setFlagsSettled(false);
+                                    setIsCVVisible((v) => !v);
+                                }}
                                 aria-expanded={isCVVisible}
                                 aria-controls="cv-flags"
                                 className="relative z-[1] w-full h-12 border border-accent text-accent-fg font-bold flex items-center justify-center gap-2 transition-colors duration-300 hover:bg-accent hover:text-ink"
@@ -166,11 +172,19 @@ export default function Intro() {
                                 {isCVVisible ? t.hero.ctaClose : t.hero.ctaCv}
                             </button>
                             <div
-                                className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+                                onTransitionEnd={(e) => {
+                                    if (e.target === e.currentTarget && isCVVisible) setFlagsSettled(true);
+                                }}
+                                // -mx-px: 1 px a mais de cada lado, para as bandeiras cobrirem a borda do botão
+                                className={`grid -mx-px transition-[grid-template-rows] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
                                     isCVVisible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                                 }`}
                             >
-                                <div id="cv-flags" inert={!isCVVisible} className="min-h-0 overflow-hidden">
+                                <div
+                                    id="cv-flags"
+                                    inert={!isCVVisible}
+                                    className={`min-h-0 ${isCVVisible && flagsSettled ? "overflow-visible" : "overflow-hidden"}`}
+                                >
                                     <div className="h-12 flex">
                                         {(
                                             [
@@ -184,11 +198,29 @@ export default function Intro() {
                                                 download
                                                 aria-label={label}
                                                 title={label}
-                                                style={{ backgroundImage: `url('${flag}')`, transitionDelay: isCVVisible ? delay : "0ms" }}
-                                                className={`w-1/2 h-full bg-center bg-cover transition-[transform,filter] duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
+                                                onClick={(e) => {
+                                                    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+                                                    // brilho sutil saindo da bandeira: anel verde + halo claro que se abrem e somem
+                                                    e.currentTarget.animate(
+                                                        [
+                                                            { boxShadow: "0 0 0 0 rgb(170 221 73 / 0.45), 0 0 0 0 rgb(255 255 255 / 0.25)" },
+                                                            { boxShadow: "0 0 0 10px rgb(170 221 73 / 0), 0 0 22px 8px rgb(255 255 255 / 0)" },
+                                                        ],
+                                                        { duration: 800, easing: "ease-out" },
+                                                    );
+                                                }}
+                                                style={{ transitionDelay: isCVVisible ? delay : "0ms" }}
+                                                className={`group relative w-1/2 h-full overflow-hidden hover:z-[1] focus-visible:z-[1] transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                                                     isCVVisible ? "translate-y-0" : "-translate-y-full"
                                                 }`}
-                                            />
+                                            >
+                                                {/* a imagem: apagada até o hover, e cresce 5% dentro da bandeira */}
+                                                <span
+                                                    aria-hidden="true"
+                                                    style={{ backgroundImage: `url('${flag}')` }}
+                                                    className="absolute inset-0 bg-center bg-cover brightness-[.5] saturate-[.65] transition-[filter,transform] duration-300 ease-out group-hover:brightness-100 group-hover:saturate-100 group-hover:scale-105 group-focus-visible:brightness-100 group-focus-visible:saturate-100 group-focus-visible:scale-105"
+                                                />
+                                            </a>
                                         ))}
                                     </div>
                                 </div>

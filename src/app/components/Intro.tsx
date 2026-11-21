@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { RiDownloadLine } from "react-icons/ri";
 import { roboto } from "../fonts/Fonts";
 import StarsBackground from "./Main/Background";
@@ -141,51 +140,61 @@ export default function Intro() {
                         {t.hero.subtitle}
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 mt-2">
                         <a
                             data-draw="box"
                             href="#contact"
-                            className="text-center w-[250px] py-3 bg-accent text-ink font-bold border border-accent transition-colors duration-300 hover:bg-transparent hover:text-accent-fg"
+                            className="w-[250px] h-12 flex items-center justify-center bg-accent text-ink font-bold border border-accent transition-colors duration-300 hover:bg-transparent hover:text-accent-fg"
                         >
                             {t.hero.ctaTalk}
                         </a>
-                        <button
-                            data-draw="box"
-                            onClick={() => setIsCVVisible((v) => !v)}
-                            aria-expanded={isCVVisible}
-                            className="w-[250px] py-3 border border-accent text-accent-fg font-bold flex items-center justify-center gap-2 transition-colors duration-300 hover:bg-accent hover:text-ink"
-                        >
-                            {!isCVVisible && <RiDownloadLine aria-hidden="true" />}
-                            {isCVVisible ? t.hero.ctaClose : t.hero.ctaCv}
-                        </button>
-                    </div>
-
-                    <AnimatePresence>
-                        {isCVVisible && (
-                            <motion.div
-                                className="flex gap-8"
-                                initial={{ opacity: 0, scale: 0.6 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.6 }}
-                                transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                        {/* Baixar CV: as bandeiras saem "de trás" do botão. A moldura logo abaixo tem o tamanho
+                            exato do botão e nenhum estilo, só overflow: hidden. As bandeiras começam
+                            puxadas para cima (atrás do botão, fora da moldura), e a moldura as recorta:
+                            mesmo com o botão transparente, nada aparece através dele. Ao abrir, a altura
+                            da moldura cresce de 0 até a do botão (grid-template-rows 0fr → 1fr), e a
+                            página abre espaço suavemente em vez de pular. */}
+                        <div className="w-[250px]">
+                            <button
+                                data-draw="box"
+                                onClick={() => setIsCVVisible((v) => !v)}
+                                aria-expanded={isCVVisible}
+                                aria-controls="cv-flags"
+                                className="relative z-[1] w-full h-12 border border-accent text-accent-fg font-bold flex items-center justify-center gap-2 transition-colors duration-300 hover:bg-accent hover:text-ink"
                             >
-                                <a
-                                    href="/CandinizCV_PT.pdf"
-                                    download
-                                    aria-label={t.hero.cvPt}
-                                    title={t.hero.cvPt}
-                                    className="w-16 h-11 bg-center bg-cover bg-[url('/br.png')] ring-2 ring-line hover:ring-accent hover:scale-110 transition-transform"
-                                />
-                                <a
-                                    href="/CandinizCV_EN.pdf"
-                                    download
-                                    aria-label={t.hero.cvEn}
-                                    title={t.hero.cvEn}
-                                    className="w-16 h-11 bg-center bg-cover bg-[url('/en.png')] ring-2 ring-line hover:ring-accent hover:scale-110 transition-transform"
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                                {!isCVVisible && <RiDownloadLine aria-hidden="true" />}
+                                {isCVVisible ? t.hero.ctaClose : t.hero.ctaCv}
+                            </button>
+                            <div
+                                className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+                                    isCVVisible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                                }`}
+                            >
+                                <div id="cv-flags" inert={!isCVVisible} className="min-h-0 overflow-hidden">
+                                    <div className="h-12 flex">
+                                        {(
+                                            [
+                                                ["/CandinizCV_PT.pdf", t.hero.cvPt, "/br.png", "0ms"],
+                                                ["/CandinizCV_EN.pdf", t.hero.cvEn, "/en.png", "70ms"],
+                                            ] as const
+                                        ).map(([href, label, flag, delay]) => (
+                                            <a
+                                                key={href}
+                                                href={href}
+                                                download
+                                                aria-label={label}
+                                                title={label}
+                                                style={{ backgroundImage: `url('${flag}')`, transitionDelay: isCVVisible ? delay : "0ms" }}
+                                                className={`w-1/2 h-full bg-center bg-cover transition-[transform,filter] duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
+                                                    isCVVisible ? "translate-y-0" : "-translate-y-full"
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Resultados: cada número é desenhado por um robô */}
                     <dl aria-label={t.hero.statsLabel} className="grid grid-cols-3 gap-1 w-full max-w-2xl mt-6">

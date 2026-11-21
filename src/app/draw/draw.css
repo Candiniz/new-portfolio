@@ -232,10 +232,11 @@ html:not(.dd-off) [data-draw]:not([data-draw-state="done"]) .dd-underscore {
 /* ------------------------------------------------- faixas deslizantes */
 
 /* Sem robô: a faixa entra pela lateral. Usa "left" (não transform) para o
-   background-attachment: fixed continuar valendo durante o movimento. */
+   background-attachment: fixed continuar valendo durante o movimento.
+   --dd-boost é o acelerador do celular (drawDirector.ts): 2 abaixo de 768 px, 1 no resto. */
 [data-slide] {
   position: relative;
-  transition: left 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  transition: left calc(0.9s / var(--dd-boost, 1)) cubic-bezier(0.16, 1, 0.3, 1), opacity calc(0.6s / var(--dd-boost, 1)) ease;
 }
 
 html:not(.dd-off) [data-slide="left"]:not([data-slide-in]) {

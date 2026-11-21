@@ -146,7 +146,7 @@ Quando um alvo desenhado sai totalmente da tela, volta a `idle`. Na volta, é de
 
 ## 6. A velocidade
 
-Toda a velocidade passa por uma variável do módulo, `RATE` (1 = normal):
+Toda a velocidade passa por uma variável do módulo, `RATE` (1 = normal), que é o produto de duas partes: `PACE`, a pressa calculada pela rolagem e pela fila (seção 6.1), e `BOOST`, o acelerador fixo do celular (seção 6.3). `RATE` age assim:
 
 - **animações:** toda animação criada pelo motor passa pela função `anim()`, que aplica `RATE` como `playbackRate` e a acompanha até terminar. Quando `RATE` muda, as animações em curso são ajustadas com `updatePlaybackRate`;
 - **pausas:** o `sleep()` divide a espera por `RATE`;
@@ -174,12 +174,22 @@ Além disso, nos primeiros 2,5 s da página (a abertura do hero) as durações b
 | Rolagem de 2.500 px/s | 2,8x em média |
 | Salto para Projetos (21 elementos) | tela cheia em 1,5 s (3,0 s sem aceleração) |
 
+### 6.3 O acelerador do celular (`BOOST`)
+
+Abaixo de **768 px** de largura, tudo o que os robôs criam anda **2x** mais rápido, por cima da pressa da rolagem: no celular cada elemento ocupa a largura toda e a rolagem é curta e rápida, então no ritmo do desktop a tela ficava esperando o robô. A regra é universal:
+
+- **no motor:** `RATE = PACE × BOOST`, então animações, pausas, digitação e o espaçamento entre largadas aceleram juntos. A conta da pressa (`updateRate`) trabalha só com `PACE` e não sabe do acelerador;
+- **no CSS:** o motor publica `--dd-boost` no `<html>` (2 no celular, 1 no resto), e as faixas deslizantes (`draw.css`) e o selo "2+" do hero (`globals.css`) dividem suas durações por ela.
+
+A largura é reavaliada no `resize`, então girar o aparelho liga ou desliga o acelerador na hora, inclusive nas animações em curso.
+
 ## 7. Onde mexer
 
 | Quero… | Onde |
 | --- | --- |
 | Mais tempo para apreciar ao rolar | `updateRate`: o `600` de `(this.vel - 600) / 800` (abaixo dele, 1x) |
 | Saltos ainda mais rápidos | `updateRate`: o `6` de `surge ? 6 : …` |
+| Acelerador do celular | topo do arquivo: `MOBILE_MAX` (largura, 768) e `MOBILE_BOOST` (2) |
 | Mais ou menos robôs | construtor: `this.maxBots = … ? 3 : … ? 5 : 8` |
 | Ritmo da digitação | `drawType`: a linha `const per = n < 30 ? 62 : n < 90 ? 30 : …` |
 | Durações da caixa | `drawBox`: os `clamp(…)` de cada etapa (ida, arrasto, contorno, revelação) |
@@ -191,7 +201,7 @@ Além disso, nos primeiros 2,5 s da página (a abertura do hero) as durações b
 Em desenvolvimento, o motor fica em `window.__drawDirector`:
 
 ```js
-__drawDirector.rate                  // velocidade atual (1 = normal)
+__drawDirector.rate                  // velocidade efetiva (1 = normal; no celular já inclui o 2x)
 __drawDirector.queue.length          // tarefas esperando robô
 __drawDirector.bots.map(b => b.busy) // quem está trabalhando
 ```

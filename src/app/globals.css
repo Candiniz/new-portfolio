@@ -399,7 +399,8 @@ section[id],
   clip-path: inset(0 calc(100% - 0.5rem) 0 0);
 }
 [data-draw-state="done"] > .badge-grow {
-  animation: badgeGrow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  /* --dd-boost: acelerador do celular dos robôs (drawDirector.ts) */
+  animation: badgeGrow calc(0.6s / var(--dd-boost, 1)) cubic-bezier(0.16, 1, 0.3, 1) calc(0.1s / var(--dd-boost, 1)) forwards;
 }
 @keyframes badgeGrow {
   to {

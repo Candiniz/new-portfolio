@@ -75,7 +75,18 @@ const SVG_NS = "http://www.w3.org/2000/svg";
  * Pressa: quando a tela anda rápido (rolagem forte ou salto pelo menu), os robôs aceleram em vez
  * de deixar a tela vazia esperando. RATE multiplica a velocidade de TUDO o que eles fazem: as
  * animações já em curso (playbackRate), as novas, as pausas (sleep) e a digitação.
+ *
+ * RATE = PACE × BOOST. PACE é a pressa da rolagem/fila (1 a 6, calculada em updateRate) e BOOST
+ * é o acelerador fixo do celular: com a tela estreita cada elemento ocupa a largura toda e a
+ * rolagem é curta e rápida, então no ritmo do desktop o celular passa tempo demais esperando o
+ * robô. Abaixo de MOBILE_MAX px tudo anda MOBILE_BOOST vezes mais rápido (robôs, digitação,
+ * pausas e também as faixas deslizantes, pela variável CSS --dd-boost). Para ajustar, mude só
+ * essas duas constantes.
  */
+const MOBILE_MAX = 768;
+const MOBILE_BOOST = 2;
+let BOOST = 1;
+let PACE = 1;
 let RATE = 1;
 const live = new Set<Animation>();
 /** el.animate que respeita a pressa atual e acompanha mudanças dela até terminar */
@@ -88,11 +99,21 @@ function anim(el: Element, kf: Keyframe[] | PropertyIndexedKeyframes, opts: Keyf
     return a;
 }
 let applied = 1; // velocidade já aplicada às animações em curso
-function setRate(r: number) {
-    RATE = r; // vale na hora para o que começar agora (pausas, digitação, novas animações)
-    if (Math.abs(r - applied) < 0.03 && r !== 1) return; // em curso: ajusta em passos, sem custo
-    applied = r;
-    live.forEach((a) => (a.updatePlaybackRate ? a.updatePlaybackRate(r) : (a.playbackRate = r)));
+/** r = pressa relativa (PACE); a velocidade efetiva já sai com o acelerador do celular */
+function setRate(r: number, force = false) {
+    PACE = r;
+    RATE = r * BOOST; // vale na hora para o que começar agora (pausas, digitação, novas animações)
+    if (!force && Math.abs(RATE - applied) < 0.03 && r !== 1) return; // em curso: ajusta em passos, sem custo
+    applied = RATE;
+    live.forEach((a) => (a.updatePlaybackRate ? a.updatePlaybackRate(RATE) : (a.playbackRate = RATE)));
+}
+/** acelerador do celular: reavaliado na abertura e quando a largura muda (girar o aparelho) */
+function updateBoost() {
+    const b = window.innerWidth < MOBILE_MAX ? MOBILE_BOOST : 1;
+    document.documentElement.style.setProperty("--dd-boost", String(b));
+    if (b === BOOST) return;
+    BOOST = b;
+    setRate(PACE, true);
 }
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms / RATE));
@@ -259,6 +280,7 @@ export class DrawDirector {
 
     constructor() {
         this.maxBots = window.innerWidth < 640 ? 3 : window.innerWidth < 1024 ? 5 : 8;
+        updateBoost();
 
         this.layer = document.createElement("div");
         this.layer.className = "dd-layer";
@@ -274,6 +296,7 @@ export class DrawDirector {
         // zera a interseção, mesmo com rootMargin alargado.)
         window.addEventListener("scroll", this.onScroll, { passive: true });
         window.addEventListener("resize", this.onScroll);
+        window.addEventListener("resize", updateBoost);
 
         this.mo = new MutationObserver((muts) => {
             for (const m of muts) {
@@ -354,9 +377,9 @@ export class DrawDirector {
         const target = surge ? 6 : Math.max(byScroll, byQueue);
         const dt = this.rateAt ? now - this.rateAt : 0;
         this.rateAt = now;
-        const next = target >= RATE ? target : RATE + (target - RATE) * (1 - Math.exp(-dt / 350));
+        const next = target >= PACE ? target : PACE + (target - PACE) * (1 - Math.exp(-dt / 350));
         setRate(next < 1.02 ? 1 : next);
-        const busy = surge || RATE > 1 || this.vel > 5 || this.queue.length > 2 * this.maxBots;
+        const busy = surge || PACE > 1 || this.vel > 5 || this.queue.length > 2 * this.maxBots;
         if (busy && !this.disposed) this.rushTimer = setTimeout(() => this.updateRate(), 100);
     }
 
@@ -523,7 +546,7 @@ export class DrawDirector {
     }
 
     /** Mais trabalho na fila → robôs mais rápidos. */
-    /** velocidade atual dos robôs (1 = normal); só leitura, para depuração */
+    /** velocidade efetiva dos robôs (1 = normal; no celular já inclui o acelerador); só leitura, para depuração */
     get rate() {
         return RATE;
     }
@@ -813,7 +836,7 @@ export class DrawDirector {
         bot.tool("arrow");
         const dist = Math.hypot(bot.pos.x - click.x, bot.pos.y - click.y);
         const ms = clamp(dist * 0.85, 220, 620) * t;
-        const iTimer = setTimeout(() => bot.tool("ibeam"), ms * 0.7);
+        const iTimer = setTimeout(() => bot.tool("ibeam"), (ms * 0.7) / RATE);
         await done(bot.moveTo(click, ms));
         clearTimeout(iTimer);
         if (this.gone(el)) return;
@@ -903,11 +926,13 @@ export class DrawDirector {
         this.queue = [];
         if (this.pumpTimer) clearTimeout(this.pumpTimer);
         if (this.rushTimer) clearTimeout(this.rushTimer);
-        RATE = 1;
-        applied = 1;
+        PACE = 1;
+        RATE = BOOST;
+        applied = BOOST;
         this.io.disconnect();
         window.removeEventListener("scroll", this.onScroll);
         window.removeEventListener("resize", this.onScroll);
+        window.removeEventListener("resize", updateBoost);
         cancelAnimationFrame(this.slideRaf);
         this.mo.disconnect();
         this.bots.forEach((b) => b.destroy());

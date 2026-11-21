@@ -8,8 +8,9 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { useDialog } from "../hooks/useDialog";
 
 // Imagens (fixas); nome e descrição vêm do dicionário, na mesma ordem.
-// "unoptimized": o navegador busca direto no imgur. Pelo otimizador do Next quem busca é o
-// servidor, e o imgur costuma recusar IP de datacenter (429) — a foto quebrava.
+// Endereço do imgur vai "unoptimized" (o navegador busca direto: pelo otimizador do Next quem busca
+// é o servidor, e o imgur recusa IP de datacenter). scripts/trazer-imagens-imgur.mjs traz as fotos
+// para public/architecture e troca os endereços; aí elas voltam a passar pelo otimizador.
 const IMAGES = [
     "https://i.imgur.com/QErZmRb.jpeg",
     "https://i.imgur.com/3T5oz0l.jpeg",
@@ -31,7 +32,7 @@ function Photo({ src, alt, name, className, ...size }: { src: string; alt: strin
             </span>
         );
     }
-    return <Image src={src} alt={alt} unoptimized onError={() => setFailed(true)} className={className} {...size} />;
+    return <Image src={src} alt={alt} unoptimized={src.startsWith("http")} onError={() => setFailed(true)} className={className} {...size} />;
 }
 
 function ImageModal({ index, onClose }: { index: number; onClose: () => void }) {
